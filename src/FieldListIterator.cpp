@@ -17,7 +17,7 @@ FieldListIterator::~FieldListIterator()
 
 bool FieldListIterator::operator!=(unsigned int other)
 {
-    return other == _Count;
+    return other != _Count;
 }
 
 void FieldListIterator::operator++(int)

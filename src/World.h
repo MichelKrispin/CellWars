@@ -4,6 +4,7 @@
 #include "Window.h"
 #include "FieldList.h"
 #include "WorldSnapshot.h"
+#include <SFML/System/Clock.hpp>
 
 class World 
 {
@@ -46,14 +47,17 @@ private:
     // Functions
     /**
      * \brief Update the world by calculating the actions of the field.
+     *
+     * \return Returns true if the window was killed while updating
      */
-    void UpdateWorld();
+    bool UpdateWorld();
      
 
     // Variables
     Window _Window; //< The window used to render everything on screen.
     WorldSnapshot* _WorldSnapshot; //< A snapshot of the world which will be updated after each turn.
     FieldList* _Fields; //< Keeping track of all fields for both teams.
+    sf::Clock _Clock; //< Used to measure the time between each turn.
 };
 
 #endif

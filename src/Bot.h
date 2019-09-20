@@ -2,12 +2,14 @@
 #define _BOT_H
 #include <iostream>
 #include "WorldSnapshot.h"
+#include "Team.h"
 
 class Bot
 {
 public:
-    Bot();
-    ~Bot();
+    // TODO: Make this better for inheritance
+    Bot(Vector StartingPosition, TEAM Team);
+    virtual ~Bot();
 
     /**
      * \brief Makes the turn for this Bot.
@@ -16,8 +18,12 @@ public:
      */
     void MakeTurn(const WorldSnapshot& Snapshot);
 
-private:
+    Vector getStartingPosition() const;
+    TEAM getTeam() const;
 
+private:
+    Vector _StartingPosition;
+    TEAM _Team;
 };
 
 #endif

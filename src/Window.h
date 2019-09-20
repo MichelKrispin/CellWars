@@ -24,8 +24,15 @@ public:
      */
     void Display(const FieldList* Fields);
 
+    /**
+     * \brief Indicates whether the window was closed.
+     *
+     * \return Returns true when the window was closed.
+     */
+    bool isDead() const;
 
 private:
-    sf::RenderWindow* _Window;
+    sf::RenderWindow* _Window; //< Pointer to the SFML Window drawing the stuff.
+    bool _isDead; //< Indicate whether the window was killed.
 
 };

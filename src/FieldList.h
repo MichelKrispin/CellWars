@@ -37,14 +37,21 @@ public:
      */
     Field* operator[](unsigned int Index) const;
 
+    /**
+     * \brief Get the size of the list.
+     *
+     * \return Returns the size of the list.
+     */
+    unsigned int getSize() const;
+
 
 private:
     /**
      * \brief Adding a new field to the list.
      *
-     * \param NewField Should be allocated with new on method call.
+     * \param NewField The new field
      */
-    void Add(Field* NewField);
+    void Add(Field NewField);
 
     Field* _Fields;     //< The actual list of fields.
     unsigned int _Size; //< Size of the list.
