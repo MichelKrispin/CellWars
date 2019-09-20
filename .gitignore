@@ -1,0 +1,45 @@
+# Custom
+SFML/*
+SFML/
+cmake-build-debug/*
+cmake-build-release/*
+bin/*
+.ycm_extra_conf.py
+.DS_Store
+*.swp
+.idea/
+docs/*
+docs-config.txt
+
+# Prerequisites
+*.d
+
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Fortran module files
+*.mod
+*.smod
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
+
+# Executables
+*.exe
+*.out
+*.app
