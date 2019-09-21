@@ -15,3 +15,5 @@
 // How long does a turn take
 #define TURN_DURATION_IN_MS 500
 
+// Possible options are White and Black
+#define BACKGROUND_COLOR Black

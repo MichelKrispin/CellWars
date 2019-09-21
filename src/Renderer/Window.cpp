@@ -34,7 +34,7 @@ void Window::Display(const FieldList* Fields)
     Rectangle.setOutlineThickness(1.0f);
 
     // Reset the window
-    _Window->clear(sf::Color::Black);
+    _Window->clear(sf::Color::BACKGROUND_COLOR);
 
     // Looping trough all of the Fields
     for (int i = 0; i < 2; ++i) // 2 for team size

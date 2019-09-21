@@ -1,6 +1,7 @@
 #include "World.h"
 #include "FieldList.h"
 #include "Configuration.h"
+#include <SFML/System/Clock.hpp>
 
 World& World::getWorld()
 {
@@ -10,9 +11,9 @@ World& World::getWorld()
 
 World::World()
     : _Window(),
-      _Grid(),
-      _Clock()
+      _Grid()
 {
+    _Clock = new sf::Clock;
     _WorldSnapshot = new WorldSnapshot;
     // TODO: Make this adjustable for multiple teams
     _Fields = new FieldList[2];
@@ -20,6 +21,7 @@ World::World()
 
 World::~World()
 {
+    delete _Clock;
     delete _WorldSnapshot;
     delete[] _Fields;
 }

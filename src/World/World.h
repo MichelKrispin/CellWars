@@ -7,7 +7,8 @@
 #include "WorldSnapshot.h"
 #include "Bot/EnemyBot.h"
 #include "Bot/PlayerBot.h"
-#include <SFML/System/Clock.hpp>
+
+namespace sf { class Clock; }
 
 class World 
 {
@@ -71,7 +72,7 @@ private:
     Grid _Grid;                    //< The grid which keeps track of all fields in a more natural way.
     WorldSnapshot* _WorldSnapshot; //< A snapshot of the world which will be updated after each turn.
     FieldList* _Fields;            //< Keeping track of all fields for both teams.
-    sf::Clock _Clock;              //< Used to measure the time between each turn.
+    sf::Clock* _Clock;             //< Used to measure the time between each turn.
 };
 
 #endif

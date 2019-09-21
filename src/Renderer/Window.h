@@ -1,9 +1,7 @@
 #pragma once
 #include "World/WorldSnapshot.h"
 
-namespace sf {
-    class RenderWindow;
-}
+namespace sf { class RenderWindow; }
 
 class Window
 {
@@ -33,6 +31,6 @@ public:
 
 private:
     sf::RenderWindow* _Window; //< Pointer to the SFML Window drawing the stuff.
-    bool _isDead; //< Indicate whether the window was killed.
+    bool _isDead;              //< Indicate whether the window was killed.
 
 };
