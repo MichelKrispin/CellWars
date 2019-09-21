@@ -61,7 +61,6 @@ set(SOURCE_FILES ${SOURCE_DIR}/Main.cpp)
 # Add the executable
 add_executable(CellWars ${SOURCE_FILES})
 
-# link all necessary libraries
 # Link all necessary libraries
 target_link_libraries(CellWars
         CellWarsLibrary)
