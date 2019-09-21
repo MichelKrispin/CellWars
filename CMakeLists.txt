@@ -25,7 +25,8 @@ include_directories(${SOURCE_DIR})
 # Bots
 set(BOT_SRC ${SOURCE_DIR}/Bot/Bot.cpp
             ${SOURCE_DIR}/Bot/EnemyBot.cpp
-            ${SOURCE_DIR}/Bot/PlayerBot.cpp)
+            ${SOURCE_DIR}/Bot/PlayerBot.cpp
+            ${SOURCE_DIR}/Bot/Utilities.cpp)
 # Renderer
 set(RENDERER_SRC ${SOURCE_DIR}/Renderer/Window.cpp)
 
