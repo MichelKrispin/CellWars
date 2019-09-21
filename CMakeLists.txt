@@ -21,22 +21,31 @@ include_directories(${SFML_SOURCE_DIR}/include)
 # Default source dir as include directory
 set(SOURCE_DIR src/)
 include_directories(${SOURCE_DIR})
+
+# Bots
+set(BOT_SRC ${SOURCE_DIR}/Bot/Bot.cpp
+            ${SOURCE_DIR}/Bot/EnemyBot.cpp
+            ${SOURCE_DIR}/Bot/PlayerBot.cpp)
+# Renderer
+set(RENDERER_SRC ${SOURCE_DIR}/Renderer/Window.cpp)
+
+# World
+set(WORLD_SRC ${SOURCE_DIR}/World/Field.cpp
+              ${SOURCE_DIR}/World/FieldList.cpp
+              ${SOURCE_DIR}/World/FieldListIterator.cpp
+              ${SOURCE_DIR}/World/Grid.cpp
+              ${SOURCE_DIR}/World/Vector.cpp
+              ${SOURCE_DIR}/World/World.cpp
+              ${SOURCE_DIR}/World/WorldSnapshot.cpp)
+
 # -----------
 
 project (CellWars)
 
 set(SOURCE_FILES ${SOURCE_DIR}/Main.cpp
-                 ${SOURCE_DIR}/Bot.cpp
-                 ${SOURCE_DIR}/EnemyBot.cpp
-                 ${SOURCE_DIR}/Field.cpp
-                 ${SOURCE_DIR}/FieldList.cpp
-                 ${SOURCE_DIR}/FieldListIterator.cpp
-                 ${SOURCE_DIR}/Grid.cpp
-                 ${SOURCE_DIR}/PlayerBot.cpp
-                 ${SOURCE_DIR}/Window.cpp
-                 ${SOURCE_DIR}/World.cpp
-                 ${SOURCE_DIR}/WorldSnapshot.cpp
-                 )
+                 ${BOT_SRC}
+                 ${RENDERER_SRC}
+                 ${WORLD_SRC})
 
 # add the executable
 add_executable(CellWars ${SOURCE_FILES})

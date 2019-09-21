@@ -1,5 +1,4 @@
 #include "World.h"
-#include "Window.h"
 #include "FieldList.h"
 #include "Configuration.h"
 

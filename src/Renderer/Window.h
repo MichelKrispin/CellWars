@@ -1,5 +1,5 @@
 #pragma once
-#include "WorldSnapshot.h"
+#include "World/WorldSnapshot.h"
 
 namespace sf {
     class RenderWindow;

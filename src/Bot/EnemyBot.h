@@ -1,6 +1,6 @@
 #ifndef _ENEMYBOT_H
 #define _ENEMYBOT_H
-#include "Bot.h"
+#include "Bot/Bot.h"
 
 class EnemyBot : public Bot
 {

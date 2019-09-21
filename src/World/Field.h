@@ -3,7 +3,7 @@
 #include "Direction.h"
 #include "Vector.h"
 #include "Actions.h"
-#include "Team.h"
+#include "Bot/Team.h"
 
 class Field
 {

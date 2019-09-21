@@ -2,7 +2,7 @@
 #define _GRID_H
 #include "Configuration.h"
 #include "Field.h"
-#include "Team.h"
+#include "Bot/Team.h"
 #include "FieldList.h"
 
 struct SplitValues

@@ -1,7 +1,7 @@
 #ifndef _WORLDSNAPSHOT_H
 #define _WORLDSNAPSHOT_H
 #include "FieldList.h"
-#include "Team.h"
+#include "Bot/Team.h"
 
 class WorldSnapshot
 {

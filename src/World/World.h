@@ -1,12 +1,12 @@
 #ifndef _WORLD_H
 #define _WORLD_H
-#include "Bot.h"
-#include "Window.h"
+#include "Bot/Bot.h"
+#include "Renderer/Window.h"
 #include "FieldList.h"
 #include "Grid.h"
 #include "WorldSnapshot.h"
-#include "EnemyBot.h"
-#include "PlayerBot.h"
+#include "Bot/EnemyBot.h"
+#include "Bot/PlayerBot.h"
 #include <SFML/System/Clock.hpp>
 
 class World 

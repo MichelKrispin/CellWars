@@ -1,7 +1,7 @@
 #ifndef _BOT_H
 #define _BOT_H
 #include <iostream>
-#include "WorldSnapshot.h"
+#include "World/WorldSnapshot.h"
 #include "Team.h"
 
 class Bot

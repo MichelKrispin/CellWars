@@ -1,6 +1,6 @@
 #ifndef _PLAYERBOT_H
 #define _PLAYERBOT_H
-#include "Bot.h"
+#include "Bot/Bot.h"
 
 class PlayerBot : public Bot
 {

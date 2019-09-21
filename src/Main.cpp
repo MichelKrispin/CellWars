@@ -1,6 +1,6 @@
-#include "World.h"
-#include "PlayerBot.h"
-#include "EnemyBot.h"
+#include "World/World.h"
+#include "Bot/PlayerBot.h"
+#include "Bot/EnemyBot.h"
 
 int main()
 {
