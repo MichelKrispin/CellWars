@@ -14,6 +14,16 @@ struct Vector
 
     unsigned short X; //< The X position of this Vector.
     unsigned short Y; //< The Y position of this Vector.
+
+    /**
+     * \brief Check for X and Y the equality.
+     *
+     * \param other Another vector
+     */
+    bool operator==(Vector &other)
+    {
+        return (X == other.X && Y == other.Y);
+    }
 };
 
 #endif

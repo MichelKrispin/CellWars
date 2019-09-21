@@ -3,6 +3,7 @@
 #include "Bot.h"
 #include "Window.h"
 #include "FieldList.h"
+#include "Grid.h"
 #include "WorldSnapshot.h"
 #include <SFML/System/Clock.hpp>
 
@@ -54,10 +55,11 @@ private:
      
 
     // Variables
-    Window _Window; //< The window used to render everything on screen.
+    Window _Window;                //< The window used to render everything on screen.
+    Grid _Grid;                    //< The grid which keeps track of all fields in a more natural way.
     WorldSnapshot* _WorldSnapshot; //< A snapshot of the world which will be updated after each turn.
-    FieldList* _Fields; //< Keeping track of all fields for both teams.
-    sf::Clock _Clock; //< Used to measure the time between each turn.
+    FieldList* _Fields;            //< Keeping track of all fields for both teams.
+    sf::Clock _Clock;              //< Used to measure the time between each turn.
 };
 
 #endif

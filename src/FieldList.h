@@ -1,7 +1,8 @@
 #ifndef _FIELDLIST_H
 #define _FIELDLIST_H
-#include "Field.h"
 #include "FieldListIterator.h"
+#include "Field.h"
+#include <vector>
 
 class FieldListIterator;
 
@@ -51,12 +52,19 @@ private:
      *
      * \param NewField The new field
      */
-    void Add(Field NewField);
+    void _Add(Field NewField);
 
-    Field* _Fields;     //< The actual list of fields.
-    unsigned int _Size; //< Size of the list.
+    /**
+     * \brief Remove a field at the specified position.
+     *
+     * \param Position Vector of the position of the field to be removed.
+     */
+    void _Remove(Vector Position);
+
+    std::vector<Field*> _Fields; //< The actual list of fields.
 
     friend class World;
+    friend class Grid;
 };
 
 #endif

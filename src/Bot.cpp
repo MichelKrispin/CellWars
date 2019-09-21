@@ -16,12 +16,12 @@ void Bot::MakeTurn(const WorldSnapshot& Snapshot)
     std::cout << "Making turn\n";
 }
 
-Vector Bot::getStartingPosition() const
+Vector Bot::GetStartingPosition() const
 {
     return _StartingPosition;
 }
 
-TEAM Bot::getTeam() const
+TEAM Bot::GetTeam() const
 {
     return _Team;
 }

@@ -3,8 +3,8 @@
 
 enum class TEAM
 {
-    BLUE = 0,
-    RED,
+    BLUE = 0, //< Blue team member with index 0
+    RED,      //< Red team member with index 1
 };
 
 #endif

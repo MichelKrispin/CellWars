@@ -11,6 +11,7 @@ World& World::getWorld()
 
 World::World()
     : _Window(),
+      _Grid(),
       _Clock()
 {
     _WorldSnapshot = new WorldSnapshot;
@@ -29,14 +30,20 @@ void World::Play(Bot* Blue, Bot* Red)
     // Initialize both teams first fields
     // TODO: Raise an exception or similar if both starting positions are the same
     // Starting Positions will be numbers on the grid and are pixels now
-    Vector BlueStartingPosition = Blue->getStartingPosition();
+    Vector BlueStartingPosition = Blue->GetStartingPosition();
     BlueStartingPosition.X *= WINDOW_SIZE / GRID_SIZE;
     BlueStartingPosition.Y *= WINDOW_SIZE / GRID_SIZE;
-    _Fields[0].Add(Field(100, BlueStartingPosition));
-    Vector RedStartingPosition = Red->getStartingPosition();
+    _Fields[static_cast<unsigned int>(TEAM::BLUE)]._Add(
+            Field(TEAM::BLUE, 100, BlueStartingPosition));
+
+    Vector RedStartingPosition = Red->GetStartingPosition();
     RedStartingPosition.X *= WINDOW_SIZE / GRID_SIZE;
     RedStartingPosition.Y *= WINDOW_SIZE / GRID_SIZE;
-    _Fields[1].Add(Field(100, RedStartingPosition));
+    _Fields[static_cast<unsigned int>(TEAM::RED)]._Add(
+            Field(TEAM::RED, 100, RedStartingPosition));
+
+    // Then initialize the grid to be a reference to the created fields
+    _Grid.Initialize(_Fields, 2); // Second argument is the number of teams
 
     for (unsigned int i = 0; i < MAX_TURN_COUNT; ++i)
     {
@@ -64,24 +71,43 @@ bool World::UpdateWorld()
     // Looping trough all fields and applying the actions
     for (int i = 0; i < 2; ++i) // 2 for team size
     {
-        for (FieldListIterator iterator = _Fields[i].Begin();
-             iterator != _Fields[i].End();
-             iterator.Next())
+        for (FieldListIterator Iterator = _Fields[i].Begin();
+             Iterator != _Fields[i].End();
+             Iterator.Next())
         {
-            Field* Current = iterator.Get();
+            Field* CurrentField = Iterator.Get();
+            
             // Split according to the actions without modifying them
-            Current->_Actions;
+            Actions &CurrentActions  = CurrentField->_Actions;
+            const Vector &CurrentPosition = CurrentField->GetPosition();
+            if (CurrentActions.Up > 0)
+                _Grid.SetFieldValuesAt(
+                        CurrentPosition.X, CurrentPosition.Y - WINDOW_SIZE/GRID_SIZE,
+                        static_cast<TEAM>(i), CurrentActions.Up);
+            if (CurrentActions.Down > 0)
+                _Grid.SetFieldValuesAt(
+                        CurrentPosition.X, CurrentPosition.Y + WINDOW_SIZE/GRID_SIZE,
+                        static_cast<TEAM>(i), CurrentActions.Down);
+            if (CurrentActions.Left > 0)
+                _Grid.SetFieldValuesAt(
+                        CurrentPosition.X - WINDOW_SIZE/GRID_SIZE, CurrentPosition.Y,
+                        static_cast<TEAM>(i), CurrentActions.Left);
+            if (CurrentActions.Right > 0)
+                _Grid.SetFieldValuesAt(
+                        CurrentPosition.X + WINDOW_SIZE/GRID_SIZE, CurrentPosition.Y,
+                        static_cast<TEAM>(i), CurrentActions.Right);
 
             // Afterwards reset the actions
+            CurrentField->_ResetActions();
         }
     }
     // TODO: Make this more efficient. Maybe by saving the vectors and checking while looping once
     // After applying everything loop again and check whether some fields were killed
     for (int i = 0; i < 2; ++i) // 2 for team size
     {
-        for (FieldListIterator iterator = _Fields[i].Begin();
-             iterator != _Fields[i].End();
-             iterator.Next())
+        for (FieldListIterator Iterator = _Fields[i].Begin();
+             Iterator != _Fields[i].End();
+             Iterator.Next())
         {
 
         }

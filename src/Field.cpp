@@ -1,7 +1,8 @@
 #include "Field.h"
 
-Field::Field(unsigned short CellCount, Vector Position)
-    : _CellCount(CellCount),
+Field::Field(TEAM Team, unsigned short CellCount, Vector Position)
+    : _Team(Team),
+      _CellCount(CellCount),
       _Position(Position)
 {
 }
@@ -10,14 +11,19 @@ Field::~Field()
 {
 }
 
-const unsigned short& Field::getCellCount() const
+const unsigned short& Field::GetCellCount() const
 {
     return _CellCount;
 }
 
-const Vector& Field::getPosition() const
+const Vector& Field::GetPosition() const
 {
     return _Position;
+}
+
+const TEAM& Field::GetTeam() const
+{
+    return _Team;
 }
 
 void Field::SplitCells(DIRECTION Direction, unsigned short CellCount)
@@ -39,17 +45,23 @@ void Field::SplitCells(DIRECTION Direction, unsigned short CellCount)
     }
 }
 
-void Field::IncreaseCellCount(unsigned char &&Percentage)
+void Field::_IncreaseCellCount(unsigned char &&Percentage)
 {
     // TODO: Fix this calculation
     _CellCount += Percentage * (_CellCount / 100);
 }
 
 
-void Field::ResetActions()
+void Field::_ResetActions()
 {
     _Actions.Up    = 0;
     _Actions.Down  = 0;
     _Actions.Right = 0;
     _Actions.Left  = 0;
 }
+
+void Field::_SetCellCount(unsigned int NewCellCount)
+{
+    _CellCount = NewCellCount;
+}
+

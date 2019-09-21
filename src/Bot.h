@@ -18,8 +18,8 @@ public:
      */
     void MakeTurn(const WorldSnapshot& Snapshot);
 
-    Vector getStartingPosition() const;
-    TEAM getTeam() const;
+    Vector GetStartingPosition() const;
+    TEAM GetTeam() const;
 
 private:
     Vector _StartingPosition;
