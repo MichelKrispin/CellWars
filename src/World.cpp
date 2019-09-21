@@ -25,6 +25,12 @@ World::~World()
     delete[] _Fields;
 }
 
+void World::Play(PlayerBot* Player, EnemyBot* Enemy)
+{
+    Play(dynamic_cast<Bot*>(Player),
+         dynamic_cast<Bot*>(Enemy));
+}
+
 void World::Play(Bot* Blue, Bot* Red)
 {
     // Initialize both teams first fields

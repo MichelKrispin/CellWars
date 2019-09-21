@@ -16,10 +16,10 @@ public:
      *
      * \param Snapshot A Snapshot of the world at this moment
      */
-    void MakeTurn(const WorldSnapshot& Snapshot);
+    virtual void MakeTurn(const WorldSnapshot& Snapshot);
 
-    Vector GetStartingPosition() const;
-    TEAM GetTeam() const;
+    virtual Vector GetStartingPosition() const final;
+    virtual TEAM GetTeam() const final;
 
 private:
     const Vector _StartingPosition;

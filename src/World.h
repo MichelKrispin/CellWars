@@ -5,6 +5,8 @@
 #include "FieldList.h"
 #include "Grid.h"
 #include "WorldSnapshot.h"
+#include "EnemyBot.h"
+#include "PlayerBot.h"
 #include <SFML/System/Clock.hpp>
 
 class World 
@@ -21,6 +23,16 @@ public:
      * \return World World reference.
      */
     static World &getWorld();
+
+    /**
+     * \brief Play the game.
+     * Starts the game with two bots of which the game will be simulated.
+     * The Player will be blue while the Enemy is in red color.
+     *
+     * \Param Player A pointer to a PlayerBot.
+     * \Param Enemy  A pointer to an EnemyBot.
+     */
+    void Play(PlayerBot* Player, EnemyBot* Enemy);
 
     /**
      * \brief Play the game.

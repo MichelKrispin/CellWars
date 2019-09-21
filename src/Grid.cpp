@@ -57,13 +57,19 @@ void Grid::SetFieldValuesAt(unsigned int x, unsigned int y, TEAM Team, unsigned 
         case TEAM::BLUE:
             _SplitValues[Position.Y * _Size + Position.X].Blue += SplitValue;
             // Cap values at 100
+            // TODO: Check whether it would be better not to max this
+            // (Someone could be attacked from all sides and die...)
+            /*
             if (_SplitValues[Position.Y * _Size + Position.X].Blue > 100)
                 _SplitValues[Position.Y * _Size + Position.X].Blue = 100;
+            */
             break;
         case TEAM::RED:
             _SplitValues[Position.Y * _Size + Position.X].Red += SplitValue;
+            /*
             if (_SplitValues[Position.Y * _Size + Position.X].Red > 100)
                 _SplitValues[Position.Y * _Size + Position.X].Red = 100;
+            */
             break;
     }
 }

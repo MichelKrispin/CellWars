@@ -27,10 +27,12 @@ project (CellWars)
 
 set(SOURCE_FILES ${SOURCE_DIR}/Main.cpp
                  ${SOURCE_DIR}/Bot.cpp
+                 ${SOURCE_DIR}/EnemyBot.cpp
                  ${SOURCE_DIR}/Field.cpp
                  ${SOURCE_DIR}/FieldList.cpp
                  ${SOURCE_DIR}/FieldListIterator.cpp
                  ${SOURCE_DIR}/Grid.cpp
+                 ${SOURCE_DIR}/PlayerBot.cpp
                  ${SOURCE_DIR}/Window.cpp
                  ${SOURCE_DIR}/World.cpp
                  ${SOURCE_DIR}/WorldSnapshot.cpp

@@ -1,13 +1,12 @@
 #include "World.h"
-#include "Bot.h"
+#include "PlayerBot.h"
+#include "EnemyBot.h"
 
-#include <SFML/Graphics.hpp>
-#include "Configuration.h"
 int main()
 {
-    Bot a({5, 5}, TEAM::BLUE);
-    Bot b({20, 20}, TEAM::RED);
+    PlayerBot Player;
+    EnemyBot  Enemy;
     World& GameWorld = World::getWorld();
-    GameWorld.Play(&a, &b);
+    GameWorld.Play(&Player, &Enemy);
     return 0;
 }
