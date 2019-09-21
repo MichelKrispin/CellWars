@@ -15,9 +15,9 @@ void EnemyBot::MakeTurn(const WorldSnapshot& Snapshot)
          Iterator.Next())
     {
         Field* CurrentField = Iterator.Get();
-        CurrentField->SplitCells(DIRECTION::UP, 10);
-        CurrentField->SplitCells(DIRECTION::DOWN, 10);
-        CurrentField->SplitCells(DIRECTION::RIGHT, 10);
-        CurrentField->SplitCells(DIRECTION::LEFT, 10);
+        CurrentField->SplitCells(DIRECTION::UP, CurrentField->GetCellCount() * 0.1);
+        CurrentField->SplitCells(DIRECTION::DOWN, CurrentField->GetCellCount() * 0.1);
+        CurrentField->SplitCells(DIRECTION::RIGHT, CurrentField->GetCellCount() * 0.1);
+        CurrentField->SplitCells(DIRECTION::LEFT, CurrentField->GetCellCount() * 0.1);
     }
 }

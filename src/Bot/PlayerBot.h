@@ -28,8 +28,7 @@
  * \endcode
  *
  *  If you want to let one PlayerBot play against another PlayerBot
- *  you can call the World Play function with a dynamic cast:
- *  GameWorld.Play(dynamic_cast<Bot*>(a), dynamic_cast<Bot*>(b));
+ *  you can call the World Play function just like before.
  */
 class PlayerBot : public Bot
 {

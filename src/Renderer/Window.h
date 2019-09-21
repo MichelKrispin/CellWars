@@ -14,7 +14,7 @@ class Window
 public:
     /**
      * \brief Initializes the window with default values.
-     * Height and width will be 800 by default.
+     * Height and width will be WINDOW_SIZE (800 by default).
      * Can be changed in the Configuration.h
      */
     Window();

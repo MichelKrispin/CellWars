@@ -10,10 +10,10 @@
 #define GRID_SIZE 50
 
 // After how many turns is the game finished
-#define MAX_TURN_COUNT 200
+#define MAX_TURN_COUNT 2000
 
 // How long does a turn take
-#define TURN_DURATION_IN_MS 500
+#define TURN_DURATION_IN_MS 50
 
 // Possible options are White and Black
 #define BACKGROUND_COLOR Black

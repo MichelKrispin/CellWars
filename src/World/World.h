@@ -85,10 +85,15 @@ private:
     // Functions
     /**
      * \brief Update the world by calculating the actions of the field.
-     *
-     * \return Returns true if the window was killed while updating
      */
-    bool _UpdateWorld();
+    void _UpdateWorld();
+
+    /**
+     * \brief Render the world by passing everything needed to the renderer.
+     *
+     * \return Returns true if the window was killed while updating.
+     */
+    bool _RenderWorld();
 
     /**
      * \brief Initializes the world with the needed resources.
