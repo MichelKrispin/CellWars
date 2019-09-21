@@ -37,24 +37,32 @@ set(WORLD_SRC ${SOURCE_DIR}/World/Field.cpp
               ${SOURCE_DIR}/World/Vector.cpp
               ${SOURCE_DIR}/World/World.cpp
               ${SOURCE_DIR}/World/WorldSnapshot.cpp)
-
-# -----------
+# ------------------------------
 
 project (CellWars)
 
-set(SOURCE_FILES ${SOURCE_DIR}/Main.cpp
-                 ${BOT_SRC}
-                 ${RENDERER_SRC}
-                 ${WORLD_SRC})
+# First create the library
+set(LIBRARY_SRC ${RENDERER_SRC}
+                ${WORLD_SRC}
+                ${BOT_SRC})
 
-# add the executable
+add_library(CellWarsLibrary ${LIBRARY_SRC})
+target_link_libraries(CellWarsLibrary
+        sfml-system
+        sfml-window
+        sfml-network
+        sfml-graphics
+        sfml-audio)
+
+
+# Then create the executable
+set(SOURCE_FILES ${SOURCE_DIR}/Main.cpp)
+
+# Add the executable
 add_executable(CellWars ${SOURCE_FILES})
 
 # link all necessary libraries
+# Link all necessary libraries
 target_link_libraries(CellWars
-    sfml-system
-    sfml-window
-    sfml-network
-    sfml-graphics
-    sfml-audio)
+        CellWarsLibrary)
 

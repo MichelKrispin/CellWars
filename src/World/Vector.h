@@ -7,6 +7,7 @@ struct Vector
      * \brief Initialize the Vector with position 0 and 0.
      */
     Vector();
+
     /**
      * \brief Initialize the Vector with position x and y.
      *
