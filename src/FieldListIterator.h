@@ -1,6 +1,6 @@
 #ifndef _FIELDLISTITERATOR_H
 #define _FIELDLISTITERATOR_H
-#include "FieldList.h"
+#include "Field.h"
 
 class FieldList;
 

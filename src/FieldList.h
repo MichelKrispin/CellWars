@@ -59,7 +59,7 @@ private:
      *
      * \param Position Vector of the position of the field to be removed.
      */
-    void _Remove(Vector Position);
+    void _Remove(Vector &Position);
 
     std::vector<Field*> _Fields; //< The actual list of fields.
 

@@ -29,6 +29,7 @@ void World::Play(Bot* Blue, Bot* Red)
 {
     // Initialize both teams first fields
     // TODO: Raise an exception or similar if both starting positions are the same
+    // TODO: Outsource this to custom initialization method
     // Starting Positions will be numbers on the grid and are pixels now
     Vector BlueStartingPosition = Blue->GetStartingPosition();
     BlueStartingPosition.X *= WINDOW_SIZE / GRID_SIZE;
@@ -45,6 +46,10 @@ void World::Play(Bot* Blue, Bot* Red)
     // Then initialize the grid to be a reference to the created fields
     _Grid.Initialize(_Fields, 2); // Second argument is the number of teams
 
+    // Then initialize the WorldSnapshot
+    // TODO: Make this snapshot prettier
+    _WorldSnapshot->Fields = _Fields;
+
     for (unsigned int i = 0; i < MAX_TURN_COUNT; ++i)
     {
         _Clock.restart();
@@ -52,6 +57,7 @@ void World::Play(Bot* Blue, Bot* Red)
         // First make the turns for the bots
         Blue->MakeTurn(*_WorldSnapshot);
         Red->MakeTurn(*_WorldSnapshot);
+        _WorldSnapshot->_TurnNumber++;
 
         // Only make a turn after the turn duration is exceeded
         bool Kill = false;
@@ -102,16 +108,9 @@ bool World::UpdateWorld()
         }
     }
     // TODO: Make this more efficient. Maybe by saving the vectors and checking while looping once
-    // After applying everything loop again and check whether some fields were killed
-    for (int i = 0; i < 2; ++i) // 2 for team size
-    {
-        for (FieldListIterator Iterator = _Fields[i].Begin();
-             Iterator != _Fields[i].End();
-             Iterator.Next())
-        {
-
-        }
-    }
+    // After applying everything calculate the grid
+    _Grid.ComputeAllFields(_Fields);
+    
 
     // TODO: Do this on another thread
     // After calculating everything draw everything

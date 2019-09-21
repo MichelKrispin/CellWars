@@ -37,22 +37,27 @@ void Grid::Initialize(FieldList* FieldsList, unsigned int FieldsSize)
 
 void Grid::SetFieldValuesAt(unsigned int x, unsigned int y, TEAM Team, unsigned int SplitValue)
 {
+    // Make negative values go to the opposite side of the screen
+    if (static_cast<int>(x) < 0)
+        x += WINDOW_SIZE;
+    if (static_cast<int>(y) < 0)
+        y += WINDOW_SIZE;
+
     Vector Position = ConvertPixelsToGridValues({x, y});
     
-    // Make negativ values go to the opposite side of the screen
-    if (Position.X < 0)
-        Position.X += GRID_SIZE;
-    if (Position.Y < 0)
-        Position.Y += GRID_SIZE;
-
     // Change the split value for each team individually at that spot
     switch (Team)
     {
         case TEAM::BLUE:
-            _SplitValues[Position.Y * _Size + Position.X].Blue = SplitValue;
+            _SplitValues[Position.Y * _Size + Position.X].Blue += SplitValue;
+            // Cap values at 100
+            if (_SplitValues[Position.Y * _Size + Position.X].Blue > 100)
+                _SplitValues[Position.Y * _Size + Position.X].Blue = 100;
             break;
         case TEAM::RED:
-            _SplitValues[Position.Y * _Size + Position.X].Red = SplitValue;
+            _SplitValues[Position.Y * _Size + Position.X].Red += SplitValue;
+            if (_SplitValues[Position.Y * _Size + Position.X].Red > 100)
+                _SplitValues[Position.Y * _Size + Position.X].Red = 100;
             break;
     }
 }

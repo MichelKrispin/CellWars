@@ -50,12 +50,12 @@ void Window::Display(const FieldList* Fields)
             // If we are drawing for the first team take the last channel
             if (i) // Red team
                 // TODO: Change the 2.55 as they are just working if MAX_COUNT = 100
-                Rectangle.setFillColor(sf::Color(Current->getCellCount() * 2.55, 0, 0));
+                Rectangle.setFillColor(sf::Color(Current->GetCellCount() * 2.55, 0, 0));
             else   // Blue team
-                Rectangle.setFillColor(sf::Color(0, 0, Current->getCellCount() * 2.55));
+                Rectangle.setFillColor(sf::Color(0, 0, Current->GetCellCount() * 2.55));
 
             // Where it should be rendered
-            Vector Position = Current->getPosition();
+            Vector Position = Current->GetPosition();
             Rectangle.setPosition(Position.X, Position.Y);
             // Draw this rectangle
             _Window->draw(Rectangle);

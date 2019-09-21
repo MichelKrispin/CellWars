@@ -13,5 +13,5 @@
 #define MAX_TURN_COUNT 200
 
 // How long does a turn take
-#define TURN_DURATION_IN_MS 1000
+#define TURN_DURATION_IN_MS 500
 

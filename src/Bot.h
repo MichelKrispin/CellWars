@@ -22,8 +22,8 @@ public:
     TEAM GetTeam() const;
 
 private:
-    Vector _StartingPosition;
-    TEAM _Team;
+    const Vector _StartingPosition;
+    const TEAM _Team;
 };
 
 #endif

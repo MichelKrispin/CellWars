@@ -19,12 +19,21 @@ public:
      * \param Team The team which wants to know about its fields.
      * \return A constant FieldList to show which fields are currently theirs.
      */
-    const FieldList &getFields(TEAM Team);
+    const FieldList &GetFields(TEAM Team) const;
+
+    /**
+     * \brief Returns the actual turn count starting at
+     *
+     * \return The count of turns.
+     */
+     unsigned int GetTurn() const;
     
 private:
     FieldList* Fields; //< One FieldList for each team.
-    unsigned int TurnNumber; //< Keeping track of the current turn.
-    
+    unsigned int _TurnNumber; //< Keeping track of the current turn.
+
+    // The world is allowed to access everything
+    friend class World;
 };
 
 #endif

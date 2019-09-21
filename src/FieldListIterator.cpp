@@ -1,4 +1,5 @@
 #include "FieldListIterator.h"
+#include "FieldList.h"
 
 FieldListIterator::FieldListIterator()
 {

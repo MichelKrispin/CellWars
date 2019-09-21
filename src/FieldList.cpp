@@ -7,6 +7,11 @@ FieldList::FieldList()
 
 FieldList::~FieldList()
 {
+    for (unsigned int i = 0; i < _Fields.size(); ++i)
+    {
+        if (_Fields[i] != nullptr)
+            delete _Fields[i];
+    }
 }
 
 FieldListIterator FieldList::Begin() const
@@ -35,16 +40,18 @@ unsigned int FieldList::getSize() const
 
 void FieldList::_Add(Field NewField)
 {
-    _Fields.push_back(NewField);
+    _Fields.push_back(new Field(NewField));
 }
 
-void FieldList::_Remove(Vector Position)
+void FieldList::_Remove(Vector &Position)
 {
     // Look trough all fields and match the correponding one
     for (unsigned int i = 0; i < _Fields.size(); ++i)
     {
-        if (_Fields[i].GetPostion() == Position)
+        Vector Copy = _Fields[i]->GetPosition();
+        if (Copy == Position)
         {
+            delete _Fields[i];
             _Fields.erase(_Fields.begin() + i);
             return;
         }
