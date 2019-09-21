@@ -5,6 +5,12 @@
 #include "Actions.h"
 #include "Bot/Team.h"
 
+/**
+ * \brief A single field which can have multiple cells.
+ *
+ * Any field can have up to 100 cells which will be increased after each turn.
+ * Every cell can split as much cells of itself as it wants.
+ */
 class Field
 {
 public:
@@ -29,7 +35,9 @@ public:
 
     /**
      * \brief Returns the position of this field.
-     * The position is defined on the grid.
+     * The position is defined in pixel values.
+     * When called by the grid it will translate the pixel values to grid values.
+     *
      * \return A 2D Vector with X and Y positions.
      */
     const Vector &GetPosition() const;

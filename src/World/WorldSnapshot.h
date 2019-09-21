@@ -3,6 +3,11 @@
 #include "FieldList.h"
 #include "Bot/Team.h"
 
+/**
+ * \brief Used to pass a snapshot of the world to the bots.
+ *
+ * The world snapshot keeps track of everything which is needed by the bots.
+ */
 class WorldSnapshot
 {
 public:

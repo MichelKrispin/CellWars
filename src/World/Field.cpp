@@ -29,6 +29,7 @@ const TEAM& Field::GetTeam() const
 
 void Field::SplitCells(DIRECTION Direction, unsigned short CellCount)
 {
+    // TODO: You can probably split up more cells than you own
     switch(Direction)
     {
         case DIRECTION::UP:

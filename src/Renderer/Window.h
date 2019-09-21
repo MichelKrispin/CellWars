@@ -3,6 +3,12 @@
 
 namespace sf { class RenderWindow; }
 
+/**
+ * \brief Window class to render out everything.
+ *
+ * Needs a FieldList pointer to all fields to render out every field
+ * as there are positions saved.
+ */
 class Window
 {
 public:

@@ -15,7 +15,6 @@ struct Vector
      * \param y The Y value of this Vector.
      */
     Vector(unsigned int x, unsigned int y);
-
     virtual ~Vector();
 
     /**
@@ -25,8 +24,14 @@ struct Vector
      */
     bool operator==(Vector &other);
 
-    unsigned short X; //< The X position of this Vector.
-    unsigned short Y; //< The Y position of this Vector.
+    /**
+     * \brief X Position of this Vector.
+     */
+    unsigned short X;
+    /**
+     * \brief X Position of this Vector.
+     */
+    unsigned short Y;
 };
 
 #endif

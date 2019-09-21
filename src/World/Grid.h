@@ -7,10 +7,18 @@
 
 struct SplitValues
 {
+    /** \brief The splitted cells by the blue team. */
     unsigned int Blue;
+    /** \brief The splitted cells by the red team. */
     unsigned int Red;
 };
 
+/**
+ * \brief Keeps track of all fields in another way.
+ *
+ * While the bots keep track of their fields with a list this
+ * class uses another representation to make some calculations easier.
+ */
 class Grid
 {
 public:
@@ -25,7 +33,7 @@ public:
      * \brief Initialize the grid with  all existing fields.
      *
      * \param FieldsList The FieldList array of all fields hold by the world.
-     * \param Size The length of the FieldList array.
+     * \param FieldsSize The length of the FieldList array.
      */
     void Initialize(FieldList* FieldsList, unsigned int FieldsSize);
 
@@ -33,8 +41,10 @@ public:
      * \brief Setting the addition values at any position of the field.
      * Used by the world to set the values of the splitted cells.
      *
-     * \param x The x position in grid values.
-     * \param y The y position in grid values.
+     * \param x The x position in pixel values.
+     * \param y The y position in pixel values.
+     * \param Team The team member for which the field values will be set.
+     * \param SplitValue How many cells will be split to this field.
      */
     void SetFieldValuesAt(unsigned int x, unsigned int y, TEAM Team, unsigned int SplitValue);
 
@@ -49,7 +59,6 @@ public:
 
 private:
     // Functions
-    // TODO: Check if needed
     /**
      * \brief Converts pixel values to positions which lie on the grid.
      *
@@ -69,7 +78,6 @@ private:
     Field* _Fields[GRID_SIZE * GRID_SIZE]; //< Pointer to all fields. Initialized all with nullptr
     // TODO: Make this more adjustable for multiple teams (dynamic sized array like _Fields of World)
     SplitValues _SplitValues[GRID_SIZE * GRID_SIZE]; //< Keeping track of each teams splitted values 
-    // TODO: Maybe add array to keep track of fields team
     const unsigned int _Size; //< Saving the size/width of the grid
 
 };

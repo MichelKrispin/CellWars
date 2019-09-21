@@ -10,6 +10,30 @@
 
 namespace sf { class Clock; }
 
+/**
+ * \mainpage Cell Wars 
+ *
+ * \section intro_sec Introduction
+ *
+ * This could be an introduction.
+ * https://github.com/MichelKrispin/CellWars
+ *
+ * \section install_sec Installation
+ *
+ * Dependencies
+ * You need git installed and CMake installed.
+ * The Build scripts will download the needed git repositories.
+ * (The project needs SFML to run correctly.)
+ *
+ * Using either the Build.sh or Build.bat script will build the project.
+ */
+
+/**
+ * \brief Global world class which handles everything.
+ *
+ * The world class will play the game and be responsible for making every turn.
+ * It also passes the updated FieldList on to the Window class which renders all fields.
+ */
 class World 
 {
 public:
@@ -23,15 +47,15 @@ public:
      *
      * \return World World reference.
      */
-    static World &getWorld();
+    static World &GetWorld();
 
     /**
      * \brief Play the game.
      * Starts the game with two bots of which the game will be simulated.
      * The Player will be blue while the Enemy is in red color.
      *
-     * \Param Player A pointer to a PlayerBot.
-     * \Param Enemy  A pointer to an EnemyBot.
+     * \param Player A pointer to a PlayerBot.
+     * \param Enemy  A pointer to an EnemyBot.
      */
     void Play(PlayerBot* Player, EnemyBot* Enemy);
 
@@ -39,8 +63,8 @@ public:
      * \brief Play the game.
      * Starts the game with two bots of which the game will be simulated.
      *
-     * \Param Blue A pointer to the first bot.
-     * \Param Red A pointer to the second bot.
+     * \param Blue A pointer to the first bot.
+     * \param Red A pointer to the second bot.
      */
     void Play(Bot* Blue, Bot* Red);
 
@@ -64,7 +88,16 @@ private:
      *
      * \return Returns true if the window was killed while updating
      */
-    bool UpdateWorld();
+    bool _UpdateWorld();
+
+    /**
+     * \brief Initializes the world with the needed resources.
+     * Mostly kept in a separate method for cleaner code.
+     *
+     * \param Blue Just transfering the pointer from the Play function.
+     * \param Red Just transfering the pointer from the Play function.
+     */
+    void _Initialize(Bot* Blue, Bot* Red);
      
 
     // Variables

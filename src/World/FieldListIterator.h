@@ -4,6 +4,11 @@
 
 class FieldList;
 
+/**
+ * \brief An iterator for the FieldList.
+ *
+ * Makes it easy to iterate over every field in the list.
+ */
 class FieldListIterator
 {
 public:
@@ -22,7 +27,7 @@ public:
      * \brief Overwrites the behaviour of the default unequal operator.
      * Used to use this iterator inside a for loop.
      *
-     * \param unsigned int Other The size for comparison.
+     * \param other Other The size for comparison.
      */
     bool operator!=(unsigned int other);
 

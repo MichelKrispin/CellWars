@@ -6,6 +6,11 @@
 
 class FieldListIterator;
 
+/**
+ * \brief Holds a list to fields.
+ *
+ * A field can be added and removed by its position.
+ */
 class FieldList
 {
 public:
