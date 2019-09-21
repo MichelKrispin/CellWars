@@ -1,5 +1,6 @@
 #include "Field.h"
 #include "Configuration.h"
+#include "Bot/Utilities.h"
 
 Field::Field(TEAM Team, unsigned short CellCount, Vector Position)
     : _Team(Team),
@@ -47,10 +48,10 @@ void Field::SplitCells(DIRECTION Direction, unsigned short CellCount)
     }
 }
 
-void Field::_IncreaseCellCount(unsigned char &&Percentage)
+void Field::_IncreaseCellCount(const double &Percentage)
 {
     // TODO: Fix this calculation to let it round up
-    _CellCount += Percentage * (_CellCount / 100);
+    _CellCount += RoundUp(_CellCount, Percentage);
     if (_CellCount > MAX_COUNT_PER_FIELD)
         _CellCount = MAX_COUNT_PER_FIELD;
 }

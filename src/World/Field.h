@@ -68,9 +68,9 @@ private:
      * Used by the World to increase this fields cells after each turn.
      * The added cells will be rounded up.
      *
-     * \param Percentage The percentage by which the count will be increased.
+     * \param Percentage The percentage by which the count will be increased. (10% = 0.1)
      */
-    void _IncreaseCellCount(unsigned char &&Percentage);
+    void _IncreaseCellCount(const double &Percentage);
 
     /**
      * \brief Resets the Actions struct.

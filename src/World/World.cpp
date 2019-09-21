@@ -139,7 +139,7 @@ void World::_UpdateWorld()
             CurrentField->_ResetActions();
             
             // And then increase all by 10%
-            CurrentField->_IncreaseCellCount(10);
+            CurrentField->_IncreaseCellCount(0.1);
         }
     }
     // After applying everything calculate the grid
