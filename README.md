@@ -15,8 +15,7 @@ There are multiple command line arguments for the build script.\
 `sh Build.sh -b`  or `sh Build.sh --build`      for building only.\
 `sh Build.sh -r`  or `sh Build.sh --run`        for running only.\
 `sh Build.sh -d`  or `sh Build.sh --debug`      for building in debug mode.\
-`sh Build.sh -dr` or `sh Build.sh --debugrun`   for building in debug mode and running afterwards.\
-`sh Build.sh -t`  or `sh Build.sh --tests`      for running only the tests. (Without building)
+`sh Build.sh -dr` or `sh Build.sh --debugrun`   for building in debug mode and running afterwards.
 
 ## Building on Windows
 The Build.bat has all build options included.\
@@ -28,5 +27,4 @@ There are multiple command line arguments for the build script.\
 `Build.bat -b`  or `Build.bat --build`      for building only.\
 `Build.bat -r`  or `Build.bat --run`        for running only.\
 `Build.bat -d`  or `Build.bat --debug`      for building in debug mode.\
-`Build.bat -dr` or `Build.bat --debugrun`   for building in debug mode and running afterwards.\
-`Build.bat -t`  or `Build.bat --tests`      for running only the tests. (Without building)
+`Build.bat -dr` or `Build.bat --debugrun`   for building in debug mode and running afterwards.
