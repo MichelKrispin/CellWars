@@ -25,7 +25,7 @@ void Grid::Initialize(FieldList* FieldsList, unsigned int FieldsSize)
              it.Next())
         {
             Field* Current = it.Get();
-            Vector CurrentPosition = ConvertPixelsToGridValues(Current->GetPosition());
+            Vector CurrentPosition = _ConvertPixelsToGridValues(Current->GetPosition());
             _Fields[CurrentPosition.Y * _Size + CurrentPosition.X] = Current;
         }
     }
@@ -40,10 +40,16 @@ void Grid::SetFieldValuesAt(unsigned int x, unsigned int y, TEAM Team, unsigned 
     // Make negative values go to the opposite side of the screen
     if (static_cast<int>(x) < 0)
         x += WINDOW_SIZE;
+    if (static_cast<int>(x) >= WINDOW_SIZE)
+        x -= WINDOW_SIZE;
+
     if (static_cast<int>(y) < 0)
         y += WINDOW_SIZE;
+    if (static_cast<int>(y) >= WINDOW_SIZE)
+        y -= WINDOW_SIZE;
 
-    Vector Position = ConvertPixelsToGridValues({x, y});
+
+    Vector Position = _ConvertPixelsToGridValues({x, y});
     
     // Change the split value for each team individually at that spot
     switch (Team)
@@ -108,7 +114,7 @@ void Grid::ComputeAllFields(FieldList* AllFields)
             else
             {
                 FieldGoesTo = static_cast<unsigned int>(TEAM::RED); // 1
-                CellDifference = CurrentSplitValues.Blue - CurrentSplitValues.Red;
+                CellDifference = CurrentSplitValues.Red - CurrentSplitValues.Blue;
             }
 
             // If FieldGoesTo is still 0 and there wasn't a field already there is no need to do anything
@@ -154,9 +160,10 @@ void Grid::ComputeAllFields(FieldList* AllFields)
                 ._Add(Field(static_cast<TEAM>(FieldGoesTo), CellDifference, StartingPosition));
         }
     }
+    _UpdateAllReferences(AllFields);
 }
 
-Vector Grid::ConvertPixelsToGridValues(Vector InputPosition)
+Vector Grid::_ConvertPixelsToGridValues(Vector InputPosition)
 {
     /*
     return {
@@ -170,3 +177,24 @@ Vector Grid::ConvertPixelsToGridValues(Vector InputPosition)
     };
 }
 
+void Grid::_UpdateAllReferences(FieldList* FieldsList)
+{
+    // TODO: This whole function can probably be more efficient or even removed
+    // Reset all of them so there is no need to be scared of removed fields
+    for (unsigned int i = 0; i < _Size * _Size; ++i)
+        _Fields[i] = nullptr;
+
+    // Then add the Fields of the FieldsList our list
+    // TODO: This 2 is wrong if there are more teams
+    for (unsigned int i = 0; i < 2; ++i)
+    {
+        for (FieldListIterator it = FieldsList[i].Begin();
+             it != FieldsList[i].End();
+             it.Next())
+        {
+            Field* Current = it.Get();
+            Vector CurrentPosition = _ConvertPixelsToGridValues(Current->GetPosition());
+            _Fields[CurrentPosition.Y * _Size + CurrentPosition.X] = Current;
+        }
+    }
+}

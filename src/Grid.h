@@ -56,14 +56,20 @@ private:
      * \param InputPosition The input position in pixels.
      * \return Returns a converted Vector bound to GRID_SIZE.
      */
-    Vector ConvertPixelsToGridValues(Vector InputPosition);
+    Vector _ConvertPixelsToGridValues(Vector InputPosition);
+
+    /**
+     * \brief Updates all the field references from the orginal list.
+     *
+     * \param FieldsList The FieldList array of all fields hold by the world.
+     */
+    void _UpdateAllReferences(FieldList* FieldsList);
 
     // Variables
     Field* _Fields[GRID_SIZE * GRID_SIZE]; //< Pointer to all fields. Initialized all with nullptr
     // TODO: Make this more adjustable for multiple teams (dynamic sized array like _Fields of World)
     SplitValues _SplitValues[GRID_SIZE * GRID_SIZE]; //< Keeping track of each teams splitted values 
     // TODO: Maybe add array to keep track of fields team
-    Vector Victor; //< Maikas Vector namens Victor
     const unsigned int _Size; //< Saving the size/width of the grid
 
 };

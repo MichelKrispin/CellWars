@@ -1,4 +1,5 @@
 #include "Field.h"
+#include "Configuration.h"
 
 Field::Field(TEAM Team, unsigned short CellCount, Vector Position)
     : _Team(Team),
@@ -49,6 +50,8 @@ void Field::_IncreaseCellCount(unsigned char &&Percentage)
 {
     // TODO: Fix this calculation
     _CellCount += Percentage * (_CellCount / 100);
+    if (_CellCount > MAX_COUNT_PER_FIELD)
+        _CellCount = MAX_COUNT_PER_FIELD;
 }
 
 
