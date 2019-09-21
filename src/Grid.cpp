@@ -37,7 +37,7 @@ void Grid::Initialize(FieldList* FieldsList, unsigned int FieldsSize)
 
 void Grid::SetFieldValuesAt(unsigned int x, unsigned int y, TEAM Team, unsigned int SplitValue)
 {
-    // Make negative values go to the opposite side of the screen
+    // Make negative or too positive values go to the opposite side of the screen
     if (static_cast<int>(x) < 0)
         x += WINDOW_SIZE;
     if (static_cast<int>(x) >= WINDOW_SIZE)
@@ -116,6 +116,11 @@ void Grid::ComputeAllFields(FieldList* AllFields)
                 FieldGoesTo = static_cast<unsigned int>(TEAM::RED); // 1
                 CellDifference = CurrentSplitValues.Red - CurrentSplitValues.Blue;
             }
+            //
+            // If the difference of both cells is above the max take the max
+            if (CellDifference > MAX_COUNT_PER_FIELD)
+                CellDifference = MAX_COUNT_PER_FIELD;
+
 
             // If FieldGoesTo is still 0 and there wasn't a field already there is no need to do anything
             if (FieldAlreadyExists == -1 && FieldGoesTo == -1)
@@ -165,12 +170,6 @@ void Grid::ComputeAllFields(FieldList* AllFields)
 
 Vector Grid::_ConvertPixelsToGridValues(Vector InputPosition)
 {
-    /*
-    return {
-        static_cast<unsigned int>(InputPosition.X - (InputPosition.X % GRID_SIZE)),
-        static_cast<unsigned int>(InputPosition.X - (InputPosition.X % GRID_SIZE))
-    };
-    */
     return {
         static_cast<unsigned int>(InputPosition.X * GRID_SIZE / WINDOW_SIZE),
         static_cast<unsigned int>(InputPosition.Y * GRID_SIZE / WINDOW_SIZE)

@@ -48,7 +48,7 @@ void Field::SplitCells(DIRECTION Direction, unsigned short CellCount)
 
 void Field::_IncreaseCellCount(unsigned char &&Percentage)
 {
-    // TODO: Fix this calculation
+    // TODO: Fix this calculation to let it round up
     _CellCount += Percentage * (_CellCount / 100);
     if (_CellCount > MAX_COUNT_PER_FIELD)
         _CellCount = MAX_COUNT_PER_FIELD;
