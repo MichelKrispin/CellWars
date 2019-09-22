@@ -50,20 +50,20 @@ bool World::_Initialize(Bot* Player, Bot* Enemy)
         return false;
     }
     
-    // TODO: Fix teams to be that one of the bots
+    // TODO: Make this more adjustable for more teams (If any team is not blue then the index isn't 0)
     // Initialize both teams first fields
     // Starting Positions will be numbers on the grid and are pixels now
     Vector BlueStartingPosition = Player->GetStartingPosition();
     BlueStartingPosition.X *= WINDOW_SIZE / GRID_SIZE;
     BlueStartingPosition.Y *= WINDOW_SIZE / GRID_SIZE;
-    _Fields[static_cast<unsigned int>(TEAM::BLUE)]._Add(
-            Field(TEAM::BLUE, 100, BlueStartingPosition));
+    _Fields[static_cast<unsigned int>(Player->GetTeam())]._Add(
+            Field(Player->GetTeam(), 100, BlueStartingPosition));
 
     Vector RedStartingPosition = Enemy->GetStartingPosition();
     RedStartingPosition.X *= WINDOW_SIZE / GRID_SIZE;
     RedStartingPosition.Y *= WINDOW_SIZE / GRID_SIZE;
     _Fields[static_cast<unsigned int>(TEAM::RED)]._Add(
-            Field(TEAM::RED, 100, RedStartingPosition));
+            Field(Player->GetTeam(), 100, RedStartingPosition));
 
     // Then initialize the grid to be a reference to the created fields
     _Grid.Initialize(_Fields, 2); // Second argument is the number of teams
