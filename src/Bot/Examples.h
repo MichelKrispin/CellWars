@@ -90,6 +90,8 @@ public:
  */
 class AnotherEnemyBot : public EnemyBot
 {
+public:
+    // Simply overwrite the MakeTurn function to define the bots behaviour
     virtual void MakeTurn(const WorldSnapshot& Snapshot) override
     {
         for (FieldListIterator Iterator = Snapshot.GetFields().Begin();

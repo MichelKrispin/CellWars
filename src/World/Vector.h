@@ -1,6 +1,9 @@
 #ifndef _VECTOR_H
 #define _VECTOR_H
 
+/**
+ * \brief Simple 2-dimensional unsigned integer vector.
+ */
 struct Vector
 {
     /**

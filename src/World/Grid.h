@@ -5,6 +5,11 @@
 #include "Bot/Team.h"
 #include "FieldList.h"
 
+/**
+ * \brief A struct just to keep track of how many cells are added to a field.
+ *
+ * Might be removed in the future.
+ */
 struct SplitValues
 {
     /** \brief The splitted cells by the blue team. */
@@ -53,6 +58,8 @@ public:
      * Returns false whenever the adjacent field is empty or possessed by another team.
      * Used by the WorldSnapshot to allow a Bot to look next to its fields.
      *
+     * \param Team The team to which the field belongs to.
+     * \param Field The field for which the adjacent fields are searched for.
      * \param Direction The direction to look out for.
      *
      * \return Whether the adjacent field in the specified direction belongs to this fields team.

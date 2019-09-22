@@ -55,8 +55,8 @@ public:
      * Both bots will have to have different starting positions
      * as well as different teams. Otherwise the game will quit immediately.
      *
-     * \param Player A pointer to a PlayerBot.
-     * \param Enemy  A pointer to an EnemyBot.
+     * \param Player1 A pointer to a PlayerBot.
+     * \param Player2 A pointer to another PlayerBot.
      */
     void Play(PlayerBot* Player1, PlayerBot* Player2);
 
