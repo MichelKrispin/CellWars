@@ -37,7 +37,6 @@ void Grid::Initialize(FieldList* FieldsList, unsigned int FieldsSize)
 
 void Grid::SetFieldValuesAt(unsigned int x, unsigned int y, TEAM Team, unsigned int SplitValue)
 {
-    // TODO: Extract this to private method as it is reused int GetAdjacentFieldOf()
     // Make negative or too positive values go to the opposite side of the screen
     if (static_cast<int>(x) < 0)
         x += WINDOW_SIZE;
@@ -48,7 +47,6 @@ void Grid::SetFieldValuesAt(unsigned int x, unsigned int y, TEAM Team, unsigned 
         y += WINDOW_SIZE;
     if (static_cast<int>(y) >= WINDOW_SIZE)
         y -= WINDOW_SIZE;
-
 
     Vector Position = _ConvertPixelsToGridValues({x, y});
     

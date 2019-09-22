@@ -37,7 +37,6 @@ public:
      */
     void operator++(int);
 
-    // TODO: Maybe return a pointer
     /**
      * \brief Get the current element.
      */

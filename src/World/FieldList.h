@@ -32,7 +32,6 @@ public:
      */
     unsigned int End() const;
 
-    // TODO: Maybe return a pointer
     /**
      * \brief Get the Field at the corresponding index.
      * Throws an error if the index is out of bounds.

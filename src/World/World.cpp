@@ -3,6 +3,7 @@
 #include "WorldSnapshot.h"
 #include "Configuration.h"
 #include <SFML/System/Clock.hpp>
+#include <iostream>
 
 World& World::GetWorld()
 {
@@ -41,11 +42,13 @@ void World::Play(PlayerBot* Player, EnemyBot* Enemy)
 
 bool World::_Initialize(Bot* Player, Bot* Enemy)
 {
-    // TODO: Output an error message or something
     // Quit if both teams are the same or if the starting positions are the same
     if (Player->GetStartingPosition() == Enemy->GetStartingPosition()
      || Player->GetTeam()             == Enemy->GetTeam())
+    {
+        std::cout << "ERROR: Initializing World: Starting positions or teams are equal\n";
         return false;
+    }
     
     // TODO: Fix teams to be that one of the bots
     // Initialize both teams first fields
