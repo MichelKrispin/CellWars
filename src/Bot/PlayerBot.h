@@ -28,7 +28,7 @@
  * \endcode
  *
  *  If you want to let one PlayerBot play against another PlayerBot
- *  you can call the World Play function just like before.
+ *  please have a look at the Examples.h
  */
 class PlayerBot : public Bot
 {
