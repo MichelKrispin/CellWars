@@ -30,3 +30,8 @@ unsigned int WorldSnapshot::GetTurn() const
 {
     return _TurnNumber;
 }
+
+unsigned int WorldSnapshot::GetCount(const TEAM &Team) const
+{
+    return _Fields[static_cast<int>(Team)].GetSize();
+}

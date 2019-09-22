@@ -33,7 +33,7 @@ Field* FieldList::operator[](unsigned int Index) const
     return _Fields[Index];
 }
 
-unsigned int FieldList::getSize() const
+unsigned int FieldList::GetSize() const
 {
     return _Fields.size();
 }

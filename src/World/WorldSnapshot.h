@@ -46,6 +46,13 @@ public:
      * \return The count of turns.
      */
      unsigned int GetTurn() const;
+
+     /**
+      * \brief Returns the number of cells on the field for this team.
+      *
+      * \return Number of cells.
+      */
+     unsigned int GetCount(const TEAM &Team) const;
     
 private:
     FieldList* _Fields;        //< One FieldList for each team.

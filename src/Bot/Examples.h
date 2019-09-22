@@ -41,6 +41,9 @@ class MyBot : public PlayerBot
 };
 
 
+/**
+ * \brief A short example to show that an enemy Bot is written in the same way as a Player.
+ */
 class AnotherEnemyBot : public EnemyBot
 {
     virtual void MakeTurn(const WorldSnapshot& Snapshot) override

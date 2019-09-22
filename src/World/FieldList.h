@@ -48,7 +48,7 @@ public:
      *
      * \return Returns the size of the list.
      */
-    unsigned int getSize() const;
+    unsigned int GetSize() const;
 
 
 private:
