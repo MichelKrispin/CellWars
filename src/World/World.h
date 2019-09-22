@@ -52,7 +52,20 @@ public:
     /**
      * \brief Play the game.
      * Starts the game with two bots of which the game will be simulated.
+     * Both bots will have to have different starting positions
+     * as well as different teams. Otherwise the game will quit immediately.
+     *
+     * \param Player A pointer to a PlayerBot.
+     * \param Enemy  A pointer to an EnemyBot.
+     */
+    void Play(PlayerBot* Player1, PlayerBot* Player2);
+
+    /**
+     * \brief Play the game.
+     * Starts the game with two bots of which the game will be simulated.
      * The Player will be blue while the Enemy is in red color.
+     * Both bots will have to have different starting positions
+     * as well as different teams. Otherwise the game will quit immediately.
      *
      * \param Player A pointer to a PlayerBot.
      * \param Enemy  A pointer to an EnemyBot.
@@ -63,10 +76,10 @@ public:
      * \brief Play the game.
      * Starts the game with two bots of which the game will be simulated.
      *
-     * \param Blue A pointer to the first bot.
-     * \param Red A pointer to the second bot.
+     * \param Player A pointer to the first bot.
+     * \param Enemy A pointer to the second bot.
      */
-    void Play(Bot* Blue, Bot* Red);
+    void Play(Bot* Player, Bot* Enemy);
 
 private:
     /**
@@ -102,7 +115,7 @@ private:
      * \param Blue Just transfering the pointer from the Play function.
      * \param Red Just transfering the pointer from the Play function.
      */
-    void _Initialize(Bot* Blue, Bot* Red);
+    bool _Initialize(Bot* Blue, Bot* Red);
      
 
     // Variables

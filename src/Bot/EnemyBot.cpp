@@ -12,8 +12,8 @@ EnemyBot::~EnemyBot()
 
 void EnemyBot::MakeTurn(const WorldSnapshot& Snapshot)
 {
-    for (FieldListIterator Iterator = Snapshot.GetFields(GetTeam()).Begin();
-         Iterator != Snapshot.GetFields(GetTeam()).End();
+    for (FieldListIterator Iterator = Snapshot.GetFields().Begin();
+         Iterator != Snapshot.GetFields().End();
          Iterator.Next())
     {
         Field* CurrentField = Iterator.Get();

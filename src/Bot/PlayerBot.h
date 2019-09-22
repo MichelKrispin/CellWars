@@ -33,7 +33,23 @@
 class PlayerBot : public Bot
 {
 public:
+    /**
+     * \brief Initializes the Bot with the default parameter.
+     *
+     * Used for normal games against an EnemyBot.
+     */
     PlayerBot();
+
+    /**
+     * \brief Initializes the Bot with a custom TEAM.
+     *
+     * To be used to let one PlayerBot play against another PlayerBot.
+     * If used both player have to have unique teams.
+     * 
+     * \param Direction The position of the starting position.
+     * \param Team The team this player belongs to. (One of the teams from Teams.h)
+     */
+    PlayerBot(DIRECTION Direction, TEAM Team);
     virtual ~PlayerBot();
     
     /**

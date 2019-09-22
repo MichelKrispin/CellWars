@@ -11,7 +11,8 @@ Vector::Vector(unsigned int x, unsigned int y)
 Vector::~Vector()
 {}
 
-bool Vector::operator==(Vector &other)
+bool Vector::operator==(const Vector &other) const
 {
     return (X == other.X && Y == other.Y);
 }
+

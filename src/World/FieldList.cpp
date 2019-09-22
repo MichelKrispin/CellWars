@@ -26,6 +26,7 @@ unsigned int FieldList::End() const
 
 Field* FieldList::operator[](unsigned int Index) const
 {
+    // TODO: Make this throw an error
     /*
     if (Index >= _Size)
         // Throw error

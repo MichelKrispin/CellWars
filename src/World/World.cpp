@@ -15,16 +15,22 @@ World::World()
       _Grid()
 {
     _Clock = new sf::Clock;
-    _WorldSnapshot = new WorldSnapshot;
     // TODO: Make this adjustable for multiple teams
+    _WorldSnapshot = new WorldSnapshot[2]; 
     _Fields = new FieldList[2];
 }
 
 World::~World()
 {
-    delete _Clock;
-    delete _WorldSnapshot;
+    delete   _Clock;
+    delete[] _WorldSnapshot;
     delete[] _Fields;
+}
+
+void World::Play(PlayerBot* Player1, PlayerBot* Player2)
+{
+    Play(dynamic_cast<Bot*>(Player1),
+         dynamic_cast<Bot*>(Player2));
 }
 
 void World::Play(PlayerBot* Player, EnemyBot* Enemy)
@@ -33,25 +39,24 @@ void World::Play(PlayerBot* Player, EnemyBot* Enemy)
          dynamic_cast<Bot*>(Enemy));
 }
 
-void World::_Initialize(Bot* Blue, Bot* Red)
+bool World::_Initialize(Bot* Player, Bot* Enemy)
 {
-    // TODO: Raise an exception or similar if both starting positions are the same
-    // Initialize both teams first fields
-    /*
-    if (Blue->GetStartingPosition())
-    {
-
-    }
-    */
+    // TODO: Output an error message or something
+    // Quit if both teams are the same or if the starting positions are the same
+    if (Player->GetStartingPosition() == Enemy->GetStartingPosition()
+     || Player->GetTeam()             == Enemy->GetTeam())
+        return false;
     
+    // TODO: Fix teams to be that one of the bots
+    // Initialize both teams first fields
     // Starting Positions will be numbers on the grid and are pixels now
-    Vector BlueStartingPosition = Blue->GetStartingPosition();
+    Vector BlueStartingPosition = Player->GetStartingPosition();
     BlueStartingPosition.X *= WINDOW_SIZE / GRID_SIZE;
     BlueStartingPosition.Y *= WINDOW_SIZE / GRID_SIZE;
     _Fields[static_cast<unsigned int>(TEAM::BLUE)]._Add(
             Field(TEAM::BLUE, 100, BlueStartingPosition));
 
-    Vector RedStartingPosition = Red->GetStartingPosition();
+    Vector RedStartingPosition = Enemy->GetStartingPosition();
     RedStartingPosition.X *= WINDOW_SIZE / GRID_SIZE;
     RedStartingPosition.Y *= WINDOW_SIZE / GRID_SIZE;
     _Fields[static_cast<unsigned int>(TEAM::RED)]._Add(
@@ -62,22 +67,28 @@ void World::_Initialize(Bot* Blue, Bot* Red)
 
     // Then initialize the WorldSnapshot
     // TODO: Make this snapshot prettier
-    _WorldSnapshot->_Fields = _Fields;
-    _WorldSnapshot->_Grid   = &_Grid;
+    _WorldSnapshot[static_cast<unsigned int>(TEAM::BLUE)]
+        ._Initialize(TEAM::BLUE, &_Fields[static_cast<unsigned int>(TEAM::BLUE)], &_Grid);
+    _WorldSnapshot[static_cast<unsigned int>(TEAM::RED)]
+        ._Initialize(TEAM::BLUE, &_Fields[static_cast<unsigned int>(TEAM::RED)], &_Grid);
+    return true;
 }
 
-void World::Play(Bot* Blue, Bot* Red)
+void World::Play(Bot* Player, Bot* Enemy)
 {
-    // Initialize everything first
-    _Initialize(Blue, Red);
+    // Initialize everything first and if there are errors quit
+    if (!_Initialize(Player, Enemy))
+        return;
 
     for (unsigned int i = 0; i < MAX_TURN_COUNT; ++i)
     {
         _Clock->restart();
         // TODO: Check the duration time for the make turn function
+        // and if one is above limit delete all of their actions (hehe)
+        
         // First make the turns for the bots
-        Blue->MakeTurn(*_WorldSnapshot);
-        Red->MakeTurn(*_WorldSnapshot);
+        Player->MakeTurn(_WorldSnapshot[static_cast<int>(TEAM::BLUE)]);
+        Enemy->MakeTurn(_WorldSnapshot[static_cast<int>(TEAM::RED)]);
         _WorldSnapshot->_TurnNumber++;
         // After the turn update once
         _UpdateWorld();

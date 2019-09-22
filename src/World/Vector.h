@@ -22,7 +22,7 @@ struct Vector
      *
      * \param other Another vector.
      */
-    bool operator==(Vector &other);
+    bool operator==(const Vector &other) const;
 
     /**
      * \brief X Position of this Vector.

@@ -3,11 +3,11 @@
 
 int main()
 {
-    //PlayerBot Player;
     //EnemyBot  Enemy;
-    MyBot Player;
-    AnotherEnemyBot Player2;
+    MyBot MyPlayer;
+    PlayAgainstPlayerBot Player(DIRECTION::DOWN, TEAM::RED);
+    AnotherEnemyBot Enemy;
     World& GameWorld = World::GetWorld();
-    GameWorld.Play(&Player, &Player2);
+    GameWorld.Play(&MyPlayer, &Player);
     return 0;
 }

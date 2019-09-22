@@ -1,17 +1,23 @@
 #include "PlayerBot.h"
 #include "Configuration.h"
+#include "World/FieldList.h"
 
 PlayerBot::PlayerBot()
     : Bot({GRID_SIZE/4, GRID_SIZE/2}, TEAM::BLUE)
 {}
+
+PlayerBot::PlayerBot(DIRECTION Direction, TEAM Team)
+    : Bot(Direction, Team)
+{
+}
 
 PlayerBot::~PlayerBot()
 {}
 
 void PlayerBot::MakeTurn(const WorldSnapshot& Snapshot)
 {
-    for (FieldListIterator Iterator = Snapshot.GetFields(GetTeam()).Begin();
-         Iterator != Snapshot.GetFields(GetTeam()).End();
+    for (FieldListIterator Iterator = Snapshot.GetFields().Begin();
+         Iterator != Snapshot.GetFields().End();
          Iterator.Next())
     {
         Field* CurrentField = Iterator.Get();

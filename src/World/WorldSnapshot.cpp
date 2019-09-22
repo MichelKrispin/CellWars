@@ -13,16 +13,16 @@ WorldSnapshot::~WorldSnapshot()
 {
 }
 
-const FieldList& WorldSnapshot::GetFields(TEAM Team) const
+const FieldList& WorldSnapshot::GetFields() const
 {
     // Using the team as an index
-    return _Fields[static_cast<int>(Team)];
+    return *_Fields;
 }
 
-bool WorldSnapshot::GetAdjacentFieldOf(const TEAM &Team, const Field* Field, const DIRECTION &Direction) const
+bool WorldSnapshot::GetAdjacentFieldOf(const Field* Field, const DIRECTION &Direction) const
 {
     // Calls into the Grids function and just passes everything on
-    return _Grid->GetAdjacentFieldOf(Team, Field, Direction);
+    return _Grid->GetAdjacentFieldOf(_Team, Field, Direction);
 }
 
 
@@ -31,7 +31,14 @@ unsigned int WorldSnapshot::GetTurn() const
     return _TurnNumber;
 }
 
-unsigned int WorldSnapshot::GetCount(const TEAM &Team) const
+unsigned int WorldSnapshot::GetCount() const
 {
-    return _Fields[static_cast<int>(Team)].GetSize();
+    return _Fields->GetSize();
+}
+
+void WorldSnapshot::_Initialize(TEAM Team, FieldList* Fields, Grid* WorldGrid)
+{
+    _Team = Team;
+    _Fields = Fields;
+    _Grid = WorldGrid;
 }
