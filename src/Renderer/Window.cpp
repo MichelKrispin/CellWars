@@ -1,6 +1,9 @@
 #include "Window.h"
 #include <SFML/Graphics.hpp>
 #include "Configuration.h"
+#include "World/Field.h"
+#include "World/FieldList.h"
+#include "World/FieldListIterator.h"
 
 Window::Window()
     : _isDead(false)
@@ -49,10 +52,9 @@ void Window::Display(const FieldList* Fields)
             // TODO: Make this adjustable for more Teams
             // If we are drawing for the first team take the last channel
             if (i) // Red team
-                // TODO: Change the 2.55 as they are just working if MAX_COUNT = 100
-                Rectangle.setFillColor(sf::Color(Current->GetCellCount() * 2.55, 0, 0));
+                Rectangle.setFillColor(sf::Color(Current->GetCellCount() * 255.0 / MAX_COUNT_PER_FIELD, 0, 0));
             else   // Blue team
-                Rectangle.setFillColor(sf::Color(0, 0, Current->GetCellCount() * 2.55));
+                Rectangle.setFillColor(sf::Color(0, 0, Current->GetCellCount() * 255.0 / MAX_COUNT_PER_FIELD));
 
             // Where it should be rendered
             Vector Position = Current->GetPosition();
