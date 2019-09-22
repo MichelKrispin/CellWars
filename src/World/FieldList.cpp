@@ -1,4 +1,15 @@
 #include "FieldList.h"
+#include <exception>
+
+// This class is only for throwing the exception at the right spot
+class OutOfBoundsException : public std::exception
+{
+public:
+    virtual const char* what() const throw()
+    {
+        return "Tried to access out of bounds index";
+    }
+};
 
 FieldList::FieldList()
 {
@@ -26,11 +37,8 @@ unsigned int FieldList::End() const
 
 Field* FieldList::operator[](unsigned int Index) const
 {
-    // TODO: Make this throw an error
-    /*
-    if (Index >= _Size)
-        // Throw error
-    */
+    if (Index >= _Fields.size())
+        throw OutOfBoundsException();
     return _Fields[Index];
 }
 

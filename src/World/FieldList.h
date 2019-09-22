@@ -34,7 +34,7 @@ public:
 
     /**
      * \brief Get the Field at the corresponding index.
-     * Throws an error if the index is out of bounds.
+     * Throws an exception if the index is out of bounds.
      *
      * \param Index The index of the field.
      * \return Returns a pointer to the field.

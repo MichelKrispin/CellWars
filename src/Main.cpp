@@ -3,7 +3,6 @@
 
 int main()
 {
-    //EnemyBot  Enemy;
     MyBot MyPlayer;
     PlayAgainstPlayerBot Player(DIRECTION::DOWN, TEAM::RED);
     AnotherEnemyBot Enemy;
