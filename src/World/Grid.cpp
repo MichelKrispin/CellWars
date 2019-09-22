@@ -37,6 +37,7 @@ void Grid::Initialize(FieldList* FieldsList, unsigned int FieldsSize)
 
 void Grid::SetFieldValuesAt(unsigned int x, unsigned int y, TEAM Team, unsigned int SplitValue)
 {
+    // TODO: Extract this to private method as it is reused int GetAdjacentFieldOf()
     // Make negative or too positive values go to the opposite side of the screen
     if (static_cast<int>(x) < 0)
         x += WINDOW_SIZE;
@@ -174,7 +175,44 @@ void Grid::ComputeAllFields(FieldList* AllFields)
     _UpdateAllReferences(AllFields);
 }
 
-Vector Grid::_ConvertPixelsToGridValues(Vector InputPosition)
+bool Grid::GetAdjacentFieldOf(const TEAM &Team, const Field* Field, const DIRECTION &Direction) const
+{
+    // First get its position in grid values
+    Vector Position = _ConvertPixelsToGridValues(Field->GetPosition());
+    switch (Direction)
+    {
+        case DIRECTION::UP:
+            Position.Y -= 1;
+            break;
+        case DIRECTION::DOWN:
+            Position.Y += 1;
+            break;
+        case DIRECTION::RIGHT:
+            Position.X += 1;
+            break;
+        case DIRECTION::LEFT:
+            Position.X -= 1;
+            break;
+    }
+   
+    // Same goes after going one step aside but in grid space
+    if (static_cast<short>(Position.X) < 0)
+        Position.X += GRID_SIZE;
+    if (static_cast<short>(Position.X) >= GRID_SIZE)
+        Position.X -= GRID_SIZE;
+
+    if (static_cast<short>(Position.Y) < 0)
+        Position.Y += GRID_SIZE;
+    if (static_cast<short>(Position.Y) >= GRID_SIZE)
+        Position.Y -= GRID_SIZE;
+
+    // If a nullptr is at the new position return false
+    // Or if their team doesn't equal (short circuiting)
+    return !(_Fields[Position.Y * _Size + Position.X] == nullptr
+             || _Fields[Position.Y * _Size + Position.X]->GetTeam() != Team);
+}
+
+Vector Grid::_ConvertPixelsToGridValues(const Vector &InputPosition) const
 {
     return {
         static_cast<unsigned int>(InputPosition.X * GRID_SIZE / WINDOW_SIZE),

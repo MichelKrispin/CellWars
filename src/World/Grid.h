@@ -17,7 +17,7 @@ struct SplitValues
  * \brief Keeps track of all fields in another way.
  *
  * While the bots keep track of their fields with a list this
- * class uses another representation to make some calculations easier.
+     * class uses another representation to make some calculations easier.
  */
 class Grid
 {
@@ -49,6 +49,17 @@ public:
     void SetFieldValuesAt(unsigned int x, unsigned int y, TEAM Team, unsigned int SplitValue);
 
     /**
+     * \brief Returns true if there is another field of the same team next to this one.
+     * Returns false whenever the adjacent field is empty or possessed by another team.
+     * Used by the WorldSnapshot to allow a Bot to look next to its fields.
+     *
+     * \param Direction The direction to look out for.
+     *
+     * \return Whether the adjacent field in the specified direction belongs to this fields team.
+     */
+   bool GetAdjacentFieldOf(const TEAM &Team, const Field* Field, const DIRECTION &Direction) const;
+
+    /**
      * \brief Computes all fields in the grid.
      * Calculates the difference between the fields and check whether new fields should be added
      * or some should be removed.
@@ -65,7 +76,7 @@ private:
      * \param InputPosition The input position in pixels.
      * \return Returns a converted Vector bound to GRID_SIZE.
      */
-    Vector _ConvertPixelsToGridValues(Vector InputPosition);
+    Vector _ConvertPixelsToGridValues(const Vector& InputPosition) const;
 
     /**
      * \brief Updates all the field references from the orginal list.

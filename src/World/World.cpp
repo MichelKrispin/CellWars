@@ -1,5 +1,6 @@
 #include "World.h"
 #include "FieldList.h"
+#include "WorldSnapshot.h"
 #include "Configuration.h"
 #include <SFML/System/Clock.hpp>
 
@@ -61,7 +62,8 @@ void World::_Initialize(Bot* Blue, Bot* Red)
 
     // Then initialize the WorldSnapshot
     // TODO: Make this snapshot prettier
-    _WorldSnapshot->Fields = _Fields;
+    _WorldSnapshot->_Fields = _Fields;
+    _WorldSnapshot->_Grid   = &_Grid;
 }
 
 void World::Play(Bot* Blue, Bot* Red)

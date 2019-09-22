@@ -3,6 +3,7 @@
 #include <iostream>
 #include "World/WorldSnapshot.h"
 #include "Team.h"
+#include "World/Vector.h"
 
 /**
  * \brief The basic bot class.

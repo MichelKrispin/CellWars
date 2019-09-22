@@ -2,13 +2,13 @@
 #define _WORLD_H
 #include "Bot/Bot.h"
 #include "Renderer/Window.h"
-#include "FieldList.h"
 #include "Grid.h"
-#include "WorldSnapshot.h"
 #include "Bot/EnemyBot.h"
 #include "Bot/PlayerBot.h"
 
 namespace sf { class Clock; }
+class FieldList;
+class WorldSnapshot;
 
 /**
  * \mainpage Cell Wars 
@@ -108,6 +108,7 @@ private:
     // Variables
     Window _Window;                //< The window used to render everything on screen.
     Grid _Grid;                    //< The grid which keeps track of all fields in a more natural way.
+    // TODO: Make multiple snapshots (one for each team)
     WorldSnapshot* _WorldSnapshot; //< A snapshot of the world which will be updated after each turn.
     FieldList* _Fields;            //< Keeping track of all fields for both teams.
     sf::Clock* _Clock;             //< Used to measure the time between each turn.
