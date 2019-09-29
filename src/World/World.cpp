@@ -62,8 +62,8 @@ bool World::_Initialize(Bot* Player, Bot* Enemy)
     Vector RedStartingPosition = Enemy->GetStartingPosition();
     RedStartingPosition.X *= WINDOW_SIZE / GRID_SIZE;
     RedStartingPosition.Y *= WINDOW_SIZE / GRID_SIZE;
-    _Fields[static_cast<unsigned int>(TEAM::RED)]._Add(
-            Field(Player->GetTeam(), 100, RedStartingPosition));
+    _Fields[static_cast<unsigned int>(Enemy->GetTeam())]._Add(
+            Field(Enemy->GetTeam(), 100, RedStartingPosition));
 
     // Then initialize the grid to be a reference to the created fields
     _Grid.Initialize(_Fields, 2); // Second argument is the number of teams
@@ -73,7 +73,7 @@ bool World::_Initialize(Bot* Player, Bot* Enemy)
     _WorldSnapshot[static_cast<unsigned int>(TEAM::BLUE)]
         ._Initialize(TEAM::BLUE, &_Fields[static_cast<unsigned int>(TEAM::BLUE)], &_Grid);
     _WorldSnapshot[static_cast<unsigned int>(TEAM::RED)]
-        ._Initialize(TEAM::BLUE, &_Fields[static_cast<unsigned int>(TEAM::RED)], &_Grid);
+        ._Initialize(TEAM::RED,  &_Fields[static_cast<unsigned int>(TEAM::RED)], &_Grid);
     return true;
 }
 

@@ -37,7 +37,7 @@ public:
 
 int main()
 {
-    PlayerBot Player;
+    MyBot Player;
     MaxBot MyPlayer;
     //PlayAgainstPlayerBot Player(DIRECTION::RIGHT, TEAM::RED);
     AnotherEnemyBot Enemy;
