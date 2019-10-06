@@ -1,7 +1,7 @@
 #include "World/World.h"
 #include "Bot/Examples.h"
 
-class MaxBot : public EnemyBot
+class MaxBot : public PlayerBot
 {
 public:
     virtual void MakeTurn(const WorldSnapshot& Snapshot) override
@@ -39,9 +39,12 @@ int main()
 {
     MyBot Player;
     MaxBot MyPlayer;
-    //PlayAgainstPlayerBot Player(DIRECTION::RIGHT, TEAM::RED);
-    AnotherEnemyBot Enemy;
+    AnotherPlayerBot Enemy;
+    Bot* Bots[2];
+    Bots[0] = &Player;
+    Bots[1] = &MyPlayer;
     World& GameWorld = World::GetWorld();
-    GameWorld.Play(&Player, &MyPlayer);
+    //GameWorld.Play(&Player, &MyPlayer);
+    GameWorld.Play(Bots);
     return 0;
 }

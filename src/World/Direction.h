@@ -6,14 +6,14 @@
  */
 enum class DIRECTION
 {
-    /** \brief Up direction */
-    UP,
     /** \brief Left direction */
     LEFT,
     /** \brief Right direction */
     RIGHT,
     /** \brief Down direction */
-    DOWN
+    DOWN,
+    /** \brief Up direction */
+    UP
 };
 
 #endif

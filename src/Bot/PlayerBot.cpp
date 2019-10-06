@@ -3,7 +3,8 @@
 #include "World/FieldList.h"
 
 PlayerBot::PlayerBot()
-    : Bot({GRID_SIZE/4, GRID_SIZE/2}, TEAM::BLUE)
+//    : Bot({GRID_SIZE/4, GRID_SIZE/2}, TEAM::BLUE)
+    : Bot()
 {}
 
 PlayerBot::PlayerBot(DIRECTION Direction, TEAM Team)

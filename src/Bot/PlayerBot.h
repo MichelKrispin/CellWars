@@ -36,7 +36,7 @@ public:
     /**
      * \brief Initializes the Bot with the default parameter.
      *
-     * Used for normal games against an EnemyBot.
+     * Used for normal games against another Bot.
      */
     PlayerBot();
 

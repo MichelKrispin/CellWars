@@ -6,8 +6,14 @@
  */
 enum class TEAM
 {
-    BLUE = 0, //< Blue team member with index 0
-    RED,      //< Red team member with index 1
+    /** \brief Blue team member starting with index 0 */
+    BLUE = 0,
+    /** \brief Red team member */
+    RED,
+    /** \brief Green team member */
+    GREEN,
+    /** \brief Yellow team member */
+    YELLOW,
 };
 
 #endif

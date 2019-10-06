@@ -13,12 +13,17 @@ World& World::GetWorld()
 
 World::World()
     : _Window(),
-      _Grid()
+      _Grid(),
+      _NumberOfBots(0)
 {
     _Clock = new sf::Clock;
-    // TODO: Make this adjustable for multiple teams
-    _WorldSnapshot = new WorldSnapshot[2]; 
-    _Fields = new FieldList[2];
+    // _WorldSnapshot and _Fields will be initialized in the right _Initialize() methods
+    // as there might be more than 2 teams
+    // Set all bots to be nullptr
+    _Bots[0] = nullptr;
+    _Bots[1] = nullptr;
+    _Bots[2] = nullptr;
+    _Bots[3] = nullptr;
 }
 
 World::~World()
@@ -30,57 +35,19 @@ World::~World()
 
 void World::Play(PlayerBot* Player1, PlayerBot* Player2)
 {
-    Play(dynamic_cast<Bot*>(Player1),
-         dynamic_cast<Bot*>(Player2));
+    _Bots[0] = Player1;
+    _Bots[1] = Player2;
+    Play(_Bots);
 }
 
-void World::Play(PlayerBot* Player, EnemyBot* Enemy)
+void World::Play(Bot** Bots)
 {
-    Play(dynamic_cast<Bot*>(Player),
-         dynamic_cast<Bot*>(Enemy));
-}
+    // Save the input bots to the local _Bots array for as many bots as there might exist
+    if (!_SetInputToLocalBots(Bots))
+        return;
 
-bool World::_Initialize(Bot* Player, Bot* Enemy)
-{
-    // Quit if both teams are the same or if the starting positions are the same
-    if (Player->GetStartingPosition() == Enemy->GetStartingPosition()
-     || Player->GetTeam()             == Enemy->GetTeam())
-    {
-        std::cout << "ERROR: Initializing World: Starting positions or teams are equal\n";
-        return false;
-    }
-    
-    // TODO: Make this more adjustable for more teams (If any team is not blue then the index isn't 0)
-    // Initialize both teams first fields
-    // Starting Positions will be numbers on the grid and are pixels now
-    Vector BlueStartingPosition = Player->GetStartingPosition();
-    BlueStartingPosition.X *= WINDOW_SIZE / GRID_SIZE;
-    BlueStartingPosition.Y *= WINDOW_SIZE / GRID_SIZE;
-    _Fields[static_cast<unsigned int>(Player->GetTeam())]._Add(
-            Field(Player->GetTeam(), 100, BlueStartingPosition));
-
-    Vector RedStartingPosition = Enemy->GetStartingPosition();
-    RedStartingPosition.X *= WINDOW_SIZE / GRID_SIZE;
-    RedStartingPosition.Y *= WINDOW_SIZE / GRID_SIZE;
-    _Fields[static_cast<unsigned int>(Enemy->GetTeam())]._Add(
-            Field(Enemy->GetTeam(), 100, RedStartingPosition));
-
-    // Then initialize the grid to be a reference to the created fields
-    _Grid.Initialize(_Fields, 2); // Second argument is the number of teams
-
-    // Then initialize the WorldSnapshot
-    // TODO: Make this snapshot prettier
-    _WorldSnapshot[static_cast<unsigned int>(TEAM::BLUE)]
-        ._Initialize(TEAM::BLUE, &_Fields[static_cast<unsigned int>(TEAM::BLUE)], &_Grid);
-    _WorldSnapshot[static_cast<unsigned int>(TEAM::RED)]
-        ._Initialize(TEAM::RED,  &_Fields[static_cast<unsigned int>(TEAM::RED)], &_Grid);
-    return true;
-}
-
-void World::Play(Bot* Player, Bot* Enemy)
-{
     // Initialize everything first and if there are errors quit
-    if (!_Initialize(Player, Enemy))
+    if (!_Initialize())
         return;
 
     for (unsigned int i = 0; i < MAX_TURN_COUNT; ++i)
@@ -89,9 +56,13 @@ void World::Play(Bot* Player, Bot* Enemy)
         // TODO: Check the duration time for the make turn function
         // and if one is above limit delete all of their actions (hehe)
         
-        // First make the turns for the bots
-        Player->MakeTurn(_WorldSnapshot[static_cast<int>(TEAM::BLUE)]);
-        Enemy->MakeTurn(_WorldSnapshot[static_cast<int>(TEAM::RED)]);
+        // TODO: Change this to be more adjustable more multiple bots
+        // First make the turns for all bots
+        for (unsigned char i = 0; i < _NumberOfBots; ++i) 
+        {
+            _Bots[i]->MakeTurn(_WorldSnapshot[_Bots[i]->GetTeamAsUnsignedInt()]);
+        }
+
         _WorldSnapshot->_TurnNumber++;
         // After the turn update once
         _UpdateWorld();
@@ -104,6 +75,68 @@ void World::Play(Bot* Player, Bot* Enemy)
         if (Kill)
             break;
     }
+}
+
+bool World::_SetInputToLocalBots(Bot** Bots)
+{
+    // If the pointer itself is empty return false
+    if (Bots == nullptr) // TODO: Same as Bots[0]?
+        return false;
+
+    // Go trough all bots pointers and check how many exist
+    unsigned char count = 0;
+    for (unsigned char i = 0; i < 4; ++i)
+    {
+        // By this we know that at the next position there is an existing Bot
+        if (dynamic_cast<Bot*>(Bots[i])->GetTeamAsUnsignedInt() == -1)
+        {
+            _Bots[count] = Bots[i];
+            ++count;
+        }
+    }
+    // If there is only one return false
+    if (count < 1)
+        return false;
+    
+    _NumberOfBots = count;
+    return true;
+}
+
+bool World::_Initialize()
+{
+    // Initalize as many fields and worldsnapshots as needed 
+    _Fields = new FieldList[_NumberOfBots];
+    _WorldSnapshot = new WorldSnapshot[_NumberOfBots];
+
+    // Initialize the bots and fields for as many players as there are
+    for (unsigned char i = 0; i < _NumberOfBots; ++i)
+    {
+        // Initialize the bots first
+        _Bots[i]->_Initialize(
+            static_cast<DIRECTION>(i), // Direction goes first LEFt, RIGHT, DOWN, UP
+            static_cast<TEAM>(i));     // Team goes first BLUE, RED, GREEN, YELLOW
+
+       
+        // After initializing the players initialize the fields for two teams
+        // Starting Positions have to be translated 
+        // from pixels to numbers on the grid
+        Vector TranslatedStartingPosition = _Bots[i]->GetStartingPosition();
+        TranslatedStartingPosition.X *= WINDOW_SIZE / GRID_SIZE;
+        TranslatedStartingPosition.Y *= WINDOW_SIZE / GRID_SIZE;
+        _Fields[_Bots[i]->GetTeamAsUnsignedInt()]._Add(
+                Field(_Bots[i]->GetTeam(), 100, TranslatedStartingPosition));
+    }
+
+    // Then the Grid can be initialized with the fields
+    _Grid.Initialize(_Fields, _NumberOfBots); // Second argument is the number of teams
+
+    // Then initialize the WorldSnapshot for all teams
+    for (unsigned char i = 0; i < _NumberOfBots; ++i)
+    {
+        _WorldSnapshot[_Bots[i]->GetTeamAsUnsignedInt()]   // Initalize Snapshot at first position
+            ._Initialize(_Bots[i]->GetTeam(), &_Fields[_Bots[i]->GetTeamAsUnsignedInt()], &_Grid);
+    }
+    return true;
 }
 
 void World::_UpdateWorld()

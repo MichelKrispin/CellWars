@@ -14,31 +14,19 @@ class Bot
 {
 public:
     /**
-     * \brief Initialize this bot with it starting position and a given team.
-     *
-     * The starting position should be somewhere between GRID_SIZE and 0 given
-     * as grid indices.
-     * It will be translated to pixels on world initialization.
-     *
-     * \param StartingPosition X and Y position in grid indices of this bot.
-     * \param Team The team this bot belongs to.
+     * \brief Create a new empty Bot.
+     * 
+     * This bot has to be initialized by the world to give it a correct starting position
+     * as well as a team.
      */
-    Bot(Vector StartingPosition, TEAM Team);
-
-    /**
-     * \brief Initialize this bot with a default starting position and a given team.
-     *
-     * The starting position can be any direction.
-     *
-     * \param Direction The starting position defined as a direction.
-     * \param Team The team this bot belongs to.
-     */
-    Bot(DIRECTION Direction, TEAM Team);
-
+    Bot();
     virtual ~Bot();
 
     /**
      * \brief Makes the turn for this Bot.
+     * 
+     * This function should be overwritten by any newly created Bot
+     * as this gets called by the World on every round.
      *
      * \param Snapshot A Snapshot of the world at this moment
      */
@@ -55,12 +43,37 @@ public:
      * \brief Returns the team of this bot.
      *
      * Normally this will only be called once on world initialization.
+     * 
+     * \return The team of this Bot as a TEAM enum.
      */
     virtual TEAM GetTeam() const final;
+    
+    /**
+     * \brief Returns the team of this bot as an unsigned int.
+     *
+     * Normally this will only be called once on world initialization
+     * to be used inside of arrays.
+     * 
+     * \return The team of this Bot as an index.
+     */
+    virtual unsigned int GetTeamAsUnsignedInt() const final;
 
 private:
+    /**
+     * \brief Initializs this bot with a starting position and a given team.
+     *
+     * The starting position can be any direction.
+     *
+     * \param Direction The starting position defined as a direction.
+     * \param Team The team this bot belongs to.
+     */
+    void _Initialize(DIRECTION Direction, TEAM Team);
+
     Vector _StartingPosition;  //< The starting position of this bot in grid indices.
-    const TEAM _Team;                //< The team of this bot.
+    // TODO: Check whether this could be const
+    TEAM _Team;                //< The team of this bot.
+
+    friend class World;
 };
 
 #endif

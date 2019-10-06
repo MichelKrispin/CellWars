@@ -1,5 +1,4 @@
 #include "Bot/PlayerBot.h"
-#include "Bot/EnemyBot.h"
 #include "Bot/Utilities.h"
 #include "World/WorldSnapshot.h"
 #include "World/FieldList.h"
@@ -88,7 +87,7 @@ public:
 /**
  * \brief A short example to show that an enemy Bot is written in the same way as a Player.
  */
-class AnotherEnemyBot : public EnemyBot
+class AnotherPlayerBot : public PlayerBot
 {
 public:
     // Simply overwrite the MakeTurn function to define the bots behaviour

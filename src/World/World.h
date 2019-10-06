@@ -3,7 +3,6 @@
 #include "Bot/Bot.h"
 #include "Renderer/Window.h"
 #include "Grid.h"
-#include "Bot/EnemyBot.h"
 #include "Bot/PlayerBot.h"
 
 namespace sf { class Clock; }
@@ -62,24 +61,17 @@ public:
 
     /**
      * \brief Play the game.
-     * Starts the game with two bots of which the game will be simulated.
-     * The Player will be blue while the Enemy is in red color.
-     * Both bots will have to have different starting positions
-     * as well as different teams. Otherwise the game will quit immediately.
-     *
-     * \param Player A pointer to a PlayerBot.
-     * \param Enemy  A pointer to an EnemyBot.
+     * 
+     * Starts the game with up to four bots of which the game will be simulated.
+     * 
+     * \param Bots A pointer to the pointers of bots.
      */
-    void Play(PlayerBot* Player, EnemyBot* Enemy);
+    void Play(Bot** Bots);
 
-    /**
-     * \brief Play the game.
-     * Starts the game with two bots of which the game will be simulated.
-     *
-     * \param Player A pointer to the first bot.
-     * \param Enemy A pointer to the second bot.
-     */
-    void Play(Bot* Player, Bot* Enemy);
+    // Used for the singleton pattern
+    // Delete the copy and the assignment constructor
+    World(const World&) = delete;
+    World& operator=(const World&) = delete;
 
 private:
     /**
@@ -88,12 +80,6 @@ private:
      */
     World();
     virtual ~World();
-
-    // Used for the singleton pattern
-    // Delete the copy and the assignment constructor
-    World(const World&) = delete;
-    World& operator=(const World&) = delete;
-
 
     // Functions
     /**
@@ -109,20 +95,32 @@ private:
     bool _RenderWorld();
 
     /**
-     * \brief Initializes the world with the needed resources.
-     * Mostly kept in a separate method for cleaner code.
-     *
-     * \param Blue Just transfering the pointer from the Play function.
-     * \param Red Just transfering the pointer from the Play function.
+     * \brief Saves the input Bots array to the local _Bots array.
+     * 
+     * \param Bots The input Bots array of all player.
+     * 
+     * \return Returns false if there is only one bot.
      */
-    bool _Initialize(Bot* Blue, Bot* Red);
+    bool _SetInputToLocalBots(Bot** Bots);
      
+    /**
+     * \brief Initializes the world with the needed resources.
+     * 
+     * Mostly kept in a separate method for cleaner code.
+     * This function uses the local _Bots array to initialize everything
+     * so it doesn't need any new input.
+     * 
+     * \return Returns false if there is anything wrong in the initalization process.
+     */
+    bool _Initialize();
 
     // Variables
     Window _Window;                //< The window used to render everything on screen.
     Grid _Grid;                    //< The grid which keeps track of all fields in a more natural way.
     WorldSnapshot* _WorldSnapshot; //< A snapshot of the world which will be updated after each turn.
     FieldList* _Fields;            //< Keeping track of all fields for both teams.
+    Bot* _Bots[4];                 //< An array of up to four Bot pointer. These are the playing bots.
+    unsigned char _NumberOfBots;   //< The number of bots that are currently playing.
     sf::Clock* _Clock;             //< Used to measure the time between each turn.
 };
 
