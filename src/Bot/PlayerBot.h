@@ -11,7 +11,7 @@
  * \code {.cpp}
  *  class MyBot : public PlayerBot
  *  {
- *      virtual void MakeTurn(const WorldSnapshot& Snapshot) override
+ *      void MakeTurn(const WorldSnapshot& Snapshot) override
  *      {
  *          // Iterate trough every of your fields
  *          for (FieldListIterator Iterator = Snapshot.GetFields(GetTeam()).Begin();
@@ -39,18 +39,6 @@ public:
      * Used for normal games against another Bot.
      */
     PlayerBot();
-
-    /**
-     * \brief Initializes the Bot with a custom TEAM.
-     *
-     * To be used to let one PlayerBot play against another PlayerBot.
-     * If used both player have to have unique teams.
-     * 
-     * \param Direction The position of the starting position.
-     * \param Team The team this player belongs to. (One of the teams from Teams.h)
-     */
-    PlayerBot(DIRECTION Direction, TEAM Team);
-    virtual ~PlayerBot();
     
     /**
      * \brief The turn function which should be overriden.

@@ -53,14 +53,14 @@ void World::Play(Bot** Bots)
     for (unsigned int i = 0; i < MAX_TURN_COUNT; ++i)
     {
         _Clock->restart();
-        // TODO: Check the duration time for the make turn function
-        // and if one is above limit delete all of their actions (hehe)
         
         // TODO: Change this to be more adjustable more multiple bots
         // First make the turns for all bots
-        for (unsigned char i = 0; i < _NumberOfBots; ++i) 
+        for (unsigned char j = 0; j < _NumberOfBots; ++j)
         {
-            _Bots[i]->MakeTurn(_WorldSnapshot[_Bots[i]->GetTeamAsUnsignedInt()]);
+            // TODO: Check the duration time for the make turn function
+            // and if one is above limit delete all of their actions (hehe)
+            _Bots[j]->MakeTurn(_WorldSnapshot[_Bots[j]->GetTeamAsUnsignedInt()]);
         }
 
         _WorldSnapshot->_TurnNumber++;
@@ -80,7 +80,7 @@ void World::Play(Bot** Bots)
 bool World::_SetInputToLocalBots(Bot** Bots)
 {
     // If the pointer itself is empty return false
-    if (Bots == nullptr) // TODO: Same as Bots[0]?
+    if (Bots == nullptr)
         return false;
 
     // Go trough all bots pointers and check how many exist
@@ -88,7 +88,8 @@ bool World::_SetInputToLocalBots(Bot** Bots)
     for (unsigned char i = 0; i < 4; ++i)
     {
         // By this we know that at the next position there is an existing Bot
-        if (dynamic_cast<Bot*>(Bots[i])->GetTeamAsUnsignedInt() == -1)
+        if (dynamic_cast<Bot*>(Bots[i]) != nullptr && // Short-circuiting for testing if that pointer is null
+            dynamic_cast<Bot*>(Bots[i])->GetTeamAsUnsignedInt() == -1)
         {
             _Bots[count] = Bots[i];
             ++count;
@@ -104,7 +105,7 @@ bool World::_SetInputToLocalBots(Bot** Bots)
 
 bool World::_Initialize()
 {
-    // Initalize as many fields and worldsnapshots as needed 
+    // Initialize as many fields and world snapshots as needed
     _Fields = new FieldList[_NumberOfBots];
     _WorldSnapshot = new WorldSnapshot[_NumberOfBots];
 
@@ -119,7 +120,7 @@ bool World::_Initialize()
        
         // After initializing the players initialize the fields for two teams
         // Starting Positions have to be translated 
-        // from pixels to numbers on the grid
+        // from numbers on the grid to pixels
         Vector TranslatedStartingPosition = _Bots[i]->GetStartingPosition();
         TranslatedStartingPosition.X *= WINDOW_SIZE / GRID_SIZE;
         TranslatedStartingPosition.Y *= WINDOW_SIZE / GRID_SIZE;

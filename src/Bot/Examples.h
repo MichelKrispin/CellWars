@@ -12,7 +12,7 @@ class MyBot : public PlayerBot
 {
 public:
     // Overwrite this method as it gets called by the world on each turn
-    virtual void MakeTurn(const WorldSnapshot& Snapshot) override
+    void MakeTurn(const WorldSnapshot& Snapshot) override
     {
         // Loop trough every Field using a FieldListIterator which automatically loops trough all existing fields of this team
         for (FieldListIterator Iterator = Snapshot.GetFields().Begin();
@@ -47,51 +47,50 @@ public:
 };
 
 /**
- * \brief A Bot to show how to be able to let a player play against another player.
- *
- * You have to create one of these bots and a normal PlayerBot because they have to have
- * different starting positions and teams.
- *
- * So you can do:
- * \code {.cpp}
- * PlayerBot a;
- * PlayAgainstPlayerBot b(DIRECTION:RIGHT, TEAM::RED);
- * GameWorld.Play(&a, &b);
- * \endcode
+ * \brief A bot which splits by looking at adjacent fields and checks for its own team fields.
  */
-class PlayAgainstPlayerBot : public PlayerBot
+class MaxBot : public PlayerBot
 {
 public:
-    // Write your own constructor to pass the the starting direction and the team.
-    PlayAgainstPlayerBot(DIRECTION Direction, TEAM Team)
-        // Pass this on to the base class
-        : PlayerBot(Direction, Team)
-    {}
-
-    // And then you can overwrite the MakeTurn function just as before
-    virtual void MakeTurn(const WorldSnapshot& Snapshot) override
+    void MakeTurn(const WorldSnapshot& Snapshot) override
     {
         for (FieldListIterator Iterator = Snapshot.GetFields().Begin();
              Iterator != Snapshot.GetFields().End();
              Iterator.Next())
         {
             Field* CurrentField = Iterator.Get();
-            CurrentField->SplitCells(DIRECTION::UP, CurrentField->GetCellCount() * 0.1);
-            CurrentField->SplitCells(DIRECTION::RIGHT, CurrentField->GetCellCount() * 0.1);
-            CurrentField->SplitCells(DIRECTION::LEFT, CurrentField->GetCellCount() * 0.1);
-            CurrentField->SplitCells(DIRECTION::DOWN, CurrentField->GetCellCount() * 0.1);
+
+            if (!Snapshot.GetAdjacentFieldOf(CurrentField, DIRECTION::LEFT))
+                CurrentField->SplitCells(DIRECTION::LEFT, CurrentField->GetCellCount()*0.5);
+            else if (!Snapshot.GetAdjacentFieldOf(CurrentField, DIRECTION::UP))
+                CurrentField->SplitCells(DIRECTION::UP, CurrentField->GetCellCount()*0.5);
+            else if (!Snapshot.GetAdjacentFieldOf(CurrentField, DIRECTION::RIGHT))
+                CurrentField->SplitCells(DIRECTION::RIGHT, CurrentField->GetCellCount()*0.5);
+            else if (!Snapshot.GetAdjacentFieldOf(CurrentField, DIRECTION::DOWN))
+                CurrentField->SplitCells(DIRECTION::DOWN, CurrentField->GetCellCount()*0.5);
+
+            if (Snapshot.GetAdjacentFieldOf(CurrentField, DIRECTION::LEFT)  &&
+                Snapshot.GetAdjacentFieldOf(CurrentField, DIRECTION::UP)    &&
+                Snapshot.GetAdjacentFieldOf(CurrentField, DIRECTION::RIGHT) &&
+                Snapshot.GetAdjacentFieldOf(CurrentField, DIRECTION::DOWN))
+            {
+                CurrentField->SplitCells(DIRECTION::UP, RoundUp(CurrentField->GetCellCount(), 0.1));
+                CurrentField->SplitCells(DIRECTION::LEFT, RoundUp(CurrentField->GetCellCount(), 0.1));
+                CurrentField->SplitCells(DIRECTION::DOWN, RoundUp(CurrentField->GetCellCount(), 0.1));
+                CurrentField->SplitCells(DIRECTION::RIGHT, RoundUp(CurrentField->GetCellCount(), 0.1));
+            }
         }
     }
 };
 
 /**
- * \brief A short example to show that an enemy Bot is written in the same way as a Player.
+ * \brief Another Bot just for demonstration purposes.
  */
 class AnotherPlayerBot : public PlayerBot
 {
 public:
     // Simply overwrite the MakeTurn function to define the bots behaviour
-    virtual void MakeTurn(const WorldSnapshot& Snapshot) override
+    void MakeTurn(const WorldSnapshot& Snapshot) override
     {
         for (FieldListIterator Iterator = Snapshot.GetFields().Begin();
              Iterator != Snapshot.GetFields().End();
