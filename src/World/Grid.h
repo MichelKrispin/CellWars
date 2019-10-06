@@ -16,6 +16,36 @@ struct SplitValues
     unsigned int Blue;
     /** \brief The splitted cells by the red team. */
     unsigned int Red;
+    /** \brief The splitted cells by the green team. */
+    unsigned int Green;
+    /** \brief The splitted cells by the yellow team. */
+    unsigned int Yellow;
+
+    /** \brief Reset all values. */
+    void Reset()
+    {
+        Blue   = 0;
+        Red    = 0;
+        Green  = 0;
+        Yellow = 0;
+    }
+
+    unsigned int operator[] (unsigned char index)
+    {
+        switch (index)
+        {
+            case 0:
+                return Blue;
+            case 1:
+                return Red;
+            case 2:
+                return Green;
+            case 3:
+                return Yellow;
+            default:
+                return -1;
+        }
+    }
 };
 
 /**
@@ -72,8 +102,9 @@ public:
      * or some should be removed.
      *
      * \param AllFields Can be modified if new fields are created or if fields are removed for a team.
+     * \param NumberOfTeams How many team are playing.
      */
-    void ComputeAllFields(FieldList* AllFields);
+    void ComputeAllFields(FieldList* AllFields, unsigned char NumberOfTeams);
 
 private:
     // Functions
@@ -89,8 +120,9 @@ private:
      * \brief Updates all the field references from the orginal list.
      *
      * \param FieldsList The FieldList array of all fields hold by the world.
+     * \param NumberOfTeams The number of teams currently playing.
      */
-    void _UpdateAllReferences(FieldList* FieldsList);
+    void _UpdateAllReferences(FieldList* FieldsList, const unsigned char &NumberOfTeams);
 
     // Variables
     Field* _Fields[GRID_SIZE * GRID_SIZE]; //< Pointer to all fields. Initialized all with nullptr

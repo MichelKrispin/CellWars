@@ -25,8 +25,9 @@ public:
      * The default function to call after all calculations are made.
      * 
      * \param Fields A list for all fields which should be drawn
+     * \param NumberOfTeams The number of teams playing.
      */
-    void Display(const FieldList* Fields);
+    void Display(const FieldList* Fields, unsigned char NumberOfTeams);
 
     /**
      * \brief Indicates whether the window was closed.

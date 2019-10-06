@@ -69,7 +69,7 @@ void World::Play(Bot** Bots)
 
         // Only make a turn after the turn duration is exceeded
         bool Kill = false;
-        // Render as long as we are below the turn duration (mostly for responsiveness)
+        // Render as long as we are below the turn duration (mostly for keystroke/kill responsiveness)
         while (_Clock->getElapsedTime().asMilliseconds() < TURN_DURATION_IN_MS)
             Kill = _RenderWorld();
         if (Kill)
@@ -142,8 +142,9 @@ bool World::_Initialize()
 
 void World::_UpdateWorld()
 {
-    // Looping trough all fields and applying the actions
-    for (int i = 0; i < 2; ++i) // 2 for team size
+    // Looping trough all fields of all teams and applying the actions
+    // (Settings the split values on the grid for each team)
+    for (int i = 0; i < _NumberOfBots; ++i)
     {
         for (FieldListIterator Iterator = _Fields[i].Begin();
              Iterator != _Fields[i].End();
@@ -160,7 +161,6 @@ void World::_UpdateWorld()
                 CurrentActions.Up  + CurrentActions.Down +
                 CurrentActions.Left + CurrentActions.Right;
 
-            // TODO: If sum of all action variables exceed the cells of the CurrentField
             // If sum exceeds cell count then skip this split
             if (SummedSplitValues > CurrentField->GetCellCount())
                 continue;
@@ -193,14 +193,14 @@ void World::_UpdateWorld()
         }
     }
     // After applying everything calculate the grid
-    _Grid.ComputeAllFields(_Fields);
+    _Grid.ComputeAllFields(_Fields, _NumberOfBots);
 }
 
 bool World::_RenderWorld()
 {
     // TODO: Do this on another thread
     // After calculating everything draw everything
-    _Window.Display(_Fields);
+    _Window.Display(_Fields, _NumberOfBots);
     
     // Return the death status of the window
     return _Window.isDead();

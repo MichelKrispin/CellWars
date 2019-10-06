@@ -5,24 +5,19 @@
 class OutOfBoundsException : public std::exception
 {
 public:
-    virtual const char* what() const throw()
+    const char* what() const noexcept override
     {
         return "Tried to access out of bounds index";
     }
 };
 
-FieldList::FieldList()
-{
-}
+FieldList::FieldList() = default;
 
 
 FieldList::~FieldList()
 {
-    for (unsigned int i = 0; i < _Fields.size(); ++i)
-    {
-        if (_Fields[i] != nullptr)
-            delete _Fields[i];
-    }
+    for (auto &_Field : _Fields)
+        delete _Field;
 }
 
 FieldListIterator FieldList::Begin() const

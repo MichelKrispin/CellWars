@@ -16,7 +16,7 @@ Window::~Window()
     delete _Window;
 }
 
-void Window::Display(const FieldList* Fields)
+void Window::Display(const FieldList* Fields, unsigned char NumberOfTeams)
 {
     // First check whether the window is dead
     sf::Event event;
@@ -40,7 +40,7 @@ void Window::Display(const FieldList* Fields)
     _Window->clear(sf::Color::BACKGROUND_COLOR);
 
     // Looping trough all of the Fields
-    for (int i = 0; i < 2; ++i) // 2 for team size
+    for (int i = 0; i < NumberOfTeams; ++i) // 2 for team size
     {
         for (FieldListIterator iterator = Fields[i].Begin();
              iterator != Fields[i].End();
@@ -49,13 +49,22 @@ void Window::Display(const FieldList* Fields)
             Field* Current = iterator.Get();
             
             // How strong the field should be rendered
-            // TODO: Make this adjustable for more Teams
             // If we are drawing for the first team take the last channel
-            if (i) // Red team
-                Rectangle.setFillColor(sf::Color(Current->GetCellCount() * 255.0 / MAX_COUNT_PER_FIELD, 0, 0));
-            else   // Blue team
-                Rectangle.setFillColor(sf::Color(0, 0, Current->GetCellCount() * 255.0 / MAX_COUNT_PER_FIELD));
-
+            switch (static_cast<TEAM>(i))
+            {
+                case TEAM::BLUE:
+                    Rectangle.setFillColor(sf::Color(0, 0, Current->GetCellCount() * 255.0 / MAX_COUNT_PER_FIELD));
+                    break;
+                case TEAM::RED:
+                    Rectangle.setFillColor(sf::Color(Current->GetCellCount() * 255.0 / MAX_COUNT_PER_FIELD, 0, 0));
+                    break;
+                case TEAM::GREEN:
+                    Rectangle.setFillColor(sf::Color(0, Current->GetCellCount() * 255.0 / MAX_COUNT_PER_FIELD, 0));
+                    break;
+                case TEAM::YELLOW:
+                    Rectangle.setFillColor(sf::Color(Current->GetCellCount() * 255.0 / MAX_COUNT_PER_FIELD, Current->GetCellCount() * 255.0 / MAX_COUNT_PER_FIELD, 0));
+                    break;
+            }
             // Where it should be rendered
             Vector Position = Current->GetPosition();
             Rectangle.setPosition(Position.X, Position.Y);
