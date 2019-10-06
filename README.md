@@ -3,7 +3,8 @@
 ## Dependencies
 You need git installed and CMake installed.\
 The Build scripts will download the needed git repositories.\
-(The project needs [SFML](https://github.com/SFML/SFML) to run correctly.)
+(The project needs [SFML](https://github.com/SFML/SFML) to run correctly.)\
+In addition you'll need a font inside of the bin folder. You can specify this font inside of the Configuration.h file.
 
 ## Building on Mac
 The Build.sh has all build options included.\
