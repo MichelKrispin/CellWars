@@ -90,9 +90,11 @@ private:
     /**
      * \brief Render the world by passing everything needed to the renderer.
      *
+     * \param TurnNumber The count of turns.
+     *
      * \return Returns true if the window was killed while updating.
      */
-    bool _RenderWorld();
+    bool _RenderWorld(const unsigned int &TurnNumber);
 
     /**
      * \brief Saves the input Bots array to the local _Bots array.

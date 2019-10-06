@@ -17,3 +17,7 @@
 
 // Possible options are White and Black
 #define BACKGROUND_COLOR Black
+
+// The font which will be used for the turn number 
+// This is the relative path off the working directory
+#define FONT_PATH "arial.ttf"

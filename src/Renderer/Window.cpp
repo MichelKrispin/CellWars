@@ -4,19 +4,33 @@
 #include "World/Field.h"
 #include "World/FieldList.h"
 #include "World/FieldListIterator.h"
+#include <iostream>
+#include <sstream>
 
 Window::Window()
     : _isDead(false)
 {
-    _Window = new sf::RenderWindow(sf::VideoMode(WINDOW_SIZE, WINDOW_SIZE), "Cell Wars");
+    _Window = new sf::RenderWindow(
+            sf::VideoMode(WINDOW_SIZE, WINDOW_SIZE + WINDOW_SIZE/10), // Add a fifth to the height
+            "Cell Wars");
+
+    if (!_Font.loadFromFile(FONT_PATH))
+        std::cout << "ERROR :: LOADING FONT :: WINDOW \n";
+
+    _Text = new sf::Text;
+    _Text->setFont(_Font); // TODO: Check whether this is working
+    _Text->setCharacterSize(WINDOW_SIZE/10);
+    _Text->setFillColor(sf::Color::White);
+    _Text->setPosition(10, WINDOW_SIZE); // 10px padding on left side
 }
 
 Window::~Window()
 {
     delete _Window;
+    delete _Text;
 }
 
-void Window::Display(const FieldList* Fields, unsigned char NumberOfTeams)
+void Window::Display(const FieldList *Fields, const unsigned char &NumberOfTeams, const unsigned int &TurnNumber)
 {
     // First check whether the window is dead
     sf::Event event;
@@ -28,6 +42,10 @@ void Window::Display(const FieldList* Fields, unsigned char NumberOfTeams)
             _isDead = true;
         }
     }
+
+    std::stringstream TextConversion;
+    TextConversion << TurnNumber;
+    _Text->setString(TextConversion.str());
 
     // Create one rectangle and draw it multiple times
     sf::RectangleShape Rectangle;
@@ -73,6 +91,7 @@ void Window::Display(const FieldList* Fields, unsigned char NumberOfTeams)
         }
     }
 
+    _Window->draw(*_Text);
     // Display everything drawn
     _Window->display();
 }

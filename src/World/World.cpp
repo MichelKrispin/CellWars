@@ -71,7 +71,7 @@ void World::Play(Bot** Bots)
         bool Kill = false;
         // Render as long as we are below the turn duration (mostly for keystroke/kill responsiveness)
         while (_Clock->getElapsedTime().asMilliseconds() < TURN_DURATION_IN_MS)
-            Kill = _RenderWorld();
+            Kill = _RenderWorld(_WorldSnapshot->_TurnNumber);
         if (Kill)
             break;
     }
@@ -89,7 +89,7 @@ bool World::_SetInputToLocalBots(Bot** Bots)
     {
         // By this we know that at the next position there is an existing Bot
         if (dynamic_cast<Bot*>(Bots[i]) != nullptr && // Short-circuiting for testing if that pointer is null
-            dynamic_cast<Bot*>(Bots[i])->GetTeamAsUnsignedInt() == -1)
+            dynamic_cast<Bot*>(Bots[i])->GetTeamAsUnsignedInt() == -1) //TODO: This looks wrong
         {
             _Bots[count] = Bots[i];
             ++count;
@@ -196,11 +196,11 @@ void World::_UpdateWorld()
     _Grid.ComputeAllFields(_Fields, _NumberOfBots);
 }
 
-bool World::_RenderWorld()
+bool World::_RenderWorld(const unsigned int &TurnNumber)
 {
     // TODO: Do this on another thread
     // After calculating everything draw everything
-    _Window.Display(_Fields, _NumberOfBots);
+    _Window.Display(_Fields, _NumberOfBots, TurnNumber);
     
     // Return the death status of the window
     return _Window.isDead();
