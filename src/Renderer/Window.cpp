@@ -21,7 +21,7 @@ Window::Window()
     _Text->setFont(_Font); // TODO: Check whether this is working
     _Text->setCharacterSize(WINDOW_SIZE/10);
     _Text->setFillColor(sf::Color::White);
-    _Text->setPosition(10, WINDOW_SIZE); // 10px padding on left side
+    _Text->setPosition(10, WINDOW_SIZE-10); // 10px padding on left side
 }
 
 Window::~Window()
@@ -30,7 +30,7 @@ Window::~Window()
     delete _Text;
 }
 
-void Window::Display(const FieldList *Fields, const unsigned char &NumberOfTeams, const unsigned int &TurnNumber)
+WindowEvent Window::Display(const FieldList *Fields, const unsigned char &NumberOfTeams, const unsigned int &TurnNumber)
 {
     // First check whether the window is dead
     sf::Event event;
@@ -39,7 +39,21 @@ void Window::Display(const FieldList *Fields, const unsigned char &NumberOfTeams
         if (event.type == sf::Event::Closed)
         {
             _Window->close();
-            _isDead = true;
+            return WindowEvent::Kill;
+        }
+        else if (event.type == sf::Event::KeyPressed)
+        {
+            if (event.key.code == sf::Keyboard::Escape)
+            {
+                _Window->close();
+                return WindowEvent::Kill;
+            }
+            else if (event.key.code == sf::Keyboard::Space)
+                return WindowEvent::Pause; // TODO: Maybe change this Event to unpause toggle or similar
+            else if (event.key.code == sf::Keyboard::Right)
+                return WindowEvent::StepForward;
+            else if (event.key.code == sf::Keyboard::Up)
+                return WindowEvent::Play;
         }
     }
 
@@ -94,6 +108,8 @@ void Window::Display(const FieldList *Fields, const unsigned char &NumberOfTeams
     _Window->draw(*_Text);
     // Display everything drawn
     _Window->display();
+
+    return WindowEvent::Nothing; // Everything is alright
 }
 
 bool Window::isDead() const

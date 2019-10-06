@@ -1,6 +1,7 @@
 #pragma once
 #include "World/WorldSnapshot.h"
 #include <SFML/Graphics/Font.hpp>
+#include "Renderer/WindowEvent.h"
 
 namespace sf { class RenderWindow; class Font; class Text; }
 
@@ -28,8 +29,10 @@ public:
      * \param Fields A list for all fields which should be drawn
      * \param NumberOfTeams The number of teams playing.
      * \param TurnNumber The count of this round.
+     *
+     * \return Returns a window event according to any interactivity happened while displaying.
      */
-    void Display(const FieldList *Fields, const unsigned char &NumberOfTeams, const unsigned int &TurnNumber);
+    WindowEvent Display(const FieldList *Fields, const unsigned char &NumberOfTeams, const unsigned int &TurnNumber);
 
     /**
      * \brief Indicates whether the window was closed.

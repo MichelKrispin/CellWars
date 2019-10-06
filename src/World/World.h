@@ -3,6 +3,7 @@
 #include "Bot/Bot.h"
 #include "Renderer/Window.h"
 #include "Grid.h"
+#include "Renderer/WindowEvent.h"
 #include "Bot/PlayerBot.h"
 
 namespace sf { class Clock; }
@@ -92,9 +93,9 @@ private:
      *
      * \param TurnNumber The count of turns.
      *
-     * \return Returns true if the window was killed while updating.
+     * \return Returns events to let the user interact with the window.
      */
-    bool _RenderWorld(const unsigned int &TurnNumber);
+    WindowEvent _RenderWorld(const unsigned int &TurnNumber);
 
     /**
      * \brief Saves the input Bots array to the local _Bots array.

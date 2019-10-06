@@ -50,30 +50,66 @@ void World::Play(Bot** Bots)
     if (!_Initialize())
         return;
 
-    for (unsigned int i = 0; i < MAX_TURN_COUNT; ++i)
+    WindowEvent Event = WindowEvent::Nothing; // Used to get feedback of the window for interactivity
+    bool Kill = false;                        // To indicate whether window should be killed afterwards
+    bool isPaused = PAUSE_ON_STARTUP;         // Default value if starting with paused
+    bool TimePaused = false;                  // To pause the turns for the turn time
+    bool OneStepForward = false;              // To check whether to go only one step forward
+    while (_WorldSnapshot->_TurnNumber < MAX_TURN_COUNT)
     {
-        _Clock->restart();
-        
-        // TODO: Change this to be more adjustable more multiple bots
-        // First make the turns for all bots
-        for (unsigned char j = 0; j < _NumberOfBots; ++j)
+        // If paused don't do anything
+        if (!isPaused && !TimePaused)
         {
-            // TODO: Check the duration time for the make turn function
-            // and if one is above limit delete all of their actions (hehe)
-            _Bots[j]->MakeTurn(_WorldSnapshot[_Bots[j]->GetTeamAsUnsignedInt()]);
+            _Clock->restart();
+
+            // First make the turns for all bots
+            for (unsigned char j = 0; j < _NumberOfBots; ++j)
+            {
+                // TODO: Check the duration time for the make turn function
+                // and if one is above limit delete all of their actions (hehe)
+                _Bots[j]->MakeTurn(_WorldSnapshot[_Bots[j]->GetTeamAsUnsignedInt()]);
+            }
+
+            _WorldSnapshot->_TurnNumber++;
+            // After the turn update once
+            _UpdateWorld();
+
+            // Turn of the one step again so we really just took one step
+            if (OneStepForward)
+            {
+                isPaused = true;
+                OneStepForward = false;
+            }
         }
 
-        _WorldSnapshot->_TurnNumber++;
-        // After the turn update once
-        _UpdateWorld();
+        // Pause as long as wer are below the turn duration
+        TimePaused = _Clock->getElapsedTime().asMilliseconds() < TURN_DURATION_IN_MS;
 
-        // Only make a turn after the turn duration is exceeded
-        bool Kill = false;
-        // Render as long as we are below the turn duration (mostly for keystroke/kill responsiveness)
-        while (_Clock->getElapsedTime().asMilliseconds() < TURN_DURATION_IN_MS)
-            Kill = _RenderWorld(_WorldSnapshot->_TurnNumber);
+        Event = _RenderWorld(_WorldSnapshot->_TurnNumber);
+
+        switch (Event)
+        {
+            case WindowEvent::Nothing:
+                break;
+            case WindowEvent::Kill:
+                Kill = true;
+                break;
+            case WindowEvent::Pause:
+                isPaused = true;
+                break;
+            case WindowEvent::Play:
+                isPaused = false;
+                break;
+            case WindowEvent::StepForward:
+                isPaused = false;
+                OneStepForward = true;
+                break;
+        }
         if (Kill)
             break;
+
+        // Reset the Event after using it once
+        Event = WindowEvent::Nothing;
     }
 }
 
@@ -196,13 +232,10 @@ void World::_UpdateWorld()
     _Grid.ComputeAllFields(_Fields, _NumberOfBots);
 }
 
-bool World::_RenderWorld(const unsigned int &TurnNumber)
+WindowEvent World::_RenderWorld(const unsigned int &TurnNumber)
 {
     // TODO: Do this on another thread
     // After calculating everything draw everything
-    _Window.Display(_Fields, _NumberOfBots, TurnNumber);
-    
-    // Return the death status of the window
-    return _Window.isDead();
+    return _Window.Display(_Fields, _NumberOfBots, TurnNumber);
 }
 
