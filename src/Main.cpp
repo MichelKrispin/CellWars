@@ -1,6 +1,10 @@
 #include "World/World.h"
 #include "Bot/Examples.h"
 
+// Keyboard shortcuts:
+// Stop: Space
+// Play: Arrow-Up
+// Move one step forward (on pause): Arrow-right
 int main()
 {
     World& GameWorld = World::GetWorld();
