@@ -3,6 +3,11 @@
 REM Check first whether the SFML directory exists and if not clone the directory
 if not exist .\SFML\ goto CLONESFMLREPOSITORY
 
+REM Then check whether the bin and build directories exist
+if not exist .\bin\ mkdir bin
+if not exist .\cmake-build-debug\ mkdir cmake-build-debug
+if not exist .\cmake-build-release\ mkdir cmake-build-release
+
 if "%1" == "" (
 	goto DEFBUILDRUN
 ) else if "%1" == "-b" (
