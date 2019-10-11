@@ -126,7 +126,6 @@ private:
 
     // Variables
     Field* _Fields[GRID_SIZE * GRID_SIZE]; //< Pointer to all fields. Initialized all with nullptr
-    // TODO: Make this more adjustable for multiple teams (dynamic sized array like _Fields of World)
     SplitValues _SplitValues[GRID_SIZE * GRID_SIZE]; //< Keeping track of each teams splitted values 
     const unsigned int _Size; //< Saving the size/width of the grid
 

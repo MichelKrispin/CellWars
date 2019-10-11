@@ -20,7 +20,7 @@ Window::Window()
         std::cout << "ERROR :: LOADING FONT :: WINDOW \n";
 
     _Text = new sf::Text;
-    _Text->setFont(_Font); // TODO: Check whether this is working
+    _Text->setFont(_Font);
     _Text->setCharacterSize(WINDOW_SIZE/10);
     _Text->setFillColor(sf::Color::White);
     _Text->setPosition(10, WINDOW_SIZE-10); // 10px padding on left side
@@ -157,7 +157,7 @@ WindowEvent Window::Display(const FieldList *Fields, const unsigned char &Number
         {
             case 0: // Pause button
                 _Button->setFillColor(sf::Color(127, 0, 0)); // Red button
-                // TODO: Hover
+                // Hover
                 if (LocalMousePosition.x > WINDOW_SIZE - BUTTON_SIZE*6 && LocalMousePosition.y > WINDOW_SIZE + 20 &&
                     LocalMousePosition.x < WINDOW_SIZE - BUTTON_SIZE*5 &&
                     LocalMousePosition.y < WINDOW_SIZE + 20 + BUTTON_SIZE)

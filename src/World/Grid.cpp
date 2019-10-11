@@ -251,6 +251,7 @@ bool Grid::GetAdjacentFieldOf(const TEAM &Team, const Field* Field, const DIRECT
              _Fields[Position.Y * _Size + Position.X]->GetTeam() != Team);
 }
 
+// TODO: Remove this function as GetPositionAsGrid exists inside of the Field class
 Vector Grid::_ConvertPixelsToGridValues(const Vector &InputPosition) const
 {
     return {

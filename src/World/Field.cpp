@@ -23,6 +23,14 @@ const Vector& Field::GetPosition() const
     return _Position;
 }
 
+const Vector& Field::GetPositionAsGrid() const
+{
+    return {
+        static_cast<unsigned int>(InputPosition.X * GRID_SIZE / WINDOW_SIZE),
+        static_cast<unsigned int>(InputPosition.Y * GRID_SIZE / WINDOW_SIZE)
+    };
+}
+
 const TEAM& Field::GetTeam() const
 {
     return _Team;
@@ -30,7 +38,6 @@ const TEAM& Field::GetTeam() const
 
 void Field::SplitCells(DIRECTION Direction, unsigned short CellCount)
 {
-    // TODO: You can probably split up more cells than you own
     switch(Direction)
     {
         case DIRECTION::UP:

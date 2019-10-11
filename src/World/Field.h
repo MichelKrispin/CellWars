@@ -31,7 +31,7 @@ public:
      *
      * \return Cell count as an unsigned short.
      */
-    const unsigned short& GetCellCount() const;
+    const unsigned short &GetCellCount() const;
 
     /**
      * \brief Returns the position of this field.
@@ -41,6 +41,14 @@ public:
      * \return A 2D Vector with X and Y positions.
      */
     const Vector &GetPosition() const;
+
+    /**
+     * \brief Returns the position of this field.
+     * The position is defined in grid values.
+     *
+     * \return A 2D Vector with X and Y positions.
+     */
+    const Vector &GetPositionAsGrid() const;
 
     // TODO: Raise an exception if the input cell count is above existing cells
     /**

@@ -199,7 +199,10 @@ void World::_UpdateWorld()
 
             // If sum exceeds cell count then skip this split
             if (SummedSplitValues > CurrentField->GetCellCount())
+            {
+                CurrentField->_ResetActions();
                 continue;
+            }
 
             if (CurrentActions.Up > 0)
                 _Grid.SetFieldValuesAt(
