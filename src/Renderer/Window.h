@@ -2,8 +2,11 @@
 #include "World/WorldSnapshot.h"
 #include <SFML/Graphics/Font.hpp>
 #include "Renderer/WindowEvent.h"
+#include "World/Vector.h"
 
-namespace sf { class RenderWindow; class Font; class Text; }
+namespace sf {
+    class RenderWindow; class Font; class Text; class RectangleShape;
+}
 
 /**
  * \brief Window class to render out everything.
@@ -42,9 +45,11 @@ public:
     bool isDead() const;
 
 private:
-    sf::RenderWindow* _Window; //< Pointer to the SFML Window drawing the stuff.
-    sf::Font _Font;            //< The font used for the text.
-    sf::Text* _Text;           //< Pointer to the text drawn.
-    bool _isDead;              //< Indicate whether the window was killed.
+    sf::RenderWindow* _Window;     //< Pointer to the SFML Window drawing the stuff.
+    sf::Font _Font;                //< The font used for the text.
+    sf::Text* _Text;               //< Pointer to the text drawn.
+    sf::RectangleShape* _Button;   //< Pointer a button drawn on the bottom.
+    Vector _ButtonPosition[3];        //< The button positions for all three buttons.
+    bool _isDead;                  //< Indicate whether the window was killed.
 
 };

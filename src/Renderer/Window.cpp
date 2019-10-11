@@ -7,6 +7,8 @@
 #include <iostream>
 #include <sstream>
 
+#define BUTTON_SIZE 50
+
 Window::Window()
     : _isDead(false)
 {
@@ -22,6 +24,17 @@ Window::Window()
     _Text->setCharacterSize(WINDOW_SIZE/10);
     _Text->setFillColor(sf::Color::White);
     _Text->setPosition(10, WINDOW_SIZE-10); // 10px padding on left side
+
+    // Create one rectangle for the buttons which will be drawn multiple times
+    _Button = new sf::RectangleShape;
+    // The buttons will be drawn on the bottom with 2 times the button size offset each
+    _ButtonPosition[0] = {WINDOW_SIZE - BUTTON_SIZE*6, WINDOW_SIZE+20};                 // First button position  -> Pause
+    _ButtonPosition[1] = {WINDOW_SIZE - BUTTON_SIZE*4, WINDOW_SIZE+20}; // Second button position -> Play
+    _ButtonPosition[2] = {WINDOW_SIZE - BUTTON_SIZE*2, WINDOW_SIZE+20}; // Third button position  -> Step
+
+    _Button->setSize(sf::Vector2f(BUTTON_SIZE, BUTTON_SIZE));
+    _Button->setOutlineColor(sf::Color::Black); // Reset outline color
+    _Button->setOutlineThickness(5.0f); // The outline color will be used for hover effect
 }
 
 Window::~Window()
@@ -41,6 +54,7 @@ WindowEvent Window::Display(const FieldList *Fields, const unsigned char &Number
             _Window->close();
             return WindowEvent::Kill;
         }
+        // Check for keyboard presses
         else if (event.type == sf::Event::KeyPressed)
         {
             if (event.key.code == sf::Keyboard::Escape)
@@ -55,8 +69,32 @@ WindowEvent Window::Display(const FieldList *Fields, const unsigned char &Number
             else if (event.key.code == sf::Keyboard::Up)
                 return WindowEvent::Play;
         }
+        // Check for mouse clicks at correct positions
+        else if (event.type == sf::Event::MouseButtonPressed)
+        {
+            if (event.mouseButton.button == sf::Mouse::Left)
+            {
+                sf::Vector2i LocalMousePosition = sf::Mouse::getPosition(*_Window);
+                // If inside of play button return play
+                if (LocalMousePosition.x > WINDOW_SIZE - BUTTON_SIZE*6 && LocalMousePosition.y > WINDOW_SIZE + 20 &&
+                    LocalMousePosition.x < WINDOW_SIZE - BUTTON_SIZE*5 &&
+                    LocalMousePosition.y < WINDOW_SIZE + 20 + BUTTON_SIZE)
+                    return WindowEvent::Pause; // TODO: Maybe change this Event to unpause toggle or similar
+
+                if (LocalMousePosition.x > WINDOW_SIZE - BUTTON_SIZE*4 && LocalMousePosition.y > WINDOW_SIZE + 20 &&
+                    LocalMousePosition.x < WINDOW_SIZE - BUTTON_SIZE*3 &&
+                    LocalMousePosition.y < WINDOW_SIZE + 20 + BUTTON_SIZE)
+                    return WindowEvent::Play;
+
+                if (LocalMousePosition.x > WINDOW_SIZE - BUTTON_SIZE*2  && LocalMousePosition.y > WINDOW_SIZE + 20 &&
+                    LocalMousePosition.x < WINDOW_SIZE - BUTTON_SIZE &&
+                    LocalMousePosition.y < WINDOW_SIZE + 20 + BUTTON_SIZE)
+                    return WindowEvent::StepForward;
+            }
+        }
     }
 
+    // Set the turn count as the text for the _Text
     std::stringstream TextConversion;
     TextConversion << TurnNumber;
     _Text->setString(TextConversion.str());
@@ -105,7 +143,45 @@ WindowEvent Window::Display(const FieldList *Fields, const unsigned char &Number
         }
     }
 
+    // Draw the text
     _Window->draw(*_Text);
+
+    // Draw the button
+    for (short i = 0; i < 3; ++i)
+    {
+        // For the hover color
+        sf::Vector2i LocalMousePosition = sf::Mouse::getPosition(*_Window);
+        _Button->setOutlineColor(sf::Color::Black); // Reset hover color first
+        // Set fill color for each button
+        switch (i)
+        {
+            case 0: // Pause button
+                _Button->setFillColor(sf::Color(127, 0, 0)); // Red button
+                // TODO: Hover
+                if (LocalMousePosition.x > WINDOW_SIZE - BUTTON_SIZE*6 && LocalMousePosition.y > WINDOW_SIZE + 20 &&
+                    LocalMousePosition.x < WINDOW_SIZE - BUTTON_SIZE*5 &&
+                    LocalMousePosition.y < WINDOW_SIZE + 20 + BUTTON_SIZE)
+                    _Button->setOutlineColor(sf::Color::White);
+                break;
+            case 1: // Play button
+                _Button->setFillColor(sf::Color(0, 127, 0)); // Green button
+                if (LocalMousePosition.x > WINDOW_SIZE - BUTTON_SIZE*4 && LocalMousePosition.y > WINDOW_SIZE + 20 &&
+                    LocalMousePosition.x < WINDOW_SIZE - BUTTON_SIZE*3 &&
+                    LocalMousePosition.y < WINDOW_SIZE + 20 + BUTTON_SIZE)
+                    _Button->setOutlineColor(sf::Color::White);
+                break;
+            case 2: // Step button
+                _Button->setFillColor(sf::Color(0, 0, 127)); // Blue button
+                if (LocalMousePosition.x > WINDOW_SIZE - BUTTON_SIZE*2  && LocalMousePosition.y > WINDOW_SIZE + 20 &&
+                    LocalMousePosition.x < WINDOW_SIZE - BUTTON_SIZE &&
+                    LocalMousePosition.y < WINDOW_SIZE + 20 + BUTTON_SIZE)
+                    _Button->setOutlineColor(sf::Color::White);
+                break;
+        }
+        _Button->setPosition(_ButtonPosition[i].X, _ButtonPosition[i].Y);
+        _Window->draw(*_Button);
+    }
+    
     // Display everything drawn
     _Window->display();
 
