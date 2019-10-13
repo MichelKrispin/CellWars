@@ -2,9 +2,10 @@
 #define CELLWARS_BUTTON_H
 
 #include <SFML/Graphics/Color.hpp>
+#include <SFML/Window.hpp>
 #include "World/Vector.h"
 
-namespace sf { class RectangleShape; }
+namespace sf { class RectangleShape; class RenderWindow; }
 
 /**
  * \brief A button which can be rendered on screen
@@ -28,9 +29,19 @@ public:
      */
     Button(const Vector &Position,
            const unsigned int &ButtonSize,
-           sf::RectangleShape* Rectangle,
+           sf::RectangleShape** Rectangle,
            const sf::Color &BackgroundColor,
            const sf::Color &HoverColor = sf::Color::White);
+
+    /**
+     * \brief The copy operator for the button.
+     *
+     * This constructor is used to assign a button inside of an array to a new button.
+     *
+     * \param Other The other button.
+     */
+    Button(const Button &Other);
+    
     ~Button();
 
     /**
@@ -39,7 +50,7 @@ public:
      * \param Position The position which will be checked for.
      * \return Returns true if the position is inside of this button.
      */
-    bool IsInside(const Vector &Position);
+    bool IsInside(const sf::Vector2i &Position);
 
     /**
      * \brief Sets the hover for this button.
@@ -56,11 +67,11 @@ public:
      *
      * This method will change the Rectangle to which this button points to.
      */
-    void Draw();
+    void Draw(sf::RenderWindow* Window);
 
 private:
     const Vector _Position;         //< The position of this button which will be used for checking whether a position is inside.
-    sf::RectangleShape* _Rectangle; //< A pointer to the RectangleShape which will be used to draw this button.
+    sf::RectangleShape** _Rectangle; //< A pointer to the pointer to the RectangleShape which will be used to draw this button.
     const unsigned int _ButtonSize;       //< The size of this button (Width and height)
     const sf::Color _BackgroundColor;     //< The background color of this button.
     const sf::Color _HoverColor;          //< The hover color of this button.
