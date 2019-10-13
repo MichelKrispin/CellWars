@@ -23,11 +23,11 @@ const Vector& Field::GetPosition() const
     return _Position;
 }
 
-const Vector& Field::GetPositionAsGrid() const
+Vector Field::GetPositionAsGrid() const
 {
     return {
-        static_cast<unsigned int>(InputPosition.X * GRID_SIZE / WINDOW_SIZE),
-        static_cast<unsigned int>(InputPosition.Y * GRID_SIZE / WINDOW_SIZE)
+        static_cast<unsigned int>(_Position.X * GRID_SIZE / WINDOW_SIZE),
+        static_cast<unsigned int>(_Position.Y * GRID_SIZE / WINDOW_SIZE)
     };
 }
 

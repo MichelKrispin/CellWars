@@ -48,7 +48,7 @@ public:
      *
      * \return A 2D Vector with X and Y positions.
      */
-    const Vector &GetPositionAsGrid() const;
+    Vector GetPositionAsGrid() const;
 
     // TODO: Raise an exception if the input cell count is above existing cells
     /**
