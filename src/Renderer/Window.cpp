@@ -33,7 +33,7 @@ Window::Window()
             "Cell Wars");
 
     if (!_Font.loadFromFile(FONT_PATH))
-        std::cout << "ERROR :: LOADING FONT :: WINDOW \n";
+        std::cout << "ERROR :: LOADING FONT :: WINDOW :: at "  << FONT_PATH << "\n";
 
     _Text = new sf::Text;
     _Text->setFont(_Font);
