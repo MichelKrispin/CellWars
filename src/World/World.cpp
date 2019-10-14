@@ -132,7 +132,7 @@ bool World::_SetInputToLocalBots(Bot** Bots)
         }
     }
     // If there is only one return false
-    if (count < 1)
+    if (count <= 1)
         return false;
     
     _NumberOfBots = count;
