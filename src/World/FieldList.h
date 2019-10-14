@@ -32,6 +32,7 @@ public:
      */
     unsigned int End() const;
 
+    // TODO: Check for return const Field pointer
     /**
      * \brief Get the Field at the corresponding index.
      * Throws an exception if the index is out of bounds.
