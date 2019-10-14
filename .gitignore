@@ -1,6 +1,14 @@
 # Custom
 SFML/*
 SFML/
+pybind11/*
+pybind11/
+build/*
+build/
+CellWars.egg-info/*
+CellWars.egg-info/
+dist/*
+dist/
 cmake-build-debug/*
 cmake-build-release/*
 bin/*
@@ -9,6 +17,7 @@ bin/*
 *.swp
 .idea/
 docs/*
+docs/
 .vscode/*
 
 # Prerequisites

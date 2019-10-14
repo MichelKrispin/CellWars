@@ -5,12 +5,6 @@
 #include <SFML/System/Clock.hpp>
 #include <iostream>
 
-World& World::GetWorld()
-{
-    static World instance;
-    return instance;
-}
-
 World::World()
     : _Window(),
       _Grid(),

@@ -7,8 +7,7 @@
 // Move one step forward (on pause): Arrow-right
 int main()
 {
-    World& GameWorld = World::GetWorld();
-
+    World GameWorld;
     MyBot Player;
     AnotherPlayerBot MyPlayer;
     //MaxBot MyPlayer;
