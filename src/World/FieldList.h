@@ -42,6 +42,18 @@ public:
      */
     Field* operator[](unsigned int Index) const;
 
+
+    #ifdef BUILD_PYTHON
+    /**
+     * \brief Returns this list as a vector.
+     * 
+     *  Only added if the python build is activated as the std::vector 
+     *  can be converted to a native python list
+     * 
+     */
+    std::vector<Field*> FieldList::GetPythonList() const;
+    #endif
+
     /**
      * \brief Get the size of the list.
      *

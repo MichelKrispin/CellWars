@@ -38,16 +38,11 @@ class World
 {
 public:
     /**
-     * \brief Returns a globally unique World.
-     *
-     * Usage as
-     * \code{.cpp}
-     * World& GameWorld = World::getWorld();
-     * \endcode
-     *
-     * \return World World reference.
+     * \brief Initializes the World with a working window and fields.
+     * Will be called on the first getWorld call.
      */
-    static World &GetWorld();
+    World();
+    virtual ~World();
 
     /**
      * \brief Play the game.
@@ -75,13 +70,6 @@ public:
     World& operator=(const World&) = delete;
 
 private:
-    /**
-     * \brief Initializes the World with a working window and fields.
-     * Will be called on the first getWorld call.
-     */
-    World();
-    virtual ~World();
-
     // Functions
     /**
      * \brief Update the world by calculating the actions of the field.

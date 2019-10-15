@@ -37,6 +37,13 @@ Field* FieldList::operator[](unsigned int Index) const
     return _Fields[Index];
 }
 
+#ifdef BUILD_PYTHON
+std::vector<Field*> FieldList::GetPythonList() const
+{
+    return _Fields;
+}
+#endif
+
 unsigned int FieldList::GetSize() const
 {
     return _Fields.size();
