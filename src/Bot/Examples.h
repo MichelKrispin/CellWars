@@ -3,6 +3,8 @@
 #include "World/WorldSnapshot.h"
 #include "World/FieldList.h"
 #include "World/FieldListIterator.h"
+#include <iostream>
+#include <vector>
 
 
 /**
@@ -102,5 +104,65 @@ public:
             CurrentField->SplitCells(DIRECTION::LEFT, CurrentField->GetCellCount() * 0.1);
             CurrentField->SplitCells(DIRECTION::DOWN, CurrentField->GetCellCount() * 0.1);
         }
+    }
+};
+
+/**
+ * \brief Bot
+ */
+class MinBot : public PlayerBot
+{
+public:
+   void MakeTurn(const WorldSnapshot& Snapshot) override
+    {
+    std::cout << "\n\nTurn " << Snapshot.GetTurn() << "\n";
+        unsigned int sum = 0;
+        for (unsigned int i = Snapshot.GetTurn(); i > 0; i--)
+        {
+            sum += i * 4;
+        }
+        unsigned int count = 0;
+        /*
+        FieldList MyFields = Snapshot.GetFields();
+        for (unsigned int count = 0; count < MyFields.GetSize(); count++)
+        {
+            Field* CurrentField;
+            try {
+            CurrentField = MyFields[count];
+            } catch (std::exception &e) {
+               std::cout << "ERROR: " << e.what() << "\n";
+            }
+            */
+        for (FieldListIterator Iterator = Snapshot.GetFields().Begin();
+             Iterator != Snapshot.GetFields().End();
+             Iterator.Next())
+        {
+            Field* CurrentField = Iterator.Get();
+            if (Snapshot.GetTurn() == 0)
+            {
+                CurrentField->SplitCellsAllDirections(21);
+            } 
+            else if (count == 0 && CurrentField->GetCellCount() > 34)
+            {
+                CurrentField->SplitCellsAllDirections((CurrentField->GetCellCount() - 31) / 4);
+            }
+            else if (count == sum - 3 && CurrentField->GetCellCount() > 12)
+            {                
+                CurrentField->SplitCells(DIRECTION::UP, CurrentField->GetCellCount() * 0.2);
+                CurrentField->SplitCells(DIRECTION::LEFT, CurrentField->GetCellCount() * 0.2);
+                CurrentField->SplitCells(DIRECTION::RIGHT, CurrentField->GetCellCount() * 0.2);
+                CurrentField->SplitCells(DIRECTION::DOWN, CurrentField->GetCellCount() * 0.2);
+            }
+            std::cout << "\n" << count << ": " << CurrentField->GetCellCount() << " - sum - " << sum << "\n"; 
+            count++;
+        }
+                /*if((!Snapshot.GetAdjacentFieldOf(CurrentField, DIRECTION::UP)
+                && !Snapshot.GetAdjacentFieldOf(CurrentField, DIRECTION::LEFT)
+                && !Snapshot.GetAdjacentFieldOf(CurrentField, DIRECTION::RIGHT)) ||
+                   (!Snapshot.GetAdjacentFieldOf(CurrentField, DIRECTION::DOWN)
+                && !Snapshot.GetAdjacentFieldOf(CurrentField, DIRECTION::LEFT)
+                && !Snapshot.GetAdjacentFieldOf(CurrentField, DIRECTION::RIGHT)))
+                    Cornerpieces.push_back(CurrentField);
+                */ 
     }
 };

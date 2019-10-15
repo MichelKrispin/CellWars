@@ -23,4 +23,4 @@
 #define FONT_PATH "arial.ttf"
 
 // Pause on startup? values are true or false
-#define PAUSE_ON_STARTUP false
+#define PAUSE_ON_STARTUP true
