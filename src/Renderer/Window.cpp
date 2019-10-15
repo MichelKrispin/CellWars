@@ -10,7 +10,8 @@
 #define BUTTON_SIZE 50
 
 Window::Window()
-    : _Buttons{
+    : _Window(nullptr),
+      _Buttons{
          {{WINDOW_SIZE - BUTTON_SIZE*6, WINDOW_SIZE+20},
          BUTTON_SIZE,
          &_ButtonRectangle,
@@ -28,10 +29,6 @@ Window::Window()
          },
     _isDead(false)
 {
-    _Window = new sf::RenderWindow(
-            sf::VideoMode(WINDOW_SIZE, WINDOW_SIZE + WINDOW_SIZE/10), // Add a fifth to the height
-            "Cell Wars");
-
     if (!_Font.loadFromFile(FONT_PATH))
         std::cout << "ERROR :: LOADING FONT :: WINDOW :: at "  << FONT_PATH << "\n";
 
@@ -52,6 +49,11 @@ Window::~Window()
 
 WindowEvent Window::Display(const FieldList *Fields, const unsigned char &NumberOfTeams, const unsigned int &TurnNumber)
 {
+    if (_Window == nullptr)
+        _Window = new sf::RenderWindow(
+                sf::VideoMode(WINDOW_SIZE, WINDOW_SIZE + WINDOW_SIZE/10), // Add a fifth to the height
+                "Cell Wars");
+
     // First check whether the window is dead
     sf::Event event;
     while (_Window->pollEvent(event))
