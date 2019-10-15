@@ -61,6 +61,15 @@ public:
      * \param CellCount Number of cells to be split to the right.
      */
     void SplitCells(DIRECTION Direction, unsigned short CellCount);
+    
+    /**
+     * \brief Splits the CellCount in all directions.
+     * Splits the number of CellCount cells in all directions..
+     * If specified twice for one direction the previous split will be overriden.
+     *
+     * \param CellCount Number of cells to be split to the right.
+     */
+    void SplitCellsAllDirections(unsigned short CellCount);
 
     /**
      * \brief Returns the team this field belongs to

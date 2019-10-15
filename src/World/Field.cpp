@@ -55,6 +55,14 @@ void Field::SplitCells(DIRECTION Direction, unsigned short CellCount)
     }
 }
 
+void Field::SplitCellsAllDirections(unsigned short CellCount)
+{
+    _Actions.Up    = CellCount;
+    _Actions.Down  = CellCount;
+    _Actions.Right = CellCount;
+    _Actions.Left  = CellCount;
+}
+
 void Field::_IncreaseCellCount(const double &Percentage)
 {
     _CellCount += RoundUp(_CellCount, Percentage);
