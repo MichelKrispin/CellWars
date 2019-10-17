@@ -148,7 +148,7 @@ public:
                 if (Currentcellcount > 34)
                     CurrentField->SplitCellsAllDirections((Currentcellcount - 31) * 0.25);
             }
-            else if (Snapshot.GetTurn() < 50)
+            else if (Snapshot.GetTurn() < 25)
             {                
                 if (Count % 2)
                 {
@@ -174,9 +174,9 @@ public:
                     }
                     else
                     {
-                        CurrentField->SplitCells(DIRECTION::RIGHT, Currentcellcount - (Currentcellcount * 0.75));
-                        CurrentField->SplitCells(DIRECTION::UP, Currentcellcount * 0.25);
-                        CurrentField->SplitCells(DIRECTION::DOWN, Currentcellcount * 0.25);
+                        CurrentField->SplitCells(DIRECTION::RIGHT, Currentcellcount - (Currentcellcount * 0.68));
+                        CurrentField->SplitCells(DIRECTION::UP, Currentcellcount * 0.34);
+                        CurrentField->SplitCells(DIRECTION::DOWN, Currentcellcount * 0.34);
                     }
                 }
                 else
@@ -203,21 +203,22 @@ public:
                     }
                     else
                     {
-                        CurrentField->SplitCells(DIRECTION::LEFT, Currentcellcount - (Currentcellcount * 0.75));
-                        CurrentField->SplitCells(DIRECTION::UP, Currentcellcount * 0.25);
-                        CurrentField->SplitCells(DIRECTION::DOWN, Currentcellcount * 0.25);
+                        CurrentField->SplitCells(DIRECTION::LEFT, Currentcellcount - (Currentcellcount * 0.68));
+                        CurrentField->SplitCells(DIRECTION::UP, Currentcellcount * 0.34);
+                        CurrentField->SplitCells(DIRECTION::DOWN, Currentcellcount * 0.34);
                     }
                 }      
             }      
-            else if (Snapshot.GetTurn() > 135)
+            else if (Snapshot.GetTurn() > 80)
             {
-                CurrentField->SplitCells(DIRECTION::RIGHT, CurrentField->GetCellCount() * 0.9);
+                CurrentField->SplitCells(DIRECTION::RIGHT, Currentcellcount - (Currentcellcount * 0.5));
+                CurrentField->SplitCells(DIRECTION::LEFT, Currentcellcount * 0.5);
+                //CurrentField->SplitCells(DIRECTION::RIGHT, CurrentField->GetCellCount() * 0.9);
             } 
             else
             {
-                CurrentField->SplitCellsAllDirections(Currentcellcount * 0.15);
+                CurrentField->SplitCellsAllDirections(Currentcellcount * 0.2);
             }
-            
             //std::cout << "\n" << Count << ": " << Currentcellcount << " - sum - " << Sum << "\n"; 
             Count++;
         }
