@@ -16,7 +16,7 @@ ConfigurationLoader::ConfigurationLoader()
 {
     std::string Line; // Buffer for each line
     // Open up the file
-    std::ifstream ConfigurationFile("config.txt");
+    std::ifstream ConfigurationFile("..\\misc\\config.txt");
     if (!ConfigurationFile.is_open()) // If file is not open return
     {
         std::cout << "Could not find the config.txt - Initializing with default values\n";

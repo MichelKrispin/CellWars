@@ -1,0 +1,40 @@
+// Don't change the values names
+
+// The maximal number of cells per field
+MAX_COUNT_PER_FIELD
+100
+
+// The window size in pixels
+WINDOW_SIZE
+800
+
+// The number of fields per row/column
+GRID_SIZE
+50
+
+// After how many turns is the game finished
+MAX_TURN_COUNT
+2000
+
+// How long does a turn take
+TURN_DURATION_IN_MS 
+50
+
+// Possible options are White and Black
+BACKGROUND_COLOR
+Black
+
+// The font which will be used for the turn number 
+// This is the relative path off the working directory
+FONT_PATH
+arial.ttf
+
+// Pause on startup? values are true or false
+PAUSE_ON_STARTUP
+true
+
+// Rule to define whether the increasing of 10 Percent happens for splitvalues immediately
+// true  -> increase of splitvalues in this turn
+// false -> increase only of fields which are owned at the start of the turn 
+INCREASING_SPLIT_VALUES
+true
