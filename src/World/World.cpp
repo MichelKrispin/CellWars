@@ -6,7 +6,8 @@
 #include <iostream>
 
 World::World()
-    : _Window(),
+    : _Configuration(),
+      _Window(),
       _Grid(),
       _NumberOfBots(0)
 {

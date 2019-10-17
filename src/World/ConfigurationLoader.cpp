@@ -11,7 +11,8 @@ ConfigurationLoader::ConfigurationLoader()
       _TurnDurationInMs(50),
       _BackgroundColor(sf::Color::Black),
       _FontPath("arial.ttf"),
-      _PauseOnStartup(false)
+      _PauseOnStartup(false),
+      _IncreasingSplitValues(true)
 {
     std::string Line; // Buffer for each line
     // Open up the file
@@ -25,11 +26,13 @@ ConfigurationLoader::ConfigurationLoader()
     // Read the input line by line
     while (std::getline(ConfigurationFile, Line))
     {
+        // TODO: Add empty spaces to continue clause
         if (Line.rfind("//", 0) == 0)
             continue;
         if (Line.rfind("MAX_COUNT_PER_FIELD", 0) == 0)
         {
             std::getline(ConfigurationFile, Line);
+            // TODO: Check if there exists string to unsigned int function
             _MaxCountPerField = static_cast<unsigned int>(std::stoi(Line, nullptr, 0));
         }
         else if (Line.rfind("WINDOW_SIZE", 0) == 0)
@@ -63,10 +66,12 @@ ConfigurationLoader::ConfigurationLoader()
         else if (Line.rfind("FONT_PATH", 0) == 0)
         {
             std::getline(ConfigurationFile, Line);
-            if (Line == "false")
-                _PauseOnStartup = false;
-            else
-                _PauseOnStartup =true;
+            _PauseOnStartup = Line == "true";
+        }
+        else if (Line.rfind("INCREASING_SPLIT_VALUES", 0) == 0)
+        {
+            std::getline(ConfigurationFile, Line);
+            _IncreasingSplitValues = static_cast<unsigned int>(std::stoi(Line, nullptr, 0));
         }
     }
 }
@@ -111,3 +116,7 @@ const bool& ConfigurationLoader::GetPauseOnStartup() const
     return _PauseOnStartup;
 }
 
+const unsigned int& ConfigurationLoader::GetIncreasingSplitValues() const
+{
+    return _IncreasingSplitValues;
+}

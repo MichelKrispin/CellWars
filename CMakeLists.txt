@@ -33,7 +33,8 @@ set(RENDERER_SRC ${SOURCE_DIR}/Renderer/Window.cpp
                  ${SOURCE_DIR}/Renderer/Button.cpp)
 
 # World
-set(WORLD_SRC ${SOURCE_DIR}/World/Field.cpp
+set(WORLD_SRC ${SOURCE_DIR}/World/ConfigurationLoader.cpp
+              ${SOURCE_DIR}/World/Field.cpp
               ${SOURCE_DIR}/World/FieldList.cpp
               ${SOURCE_DIR}/World/FieldListIterator.cpp
               ${SOURCE_DIR}/World/Grid.cpp

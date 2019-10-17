@@ -23,6 +23,7 @@ public:
     const sf::Color    &GetBackgroundColor() const;
     const std::string  &GetFontPath() const;
     const bool         &GetPauseOnStartup() const;
+    const unsigned int &GetIncreasingSplitValues() const;
 
 private:
     unsigned int _MaxCountPerField;
@@ -33,6 +34,7 @@ private:
     sf::Color    _BackgroundColor;
     std::string  _FontPath;
     bool         _PauseOnStartup;
+    unsigned int _IncreasingSplitValues;
 
 };
 

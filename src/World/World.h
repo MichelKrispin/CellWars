@@ -5,6 +5,7 @@
 #include "Grid.h"
 #include "Renderer/WindowEvent.h"
 #include "Bot/PlayerBot.h"
+#include "ConfigurationLoader.h"
 
 namespace sf { class Clock; }
 class FieldList;
@@ -106,13 +107,14 @@ private:
     bool _Initialize();
 
     // Variables
-    Window _Window;                //< The window used to render everything on screen.
-    Grid _Grid;                    //< The grid which keeps track of all fields in a more natural way.
-    WorldSnapshot* _WorldSnapshot; //< A snapshot of the world which will be updated after each turn.
-    FieldList* _Fields;            //< Keeping track of all fields for both teams.
-    Bot* _Bots[4];                 //< An array of up to four Bot pointer. These are the playing bots.
-    unsigned char _NumberOfBots;   //< The number of bots that are currently playing.
-    sf::Clock* _Clock;             //< Used to measure the time between each turn.
+    ConfigurationLoader _Configuration; //< The class which holds all configuration data
+    Window _Window;                     //< The window used to render everything on screen.
+    Grid _Grid;                         //< The grid which keeps track of all fields in a more natural way.
+    WorldSnapshot* _WorldSnapshot;      //< A snapshot of the world which will be updated after each turn.
+    FieldList* _Fields;                 //< Keeping track of all fields for both teams.
+    Bot* _Bots[4];                      //< An array of up to four Bot pointer. These are the playing bots.
+    unsigned char _NumberOfBots;        //< The number of bots that are currently playing.
+    sf::Clock* _Clock;                  //< Used to measure the time between each turn.
 };
 
 #endif

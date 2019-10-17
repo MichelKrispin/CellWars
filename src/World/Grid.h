@@ -5,6 +5,7 @@
 #include "Bot/Team.h"
 #include "FieldList.h"
 
+// TODO: Outsource this to its own file
 /**
  * \brief A struct just to keep track of how many cells are added to a field.
  *
