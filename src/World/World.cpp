@@ -221,14 +221,27 @@ void World::_UpdateWorld()
             // Afterwards reset the actions
             CurrentField->_ResetActions();
             
-            // And then increase all by 10%
-            CurrentField->_IncreaseCellCount(0.1);
+            if (!INCREASING_SPLIT_VALUES)
+                // And then increase all by 10%
+                CurrentField->_IncreaseCellCount(0.1);
         }
     }
     // After applying everything calculate the grid
     _Grid.ComputeAllFields(_Fields, _NumberOfBots);
 
-    // TODO: Check whether adding 10% after splitting/calculating the grid is better
+    if (INCREASING_SPLIT_VALUES)
+    {
+        for (int i = 0; i < _NumberOfBots; ++i)
+        {
+            for (FieldListIterator Iterator = _Fields[i].Begin();
+                Iterator != _Fields[i].End();
+                Iterator.Next())
+            {
+                // Increase all fields by 10%
+                Iterator.Get()->_IncreaseCellCount(0.1);
+            }
+        }
+    }
 }
 
 WindowEvent World::_RenderWorld(const unsigned int &TurnNumber)
