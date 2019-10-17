@@ -4,8 +4,6 @@ class MyBot(cw.PlayerBot):
     def MakeTurn(self, snapshot):
         for field in snapshot.fields.as_list:
             if snapshot.get_adjacent_field_of(field, cw.Direction.up):
-                print('Hi')
-            else:
                 print(field.cell_count)
             """
                 field.split_cells(cw.Direction.right, int(field.cell_count * 0.1))
