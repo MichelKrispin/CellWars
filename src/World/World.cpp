@@ -227,6 +227,8 @@ void World::_UpdateWorld()
     }
     // After applying everything calculate the grid
     _Grid.ComputeAllFields(_Fields, _NumberOfBots);
+
+    // TODO: Check whether adding 10% after splitting/calculating the grid is better
 }
 
 WindowEvent World::_RenderWorld(const unsigned int &TurnNumber)

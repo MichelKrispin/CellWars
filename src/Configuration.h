@@ -24,3 +24,8 @@
 
 // Pause on startup? values are true or false
 #define PAUSE_ON_STARTUP true
+
+// Rule to define whether the increasing of 10 Percent happens for splitvalues immediately
+// true  -> increase of splitvalues in this turn
+// false -> increase only of fields which are owned at the start of the turn 
+#define INCREASING_SPLIT_VALUES true
