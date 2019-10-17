@@ -63,7 +63,7 @@ ConfigurationLoader::ConfigurationLoader()
             std::getline(ConfigurationFile, Line);
             _FontPath = Line;
         }
-        else if (Line.rfind("FONT_PATH", 0) == 0)
+        else if (Line.rfind("PAUSE_ON_STARTUP", 0) == 0)
         {
             std::getline(ConfigurationFile, Line);
             _PauseOnStartup = Line == "true";
@@ -71,14 +71,16 @@ ConfigurationLoader::ConfigurationLoader()
         else if (Line.rfind("INCREASING_SPLIT_VALUES", 0) == 0)
         {
             std::getline(ConfigurationFile, Line);
-            _IncreasingSplitValues = static_cast<unsigned int>(std::stoi(Line, nullptr, 0));
+            _IncreasingSplitValues = Line == "true";
         }
     }
 }
 
+ConfigurationLoader::~ConfigurationLoader() = default;
+
 const unsigned int& ConfigurationLoader::GetMaxCountPerField() const
 {
-    return _MaxTurnCount;
+    return _MaxCountPerField;
 }
 
 const unsigned int& ConfigurationLoader::GetWindowSize() const
@@ -116,7 +118,7 @@ const bool& ConfigurationLoader::GetPauseOnStartup() const
     return _PauseOnStartup;
 }
 
-const unsigned int& ConfigurationLoader::GetIncreasingSplitValues() const
+const bool& ConfigurationLoader::GetIncreasingSplitValues() const
 {
     return _IncreasingSplitValues;
 }

@@ -1,9 +1,11 @@
 #include "Field.h"
 #include "Configuration.h"
 #include "Bot/Utilities.h"
+#include "ConfigurationLoader.h"
 
-Field::Field(TEAM Team, unsigned short CellCount, Vector Position)
-    : _Team(Team),
+Field::Field(const ConfigurationLoader* const Configuration, TEAM Team, unsigned short CellCount, Vector Position)
+    : _Configuration(Configuration),
+      _Team(Team),
       _CellCount(CellCount),
       _Position(Position)
 {
@@ -26,8 +28,8 @@ const Vector& Field::GetPosition() const
 Vector Field::GetPositionAsGrid() const
 {
     return {
-        static_cast<unsigned int>(_Position.X * GRID_SIZE / WINDOW_SIZE),
-        static_cast<unsigned int>(_Position.Y * GRID_SIZE / WINDOW_SIZE)
+        static_cast<unsigned int>(_Position.X * _Configuration->GetGridSize() / _Configuration->GetWindowSize()),
+        static_cast<unsigned int>(_Position.Y * _Configuration->GetGridSize() / _Configuration->GetWindowSize())
     };
 }
 
@@ -66,8 +68,8 @@ void Field::SplitCellsAllDirections(unsigned short CellCount)
 void Field::_IncreaseCellCount(const double &Percentage)
 {
     _CellCount += RoundUp(_CellCount, Percentage);
-    if (_CellCount > MAX_COUNT_PER_FIELD)
-        _CellCount = MAX_COUNT_PER_FIELD;
+    if (_CellCount > _Configuration->GetMaxCountPerField())
+        _CellCount = _Configuration->GetMaxCountPerField();
 }
 
 

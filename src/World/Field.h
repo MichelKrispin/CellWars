@@ -5,6 +5,8 @@
 #include "Actions.h"
 #include "Bot/Team.h"
 
+class ConfigurationLoader;
+
 /**
  * \brief A single field which can have multiple cells.
  *
@@ -17,11 +19,12 @@ public:
     /**
      * \brief Creates a new field which will the default value of 1 cell.
      *
+     * \param Configuration The configuration loaded dynmically.
      * \param Team The team this field belongs to.
      * \param CellCount The count with which this field will be initialized.
      * \param Position The position of this field in the grid
      */
-    Field(TEAM Team, unsigned short CellCount = 1, Vector Position = {0, 0});
+    Field(const ConfigurationLoader* const Configuration, TEAM Team, unsigned short CellCount = 1, Vector Position = {0, 0});
     virtual ~Field();
 
     /**
@@ -103,10 +106,11 @@ private:
     void _SetCellCount(unsigned int NewCellCount);
 
     // Variables
-    TEAM _Team; //< The team to which this field belongs
-    unsigned short _CellCount; //< The cell count of this field.
-    Vector _Position; //< The position of this field.
-    Actions _Actions; //< A list of actions which will be used by the World to update the fields
+    const ConfigurationLoader * const _Configuration; //< The configuration.
+    TEAM _Team;                                       //< The team to which this field belongs
+    unsigned short _CellCount;                        //< The cell count of this field.
+    Vector _Position;                                 //< The position of this field.
+    Actions _Actions;                                 //< A list of actions which will be used by the World to update the fields
 
     // The world has access to everything.
     friend class World;

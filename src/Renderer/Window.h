@@ -8,6 +8,7 @@
 namespace sf {
     class RenderWindow; class Font; class Text; class RectangleShape;
 }
+class ConfigurationLoader;
 
 /**
  * \brief Window class to render out everything.
@@ -23,7 +24,7 @@ public:
      * Height and width will be WINDOW_SIZE (800 by default).
      * Can be changed in the Configuration.h
      */
-    Window();
+    Window(const ConfigurationLoader* const Configuration);
     ~Window();
 
     /**
@@ -46,11 +47,12 @@ public:
     bool isDead() const;
 
 private:
-    sf::RenderWindow* _Window;            //< Pointer to the SFML Window drawing the stuff.
-    sf::Font _Font;                       //< The font used for the text.
-    sf::Text* _Text;                      //< Pointer to the text drawn.
-    sf::RectangleShape* _ButtonRectangle; //< Pointer a button rectangle drawn on the bottom.
-    Button _Buttons[3];                   //< The buttons.
-    bool _isDead;                         //< Indicate whether the window was killed.
+    const ConfigurationLoader * const _Configuration; //< The Configuration
+    sf::RenderWindow* _Window;                        //< Pointer to the SFML Window drawing the stuff.
+    sf::Font _Font;                                   //< The font used for the text.
+    sf::Text* _Text;                                  //< Pointer to the text drawn.
+    sf::RectangleShape* _ButtonRectangle;             //< Pointer a button rectangle drawn on the bottom.
+    Button _Buttons[3];                               //< The buttons.
+    bool _isDead;                                     //< Indicate whether the window was killed.
 
 };

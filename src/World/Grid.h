@@ -1,9 +1,11 @@
 #ifndef _GRID_H
 #define _GRID_H
-#include "Configuration.h"
 #include "Field.h"
 #include "Bot/Team.h"
 #include "FieldList.h"
+
+// Forward declaration
+class ConfigurationLoader;
 
 // TODO: Outsource this to its own file
 /**
@@ -61,8 +63,10 @@ public:
     /**
      * \brief Create an empty grid.
      * Even if its empty it has array fields for all of the grid.
+     * 
+     * \param Configuration The adress of the configuration which is loaded once.
      */
-    Grid();
+    Grid(ConfigurationLoader* Configuration);
     virtual ~Grid();
 
     /**
@@ -126,8 +130,9 @@ private:
     void _UpdateAllReferences(FieldList* FieldsList, const unsigned char &NumberOfTeams);
 
     // Variables
-    Field* _Fields[GRID_SIZE * GRID_SIZE]; //< Pointer to all fields. Initialized all with nullptr
-    SplitValues _SplitValues[GRID_SIZE * GRID_SIZE]; //< Keeping track of each teams splitted values 
+    const ConfigurationLoader * const _Configuration; //< The Configuration
+    Field** _Fields; //< Pointer to all fields. Initialized all with nullptr
+    SplitValues* _SplitValues; //< Keeping track of each teams splitted values 
     const unsigned int _Size; //< Saving the size/width of the grid
 
 };

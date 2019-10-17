@@ -1,42 +1,46 @@
 #include "Window.h"
 #include <SFML/Graphics.hpp>
-#include "Configuration.h"
 #include "World/Field.h"
 #include "World/FieldList.h"
 #include "World/FieldListIterator.h"
+#include "World/ConfigurationLoader.h"
 #include <iostream>
 #include <sstream>
 
 #define BUTTON_SIZE 50
 
-Window::Window()
-    : _Window(nullptr),
+Window::Window(const ConfigurationLoader* const Configuration)
+    : _Configuration(Configuration),
+      _Window(nullptr),
       _Buttons{
-         {{WINDOW_SIZE - BUTTON_SIZE*6, WINDOW_SIZE+20},
+         {{_Configuration->GetWindowSize() - BUTTON_SIZE*6,
+           _Configuration->GetWindowSize()+20},
          BUTTON_SIZE,
          &_ButtonRectangle,
          sf::Color::Red},
 
-         {{WINDOW_SIZE - BUTTON_SIZE*4, WINDOW_SIZE+20},
+         {{_Configuration->GetWindowSize() - BUTTON_SIZE*4,
+           _Configuration->GetWindowSize()+20},
          BUTTON_SIZE,
          &_ButtonRectangle,
          sf::Color::Green},
 
-         {{WINDOW_SIZE - BUTTON_SIZE*2, WINDOW_SIZE+20},
+         {{_Configuration->GetWindowSize() - BUTTON_SIZE*2,
+           _Configuration->GetWindowSize()+20},
          BUTTON_SIZE,
          &_ButtonRectangle,
          sf::Color::Blue}
          },
     _isDead(false)
 {
-    if (!_Font.loadFromFile(FONT_PATH))
-        std::cout << "ERROR :: LOADING FONT :: WINDOW :: at "  << FONT_PATH << "\n";
+    if (!_Font.loadFromFile(_Configuration->GetFontPath()))
+        std::cout << "ERROR :: LOADING FONT :: WINDOW :: at "  << _Configuration->GetFontPath() << "\n";
 
     _Text = new sf::Text;
     _Text->setFont(_Font);
-    _Text->setCharacterSize(WINDOW_SIZE/10);
+    _Text->setCharacterSize(_Configuration->GetWindowSize()/10);
     _Text->setFillColor(sf::Color::White);
-    _Text->setPosition(10, WINDOW_SIZE-10); // 10px padding on left side
+    _Text->setPosition(10, _Configuration->GetWindowSize()-10); // 10px padding on left side
     
     _ButtonRectangle = new sf::RectangleShape;
 }
@@ -51,7 +55,8 @@ WindowEvent Window::Display(const FieldList *Fields, const unsigned char &Number
 {
     if (_Window == nullptr)
         _Window = new sf::RenderWindow(
-                sf::VideoMode(WINDOW_SIZE, WINDOW_SIZE + WINDOW_SIZE/10), // Add a fifth to the height
+                sf::VideoMode(_Configuration->GetWindowSize(),
+                              _Configuration->GetWindowSize() + _Configuration->GetWindowSize()/10), // Add a fifth to the height
                 "Cell Wars");
 
     // First check whether the window is dead
@@ -85,19 +90,19 @@ WindowEvent Window::Display(const FieldList *Fields, const unsigned char &Number
             {
                 sf::Vector2i LocalMousePosition = sf::Mouse::getPosition(*_Window);
                 // If inside of play button return play
-                if (LocalMousePosition.x > WINDOW_SIZE - BUTTON_SIZE*6 && LocalMousePosition.y > WINDOW_SIZE + 20 &&
-                    LocalMousePosition.x < WINDOW_SIZE - BUTTON_SIZE*5 &&
-                    LocalMousePosition.y < WINDOW_SIZE + 20 + BUTTON_SIZE)
+                if (LocalMousePosition.x > _Configuration->GetWindowSize() - BUTTON_SIZE*6 && LocalMousePosition.y > _Configuration->GetWindowSize() + 20 &&
+                    LocalMousePosition.x < _Configuration->GetWindowSize() - BUTTON_SIZE*5 &&
+                    LocalMousePosition.y < _Configuration->GetWindowSize() + 20 + BUTTON_SIZE)
                     return WindowEvent::Pause; // TODO: Maybe change this Event to unpause toggle or similar
 
-                if (LocalMousePosition.x > WINDOW_SIZE - BUTTON_SIZE*4 && LocalMousePosition.y > WINDOW_SIZE + 20 &&
-                    LocalMousePosition.x < WINDOW_SIZE - BUTTON_SIZE*3 &&
-                    LocalMousePosition.y < WINDOW_SIZE + 20 + BUTTON_SIZE)
+                if (LocalMousePosition.x > _Configuration->GetWindowSize() - BUTTON_SIZE*4 && LocalMousePosition.y > _Configuration->GetWindowSize() + 20 &&
+                    LocalMousePosition.x < _Configuration->GetWindowSize() - BUTTON_SIZE*3 &&
+                    LocalMousePosition.y < _Configuration->GetWindowSize() + 20 + BUTTON_SIZE)
                     return WindowEvent::Play;
 
-                if (LocalMousePosition.x > WINDOW_SIZE - BUTTON_SIZE*2  && LocalMousePosition.y > WINDOW_SIZE + 20 &&
-                    LocalMousePosition.x < WINDOW_SIZE - BUTTON_SIZE &&
-                    LocalMousePosition.y < WINDOW_SIZE + 20 + BUTTON_SIZE)
+                if (LocalMousePosition.x > _Configuration->GetWindowSize() - BUTTON_SIZE*2  && LocalMousePosition.y > _Configuration->GetWindowSize() + 20 &&
+                    LocalMousePosition.x < _Configuration->GetWindowSize() - BUTTON_SIZE &&
+                    LocalMousePosition.y < _Configuration->GetWindowSize() + 20 + BUTTON_SIZE)
                     return WindowEvent::StepForward;
             }
         }
@@ -111,12 +116,13 @@ WindowEvent Window::Display(const FieldList *Fields, const unsigned char &Number
     // Create one rectangle and draw it multiple times
     sf::RectangleShape Rectangle;
     // Minus two for the outline
-    Rectangle.setSize(sf::Vector2f(WINDOW_SIZE / GRID_SIZE - 2.0f, WINDOW_SIZE / GRID_SIZE - 2.0f));
+    Rectangle.setSize(sf::Vector2f(_Configuration->GetWindowSize() / _Configuration->GetGridSize() - 2.0f,
+                                  _Configuration->GetWindowSize() / _Configuration->GetGridSize() - 2.0f));
     Rectangle.setOutlineColor(sf::Color::Black);
     Rectangle.setOutlineThickness(1.0f);
 
     // Reset the window
-    _Window->clear(sf::Color::BACKGROUND_COLOR);
+    _Window->clear(_Configuration->GetBackgroundColor());
 
     // Looping trough all of the Fields
     for (int i = 0; i < NumberOfTeams; ++i) // 2 for team size
@@ -132,16 +138,21 @@ WindowEvent Window::Display(const FieldList *Fields, const unsigned char &Number
             switch (static_cast<TEAM>(i))
             {
                 case TEAM::BLUE:
-                    Rectangle.setFillColor(sf::Color(0, 0, Current->GetCellCount() * 255.0 / MAX_COUNT_PER_FIELD));
+                    Rectangle.setFillColor(sf::Color(
+                        0, 0, Current->GetCellCount() * 255.0 / _Configuration->GetMaxCountPerField()));
                     break;
                 case TEAM::RED:
-                    Rectangle.setFillColor(sf::Color(Current->GetCellCount() * 255.0 / MAX_COUNT_PER_FIELD, 0, 0));
+                    Rectangle.setFillColor(sf::Color(
+                        Current->GetCellCount() * 255.0 / _Configuration->GetMaxCountPerField(), 0, 0));
                     break;
                 case TEAM::GREEN:
-                    Rectangle.setFillColor(sf::Color(0, Current->GetCellCount() * 255.0 / MAX_COUNT_PER_FIELD, 0));
+                    Rectangle.setFillColor(sf::Color(
+                        0, Current->GetCellCount() * 255.0 / _Configuration->GetMaxCountPerField(), 0));
                     break;
                 case TEAM::YELLOW:
-                    Rectangle.setFillColor(sf::Color(Current->GetCellCount() * 255.0 / MAX_COUNT_PER_FIELD, Current->GetCellCount() * 255.0 / MAX_COUNT_PER_FIELD, 0));
+                    Rectangle.setFillColor(sf::Color(
+                        Current->GetCellCount() * 255.0 / _Configuration->GetMaxCountPerField(),
+                        Current->GetCellCount() * 255.0 / _Configuration->GetMaxCountPerField(), 0));
                     break;
             }
             // Where it should be rendered

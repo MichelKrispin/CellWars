@@ -1,14 +1,13 @@
 #include "World.h"
 #include "FieldList.h"
 #include "WorldSnapshot.h"
-#include "Configuration.h"
 #include <SFML/System/Clock.hpp>
 #include <iostream>
 
 World::World()
     : _Configuration(),
-      _Window(),
-      _Grid(),
+      _Window(&_Configuration),
+      _Grid(&_Configuration),
       _NumberOfBots(0)
 {
     _Clock = new sf::Clock;
@@ -47,10 +46,10 @@ void World::Play(Bot** Bots)
 
     WindowEvent Event = WindowEvent::Nothing; // Used to get feedback of the window for interactivity
     bool Kill = false;                        // To indicate whether window should be killed afterwards
-    bool isPaused = PAUSE_ON_STARTUP;         // Default value if starting with paused
+    bool isPaused = _Configuration.GetPauseOnStartup();         // Default value if starting with paused
     bool TimePaused = false;                  // To pause the turns for the turn time
     bool OneStepForward = false;              // To check whether to go only one step forward
-    while (_WorldSnapshot->_TurnNumber < MAX_TURN_COUNT)
+    while (_WorldSnapshot->_TurnNumber < _Configuration.GetMaxTurnCount())
     {
         // If paused don't do anything
         if (!isPaused && !TimePaused)
@@ -78,7 +77,7 @@ void World::Play(Bot** Bots)
         }
 
         // Pause as long as wer are below the turn duration
-        TimePaused = _Clock->getElapsedTime().asMilliseconds() < TURN_DURATION_IN_MS;
+        TimePaused = _Clock->getElapsedTime().asMilliseconds() < _Configuration.GetTurnDurationInMs();
 
         Event = _RenderWorld(_WorldSnapshot->_TurnNumber);
 
@@ -153,10 +152,10 @@ bool World::_Initialize()
         // Starting Positions have to be translated 
         // from numbers on the grid to pixels
         Vector TranslatedStartingPosition = _Bots[i]->GetStartingPosition();
-        TranslatedStartingPosition.X *= WINDOW_SIZE / GRID_SIZE;
-        TranslatedStartingPosition.Y *= WINDOW_SIZE / GRID_SIZE;
+        TranslatedStartingPosition.X *= _Configuration.GetWindowSize() / _Configuration.GetGridSize();
+        TranslatedStartingPosition.Y *= _Configuration.GetWindowSize() / _Configuration.GetGridSize();
         _Fields[_Bots[i]->GetTeamAsUnsignedInt()]._Add(
-                Field(_Bots[i]->GetTeam(), 100, TranslatedStartingPosition));
+                Field(&_Configuration, _Bots[i]->GetTeam(), 100, TranslatedStartingPosition));
     }
 
     // Then the Grid can be initialized with the fields
@@ -201,19 +200,19 @@ void World::_UpdateWorld()
 
             if (CurrentActions.Up > 0)
                 _Grid.SetFieldValuesAt(
-                        CurrentPosition.X, CurrentPosition.Y - WINDOW_SIZE/GRID_SIZE,
+                        CurrentPosition.X, CurrentPosition.Y - _Configuration.GetWindowSize()/_Configuration.GetGridSize(),
                         static_cast<TEAM>(i), CurrentActions.Up);
             if (CurrentActions.Down > 0)
                 _Grid.SetFieldValuesAt(
-                        CurrentPosition.X, CurrentPosition.Y + WINDOW_SIZE/GRID_SIZE,
+                        CurrentPosition.X, CurrentPosition.Y + _Configuration.GetWindowSize()/_Configuration.GetGridSize(),
                         static_cast<TEAM>(i), CurrentActions.Down);
             if (CurrentActions.Left > 0)
                 _Grid.SetFieldValuesAt(
-                        CurrentPosition.X - WINDOW_SIZE/GRID_SIZE, CurrentPosition.Y,
+                        CurrentPosition.X - _Configuration.GetWindowSize()/_Configuration.GetGridSize(), CurrentPosition.Y,
                         static_cast<TEAM>(i), CurrentActions.Left);
             if (CurrentActions.Right > 0)
                 _Grid.SetFieldValuesAt(
-                        CurrentPosition.X + WINDOW_SIZE/GRID_SIZE, CurrentPosition.Y,
+                        CurrentPosition.X + _Configuration.GetWindowSize()/_Configuration.GetGridSize(), CurrentPosition.Y,
                         static_cast<TEAM>(i), CurrentActions.Right);
 
             // After setting all those field values decrease the actual cell count of the current field
@@ -222,7 +221,7 @@ void World::_UpdateWorld()
             // Afterwards reset the actions
             CurrentField->_ResetActions();
             
-            if (!INCREASING_SPLIT_VALUES)
+            if (!_Configuration.GetIncreasingSplitValues())
                 // And then increase all by 10%
                 CurrentField->_IncreaseCellCount(0.1);
         }
@@ -230,7 +229,7 @@ void World::_UpdateWorld()
     // After applying everything calculate the grid
     _Grid.ComputeAllFields(_Fields, _NumberOfBots);
 
-    if (INCREASING_SPLIT_VALUES)
+    if (_Configuration.GetIncreasingSplitValues())
     {
         for (int i = 0; i < _NumberOfBots; ++i)
         {
