@@ -115,13 +115,13 @@ class MinBot : public PlayerBot
 public:
    void MakeTurn(const WorldSnapshot& Snapshot) override
     {
-    std::cout << "\n\nTurn " << Snapshot.GetTurn() << "\n";
-        unsigned int sum = 0;
-        for (unsigned int i = Snapshot.GetTurn(); i > 0; i--)
+    //std::cout << "\n\nTurn " << Snapshot.GetTurn() << "\n";
+        unsigned int Sum = 0;
+        for (unsigned int i = Snapshot.GetTurn(); i < 25 && i > 0; i--)
         {
-            sum += i * 4;
+            Sum += i * 4;
         }
-        unsigned int count = 0;
+        unsigned int Count = 0;
         /*
         FieldList MyFields = Snapshot.GetFields();
         for (unsigned int count = 0; count < MyFields.GetSize(); count++)
@@ -138,23 +138,88 @@ public:
              Iterator.Next())
         {
             Field* CurrentField = Iterator.Get();
+            unsigned short Currentcellcount = CurrentField->GetCellCount();
             if (Snapshot.GetTurn() == 0)
             {
                 CurrentField->SplitCellsAllDirections(21);
             } 
-            else if (count == 0 && CurrentField->GetCellCount() > 34)
+            else if (Count == 0)
             {
-                CurrentField->SplitCellsAllDirections((CurrentField->GetCellCount() - 31) / 4);
+                if (Currentcellcount > 34)
+                    CurrentField->SplitCellsAllDirections((Currentcellcount - 31) * 0.25);
             }
-            else if (count == sum - 3 && CurrentField->GetCellCount() > 12)
+            else if (Snapshot.GetTurn() < 50)
             {                
-                CurrentField->SplitCells(DIRECTION::UP, CurrentField->GetCellCount() * 0.2);
-                CurrentField->SplitCells(DIRECTION::LEFT, CurrentField->GetCellCount() * 0.2);
-                CurrentField->SplitCells(DIRECTION::RIGHT, CurrentField->GetCellCount() * 0.2);
-                CurrentField->SplitCells(DIRECTION::DOWN, CurrentField->GetCellCount() * 0.2);
+                if (Count % 2)
+                {
+                    if (Count == (Sum - (2 * Snapshot.GetTurn()) + 1) && Currentcellcount > 11)
+                    {
+                        CurrentField->SplitCells(DIRECTION::RIGHT, 11);
+                        CurrentField->SplitCells(DIRECTION::DOWN, Currentcellcount - 12);
+                    }
+                    else if (Count == (Sum - (4 * Snapshot.GetTurn()) + 1) && Currentcellcount > 11)
+                    {
+                        CurrentField->SplitCells(DIRECTION::UP, 11);
+                        CurrentField->SplitCells(DIRECTION::RIGHT, Currentcellcount - 12);
+                    }
+                    else if (!Snapshot.GetAdjacentFieldOf(CurrentField, DIRECTION::UP))
+                    {
+                        CurrentField->SplitCells(DIRECTION::UP, Currentcellcount * 0.5);
+                        CurrentField->SplitCells(DIRECTION::RIGHT, (Currentcellcount - 1) * 0.5);                        
+                    }
+                    else if (!Snapshot.GetAdjacentFieldOf(CurrentField, DIRECTION::DOWN))
+                    {
+                        CurrentField->SplitCells(DIRECTION::RIGHT, Currentcellcount * 0.5);
+                        CurrentField->SplitCells(DIRECTION::DOWN, (Currentcellcount - 1) * 0.5);                        
+                    }
+                    else
+                    {
+                        CurrentField->SplitCells(DIRECTION::RIGHT, Currentcellcount - (Currentcellcount * 0.75));
+                        CurrentField->SplitCells(DIRECTION::UP, Currentcellcount * 0.25);
+                        CurrentField->SplitCells(DIRECTION::DOWN, Currentcellcount * 0.25);
+                    }
+                }
+                else
+                {
+                    if (Count == Sum && Currentcellcount > 11)
+                    {
+                        CurrentField->SplitCells(DIRECTION::DOWN, 11);
+                        CurrentField->SplitCells(DIRECTION::LEFT, Currentcellcount - 12);
+                    }
+                    else if (Count == (Sum - (2 * Snapshot.GetTurn())) && Currentcellcount > 11)
+                    {
+                        CurrentField->SplitCells(DIRECTION::LEFT, 11);
+                        CurrentField->SplitCells(DIRECTION::UP, Currentcellcount - 12);
+                    }
+                    else if (!Snapshot.GetAdjacentFieldOf(CurrentField, DIRECTION::UP))
+                    {
+                        CurrentField->SplitCells(DIRECTION::LEFT, Currentcellcount * 0.5);
+                        CurrentField->SplitCells(DIRECTION::UP, (Currentcellcount - 1) * 0.5);                        
+                    }
+                    else if (!Snapshot.GetAdjacentFieldOf(CurrentField, DIRECTION::DOWN))
+                    {
+                        CurrentField->SplitCells(DIRECTION::DOWN, Currentcellcount * 0.5);
+                        CurrentField->SplitCells(DIRECTION::LEFT,(Currentcellcount - 1) * 0.5);                        
+                    }
+                    else
+                    {
+                        CurrentField->SplitCells(DIRECTION::LEFT, Currentcellcount - (Currentcellcount * 0.75));
+                        CurrentField->SplitCells(DIRECTION::UP, Currentcellcount * 0.25);
+                        CurrentField->SplitCells(DIRECTION::DOWN, Currentcellcount * 0.25);
+                    }
+                }      
+            }      
+            else if (Snapshot.GetTurn() > 135)
+            {
+                CurrentField->SplitCells(DIRECTION::RIGHT, CurrentField->GetCellCount() * 0.9);
+            } 
+            else
+            {
+                CurrentField->SplitCellsAllDirections(Currentcellcount * 0.15);
             }
-            std::cout << "\n" << count << ": " << CurrentField->GetCellCount() << " - sum - " << sum << "\n"; 
-            count++;
+            
+            //std::cout << "\n" << Count << ": " << Currentcellcount << " - sum - " << Sum << "\n"; 
+            Count++;
         }
                 /*if((!Snapshot.GetAdjacentFieldOf(CurrentField, DIRECTION::UP)
                 && !Snapshot.GetAdjacentFieldOf(CurrentField, DIRECTION::LEFT)

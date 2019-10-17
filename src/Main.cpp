@@ -8,9 +8,11 @@
 int main()
 {
     World GameWorld;
-    MyBot Player;
-    AnotherPlayerBot MyPlayer;
-    //MaxBot MyPlayer;
+
+    MinBot Player;
+    //MyBot MyPlayer;
+    //AnotherPlayerBot MyPlayer;
+    MaxBot MyPlayer;
     //AnotherPlayerBot Enemy;
     //Bot* Bots[3]; // For a 2-4 player game
     //Bots[0] = &Player;
