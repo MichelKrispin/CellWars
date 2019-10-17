@@ -74,6 +74,14 @@ void World::Play(Bot** Bots)
                 isPaused = true;
                 OneStepForward = false;
             }
+
+            // If one team has no fields anymore break
+            for (unsigned char j = 0; j < _NumberOfBots; ++j)
+            {
+                if (!_WorldSnapshot[_Bots[j]->GetTeamAsUnsignedInt()].GetFields().GetSize())
+                    return;
+            }
+
         }
 
         // Pause as long as wer are below the turn duration
