@@ -40,6 +40,15 @@ public:
     WindowEvent Display(const FieldList *Fields, const unsigned char &NumberOfTeams, const unsigned int &TurnNumber);
 
     /**
+     * \brief Sets a winner which ends the game.
+     *
+     * The winning team can also be a casted 0, 1, 2, 3.
+     * 
+     * \param Team The winning team.
+     */
+    void SetWinner(TEAM Team);
+
+    /**
      * \brief Indicates whether the window was closed.
      *
      * \return Returns true when the window was closed.
@@ -50,6 +59,7 @@ private:
     const ConfigurationLoader * const _Configuration; //< The Configuration
     sf::RenderWindow* _Window;                        //< Pointer to the SFML Window drawing the stuff.
     sf::Font _Font;                                   //< The font used for the text.
+    bool _FontExists;                                  //< Indicates whether the font exists.
     sf::Text* _Text;                                  //< Pointer to the text drawn.
     sf::RectangleShape* _ButtonRectangle;             //< Pointer a button rectangle drawn on the bottom.
     Button _Buttons[3];                               //< The buttons.

@@ -12,6 +12,7 @@
 Window::Window(const ConfigurationLoader* const Configuration)
     : _Configuration(Configuration),
       _Window(nullptr),
+      _FontExists(true),
       _Buttons{
          {{_Configuration->GetWindowSize() - BUTTON_SIZE*6,
            _Configuration->GetWindowSize()+20},
@@ -34,13 +35,19 @@ Window::Window(const ConfigurationLoader* const Configuration)
     _isDead(false)
 {
     if (!_Font.loadFromFile(_Configuration->GetFontPath()))
+    {
         std::cout << "ERROR :: LOADING FONT :: WINDOW :: at "  << _Configuration->GetFontPath() << "\n";
+        _FontExists = false;
+    }
 
-    _Text = new sf::Text;
-    _Text->setFont(_Font);
-    _Text->setCharacterSize(_Configuration->GetWindowSize()/10);
-    _Text->setFillColor(sf::Color::White);
-    _Text->setPosition(10, _Configuration->GetWindowSize()-10); // 10px padding on left side
+    if (_FontExists)
+    {
+        _Text = new sf::Text;
+        _Text->setFont(_Font);
+        _Text->setCharacterSize(_Configuration->GetWindowSize()/10);
+        _Text->setFillColor(sf::Color::White);
+        _Text->setPosition(10, static_cast<float>(_Configuration->GetWindowSize()-10)); // 10px padding on left side
+    }
     
     _ButtonRectangle = new sf::RectangleShape;
 }
@@ -89,29 +96,36 @@ WindowEvent Window::Display(const FieldList *Fields, const unsigned char &Number
             if (event.mouseButton.button == sf::Mouse::Left)
             {
                 sf::Vector2i LocalMousePosition = sf::Mouse::getPosition(*_Window);
+                // TODO: The buttons should have a is inside function or similar
                 // If inside of play button return play
-                if (LocalMousePosition.x > _Configuration->GetWindowSize() - BUTTON_SIZE*6 && LocalMousePosition.y > _Configuration->GetWindowSize() + 20 &&
-                    LocalMousePosition.x < _Configuration->GetWindowSize() - BUTTON_SIZE*5 &&
-                    LocalMousePosition.y < _Configuration->GetWindowSize() + 20 + BUTTON_SIZE)
+                if (static_cast<unsigned int>(LocalMousePosition.x) > _Configuration->GetWindowSize() - BUTTON_SIZE*6 &&
+                    static_cast<unsigned int>(LocalMousePosition.y) > _Configuration->GetWindowSize() + 20            &&
+                    static_cast<unsigned int>(LocalMousePosition.x) < _Configuration->GetWindowSize() - BUTTON_SIZE*5 &&
+                    static_cast<unsigned int>(LocalMousePosition.y) < _Configuration->GetWindowSize() + 20 + BUTTON_SIZE)
                     return WindowEvent::Pause; // TODO: Maybe change this Event to unpause toggle or similar
 
-                if (LocalMousePosition.x > _Configuration->GetWindowSize() - BUTTON_SIZE*4 && LocalMousePosition.y > _Configuration->GetWindowSize() + 20 &&
-                    LocalMousePosition.x < _Configuration->GetWindowSize() - BUTTON_SIZE*3 &&
-                    LocalMousePosition.y < _Configuration->GetWindowSize() + 20 + BUTTON_SIZE)
+                if (static_cast<unsigned int>(LocalMousePosition.x) > _Configuration->GetWindowSize() - BUTTON_SIZE*4 && 
+                    static_cast<unsigned int>(LocalMousePosition.y) > _Configuration->GetWindowSize() + 20            &&
+                    static_cast<unsigned int>(LocalMousePosition.x) < _Configuration->GetWindowSize() - BUTTON_SIZE*3 &&
+                    static_cast<unsigned int>(LocalMousePosition.y) < _Configuration->GetWindowSize() + 20 + BUTTON_SIZE)
                     return WindowEvent::Play;
 
-                if (LocalMousePosition.x > _Configuration->GetWindowSize() - BUTTON_SIZE*2  && LocalMousePosition.y > _Configuration->GetWindowSize() + 20 &&
-                    LocalMousePosition.x < _Configuration->GetWindowSize() - BUTTON_SIZE &&
-                    LocalMousePosition.y < _Configuration->GetWindowSize() + 20 + BUTTON_SIZE)
+                if (static_cast<unsigned int>(LocalMousePosition.x) > _Configuration->GetWindowSize() - BUTTON_SIZE*2 &&
+                    static_cast<unsigned int>(LocalMousePosition.y) > _Configuration->GetWindowSize() + 20            &&
+                    static_cast<unsigned int>(LocalMousePosition.x) < _Configuration->GetWindowSize() - BUTTON_SIZE   &&
+                    static_cast<unsigned int>(LocalMousePosition.y) < _Configuration->GetWindowSize() + 20 + BUTTON_SIZE)
                     return WindowEvent::StepForward;
             }
         }
     }
 
     // Set the turn count as the text for the _Text
-    std::stringstream TextConversion;
-    TextConversion << TurnNumber;
-    _Text->setString(TextConversion.str());
+    if (_FontExists)
+    {
+        std::stringstream TextConversion;
+        TextConversion << TurnNumber;
+        _Text->setString(TextConversion.str());
+    }
 
     // Create one rectangle and draw it multiple times
     sf::RectangleShape Rectangle;
@@ -138,21 +152,22 @@ WindowEvent Window::Display(const FieldList *Fields, const unsigned char &Number
             switch (static_cast<TEAM>(i))
             {
                 case TEAM::BLUE:
+                    // Casting from double to unsigned char as color channel only goes to 255 -> unsigned 8 bit integer value
                     Rectangle.setFillColor(sf::Color(
-                        0, 0, Current->GetCellCount() * 255.0 / _Configuration->GetMaxCountPerField()));
+                        0, 0, static_cast<unsigned char>(Current->GetCellCount() * 255.0 / _Configuration->GetMaxCountPerField())));
                     break;
                 case TEAM::RED:
                     Rectangle.setFillColor(sf::Color(
-                        Current->GetCellCount() * 255.0 / _Configuration->GetMaxCountPerField(), 0, 0));
+                        static_cast<unsigned char>(Current->GetCellCount() * 255.0 / _Configuration->GetMaxCountPerField()), 0, 0));
                     break;
                 case TEAM::GREEN:
                     Rectangle.setFillColor(sf::Color(
-                        0, Current->GetCellCount() * 255.0 / _Configuration->GetMaxCountPerField(), 0));
+                        0, static_cast<unsigned char>(Current->GetCellCount() * 255.0 / _Configuration->GetMaxCountPerField()), 0));
                     break;
                 case TEAM::YELLOW:
                     Rectangle.setFillColor(sf::Color(
-                        Current->GetCellCount() * 255.0 / _Configuration->GetMaxCountPerField(),
-                        Current->GetCellCount() * 255.0 / _Configuration->GetMaxCountPerField(), 0));
+                        static_cast<unsigned char>(Current->GetCellCount() * 255.0 / _Configuration->GetMaxCountPerField()),
+                        static_cast<unsigned char>(Current->GetCellCount() * 255.0 / _Configuration->GetMaxCountPerField()), 0));
                     break;
             }
             // Where it should be rendered
@@ -163,8 +178,9 @@ WindowEvent Window::Display(const FieldList *Fields, const unsigned char &Number
         }
     }
 
-    // Draw the text
-    _Window->draw(*_Text);
+    // Draw the text if the font was loaded
+    if (_FontExists)
+        _Window->draw(*_Text);
 
     // Draw the buttons
     for (short i = 0; i < 3; ++i)
@@ -182,6 +198,78 @@ WindowEvent Window::Display(const FieldList *Fields, const unsigned char &Number
     _Window->display();
 
     return WindowEvent::Nothing; // Everything is alright
+}
+
+void Window::SetWinner(TEAM Team)
+{
+    // Initialize everything needed for the displaying
+    // and then display it once
+    sf::RectangleShape Rectangle;
+    // Minus two for the outline
+    Rectangle.setSize(sf::Vector2f(_Configuration->GetWindowSize() * 0.5f,
+                                   _Configuration->GetWindowSize() * 0.5f));
+    Rectangle.setOutlineColor(sf::Color::Black);
+    Rectangle.setOutlineThickness(1.0f);
+    Rectangle.setPosition(_Configuration->GetWindowSize() * 0.25f,
+                          _Configuration->GetWindowSize() * 0.25f);
+
+    std::string WinnerText = "The winner is team ";
+    // Set the color of the rectangle to be that of the winner team
+    // And also set the correct winner text
+    switch (Team)
+    {
+        case TEAM::BLUE:
+            Rectangle.setFillColor(sf::Color(0, 0, 255));
+            WinnerText += "Blue!";
+            break;
+        case TEAM::RED:
+            Rectangle.setFillColor(sf::Color(255, 0, 0));
+            WinnerText += "Red!";
+            break;
+        case TEAM::GREEN:
+            Rectangle.setFillColor(sf::Color(0, 255, 0));
+            WinnerText += "Green!";
+            break;
+        case TEAM::YELLOW:
+            Rectangle.setFillColor(sf::Color(255, 255, 0));
+            WinnerText += "Yellow!";
+            break;
+    }
+
+    if (_FontExists)
+    {
+        _Text->setString(WinnerText);
+        _Text->setPosition(_Configuration->GetWindowSize() * 0.3f,
+                           _Configuration->GetWindowSize() * 0.4f);
+    }
+    
+    // Reset the window
+    _Window->clear(_Configuration->GetBackgroundColor());
+    _Window->draw(Rectangle);
+    if (_FontExists)
+        _Window->draw(*_Text);
+
+
+    // Loop as long as someone kills the window
+    for (;;)
+    {
+        // First check if someone actually kills the window
+        sf::Event event;
+        while (_Window->pollEvent(event))
+        {
+            if (event.type == sf::Event::Closed)
+            {
+                _Window->close();
+                return;
+            }
+            if (event.type == sf::Event::KeyPressed &&
+                event.key.code == sf::Keyboard::Escape)
+            {
+                _Window->close();
+                return;
+            }
+        }
+    }
 }
 
 bool Window::isDead() const
