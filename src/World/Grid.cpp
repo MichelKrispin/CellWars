@@ -46,12 +46,12 @@ void Grid::SetFieldValuesAt(unsigned int x, unsigned int y, TEAM Team, unsigned 
     // Make negative or too positive values go to the opposite side of the screen
     if (static_cast<int>(x) < 0)
         x += _Configuration->GetWindowSize();
-    if (static_cast<int>(x) >= _Configuration->GetWindowSize())
+    if (x >= _Configuration->GetWindowSize())
         x -= _Configuration->GetWindowSize();
 
     if (static_cast<int>(y) < 0)
         y += _Configuration->GetWindowSize();
-    if (static_cast<int>(y) >= _Configuration->GetWindowSize())
+    if (y >= _Configuration->GetWindowSize())
         y -= _Configuration->GetWindowSize();
 
     Vector Position = _ConvertPixelsToGridValues({x, y});

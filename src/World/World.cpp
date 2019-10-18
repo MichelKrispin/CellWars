@@ -127,7 +127,7 @@ bool World::_SetInputToLocalBots(Bot** Bots)
     {
         // By this we know that at the next position there is an existing Bot
         if (dynamic_cast<Bot*>(Bots[i]) != nullptr && // Short-circuiting for testing if that pointer is null
-            dynamic_cast<Bot*>(Bots[i])->GetTeamAsUnsignedInt() == -1) //TODO: This looks wrong
+            static_cast<int>(dynamic_cast<Bot*>(Bots[i])->GetTeamAsUnsignedInt()) == -1)
         {
             _Bots[count] = Bots[i];
             ++count;
@@ -153,7 +153,8 @@ bool World::_Initialize()
         // Initialize the bots first
         _Bots[i]->_Initialize(
             static_cast<DIRECTION>(i), // Direction goes first LEFt, RIGHT, DOWN, UP
-            static_cast<TEAM>(i));     // Team goes first BLUE, RED, GREEN, YELLOW
+            static_cast<TEAM>(i),     // Team goes first BLUE, RED, GREEN, YELLOW
+            &_Configuration);
 
        
         // After initializing the players initialize the fields for two teams
