@@ -1,5 +1,5 @@
 #include "Bot.h"
-#include "Configuration.h"
+#include "World/ConfigurationLoader.h"
 
 Bot::Bot()
     : _Team(static_cast<TEAM>(-1))
@@ -26,22 +26,26 @@ unsigned int Bot::GetTeamAsUnsignedInt() const
     return static_cast<unsigned int>(_Team);
 }
 
-void Bot::_Initialize(DIRECTION Direction, TEAM Team)
+void Bot::_Initialize(DIRECTION Direction, TEAM Team, ConfigurationLoader* Configuration)
 {
     _Team = Team;
     switch(Direction)
     {
         case DIRECTION::UP:
-            _StartingPosition = {GRID_SIZE/2, GRID_SIZE/4};
+            _StartingPosition = {Configuration->GetGridSize()/2,
+                                 Configuration->GetGridSize()/4};
             break;
         case DIRECTION::LEFT:
-            _StartingPosition = {GRID_SIZE/4, GRID_SIZE/2};
+            _StartingPosition = {Configuration->GetGridSize()/4,
+                                 Configuration->GetGridSize()/2};
             break;
         case DIRECTION::RIGHT:
-            _StartingPosition = {GRID_SIZE/4+GRID_SIZE/2, GRID_SIZE/2};
+            _StartingPosition = {Configuration->GetGridSize()/4+Configuration->GetGridSize()/2,
+                                 Configuration->GetGridSize()/2};
             break;
         case DIRECTION::DOWN:
-            _StartingPosition = {GRID_SIZE/2, GRID_SIZE/4+GRID_SIZE/2};
+            _StartingPosition = {Configuration->GetGridSize()/2,
+                                 Configuration->GetGridSize()/4+Configuration->GetGridSize()/2};
             break;
     }
 }
