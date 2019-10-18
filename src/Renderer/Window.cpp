@@ -213,34 +213,35 @@ void Window::SetWinner(TEAM Team)
     Rectangle.setPosition(_Configuration->GetWindowSize() * 0.25f,
                           _Configuration->GetWindowSize() * 0.25f);
 
-    std::string WinnerText = "The winner is team ";
+    std::string WinnerText = "";
     // Set the color of the rectangle to be that of the winner team
     // And also set the correct winner text
     switch (Team)
     {
         case TEAM::BLUE:
             Rectangle.setFillColor(sf::Color(0, 0, 255));
-            WinnerText += "Blue!";
+            WinnerText += "Blue";
             break;
         case TEAM::RED:
             Rectangle.setFillColor(sf::Color(255, 0, 0));
-            WinnerText += "Red!";
+            WinnerText += "Red";
             break;
         case TEAM::GREEN:
             Rectangle.setFillColor(sf::Color(0, 255, 0));
-            WinnerText += "Green!";
+            WinnerText += "Green";
             break;
         case TEAM::YELLOW:
             Rectangle.setFillColor(sf::Color(255, 255, 0));
-            WinnerText += "Yellow!";
+            WinnerText += "Yellow";
             break;
     }
+    WinnerText += " wins!";
 
     if (_FontExists)
     {
         _Text->setString(WinnerText);
-        _Text->setPosition(_Configuration->GetWindowSize() * 0.3f,
-                           _Configuration->GetWindowSize() * 0.4f);
+        _Text->setPosition(_Configuration->GetWindowSize() * 0.28f,
+                           _Configuration->GetWindowSize() * 0.45f);
     }
     
     // Reset the window
@@ -248,6 +249,7 @@ void Window::SetWinner(TEAM Team)
     _Window->draw(Rectangle);
     if (_FontExists)
         _Window->draw(*_Text);
+    _Window->display();
 
 
     // Loop as long as someone kills the window

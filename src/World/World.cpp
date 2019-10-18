@@ -75,17 +75,74 @@ void World::Play(Bot** Bots)
                 OneStepForward = false;
             }
 
-            // If one team has no fields anymore break
+            // If only one team still has fields set the winner team
+            bool TeamCount[4] = {true, true, true, true};
             for (unsigned char j = 0; j < _NumberOfBots; ++j)
             {
                 if (!_WorldSnapshot[_Bots[j]->GetTeamAsUnsignedInt()].GetFields().GetSize())
+                {
+                    TeamCount[j] = false;
+                    _Window.SetWinner(TEAM::BLUE);
                     return;
+                }
             }
-
+            // TODO: Make this cleaner
+            if (_NumberOfBots == 2 && !TeamCount[1])
+            {
+                _Window.SetWinner(TEAM::BLUE);
+                return;
+            }
+            if (_NumberOfBots == 2 && !TeamCount[0])
+            {
+                _Window.SetWinner(TEAM::RED);
+                return;
+            }
+            if (_NumberOfBots == 3)
+            {
+                if (!TeamCount[1] && !TeamCount[2])
+                {
+                    _Window.SetWinner(TEAM::BLUE);
+                    return;
+                }
+                if (!TeamCount[0] && !TeamCount[2])
+                {
+                    _Window.SetWinner(TEAM::RED);
+                    return;
+                }
+                if (!TeamCount[0] && !TeamCount[1])
+                {
+                    _Window.SetWinner(TEAM::GREEN);
+                    return;
+                }
+            }
+            if (_NumberOfBots == 4)
+            {
+                if (!TeamCount[1] && !TeamCount[2] && !TeamCount[3])
+                {
+                    _Window.SetWinner(TEAM::BLUE);
+                    return;
+                }
+                if (!TeamCount[0] && !TeamCount[2] && !TeamCount[3])
+                {
+                    _Window.SetWinner(TEAM::RED);
+                    return;
+                }
+                if (!TeamCount[0] && !TeamCount[1] && !TeamCount[3])
+                {
+                    _Window.SetWinner(TEAM::GREEN);
+                    return;
+                }
+                if (!TeamCount[0] && !TeamCount[1] && !TeamCount[2])
+                {
+                    _Window.SetWinner(TEAM::YELLOW);
+                    return;
+                }
+            }
         }
 
         // Pause as long as wer are below the turn duration
-        TimePaused = _Clock->getElapsedTime().asMilliseconds() < _Configuration.GetTurnDurationInMs();
+        TimePaused = static_cast<unsigned int>(_Clock->getElapsedTime().asMilliseconds())
+                     < _Configuration.GetTurnDurationInMs();
 
         Event = _RenderWorld(_WorldSnapshot->_TurnNumber);
 
