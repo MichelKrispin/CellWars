@@ -1,7 +1,7 @@
 #ifndef _WORLD_H
 #define _WORLD_H
 #include "Bot/Bot.h"
-#include "Renderer/Window.h"
+#include "Renderer/SFMLWindow.h"
 #include "Grid.h"
 #include "Renderer/WindowEvent.h"
 #include "Bot/PlayerBot.h"
@@ -56,6 +56,8 @@ public:
      */
     void Play(PlayerBot* Player1, PlayerBot* Player2);
 
+    // TODO: Create dedicated python functions to play with three or four players
+    // TODO: Check whether playing with 4 players works correctly
     /**
      * \brief Play the game.
      * 
@@ -108,7 +110,7 @@ private:
 
     // Variables
     ConfigurationLoader _Configuration; //< The class which holds all configuration data
-    Window _Window;                     //< The window used to render everything on screen.
+    SFMLWindow _Window;                     //< The window used to render everything on screen.
     Grid _Grid;                         //< The grid which keeps track of all fields in a more natural way.
     WorldSnapshot* _WorldSnapshot;      //< A snapshot of the world which will be updated after each turn.
     FieldList* _Fields;                 //< Keeping track of all fields for both teams.

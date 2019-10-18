@@ -1,68 +1,56 @@
-#pragma once
-#include "World/WorldSnapshot.h"
-#include <SFML/Graphics/Font.hpp>
-#include "Renderer/WindowEvent.h"
-#include "World/Vector.h"
-#include "Button.h"
+#ifndef _WINDOW_H
+#define _WINDOW_H
 
-namespace sf {
-    class RenderWindow; class Font; class Text; class RectangleShape;
-}
+#include "WindowEvent.h"
+#include "Bot/Team.h"
+
 class ConfigurationLoader;
+class FieldList;
 
-/**
- * \brief Window class to render out everything.
- *
- * Needs a FieldList pointer to all fields to render out every field
- * as there are positions saved.
- */
-class Window
-{
+class Window {
 public:
     /**
-     * \brief Initializes the window with default values.
-     * Height and width will be WINDOW_SIZE (800 by default).
-     * Can be changed in the Configuration.h
+     * \brief Initialize the window with a global configuration.
+     *
+     * This function doesn't need to be overridden.
+     *
+     * \param Configuration The global configuration.
      */
     Window(const ConfigurationLoader* const Configuration);
-    ~Window();
+    virtual ~Window();
 
     /**
      * \brief Display the window.
+     *
      * The default function to call after all calculations are made.
-     * 
+     * This function should implement a window drawing function.
+     * This windows should draw for the NumberOfTeams all elements in the
+     * FieldList. The TurnNumber is given to make it possible to show it somehow.
+     *
+     * It should also handle all input events and return a WindowEvent accordingly.
+     *
      * \param Fields A list for all fields which should be drawn
      * \param NumberOfTeams The number of teams playing.
      * \param TurnNumber The count of this round.
      *
      * \return Returns a window event according to any interactivity happened while displaying.
      */
-    WindowEvent Display(const FieldList *Fields, const unsigned char &NumberOfTeams, const unsigned int &TurnNumber);
+    virtual WindowEvent Display(const FieldList* Fields, const unsigned char &NumberOfTeams, const unsigned int &TurnNumber) = 0;
 
     /**
-     * \brief Sets a winner which ends the game.
+     * \brief Sets a winner to end the game.
      *
-     * The winning team can also be a casted 0, 1, 2, 3.
-     * 
+     * This function should display the winner in a winner/end game screen.
+     * After this method terminates the World will end the game.
+     * The winning team can also be a cast to team 0, 1, 2, 3.
+     *
      * \param Team The winning team.
      */
-    void SetWinner(TEAM Team);
+     virtual void SetWinner(TEAM Team) = 0;
 
-    /**
-     * \brief Indicates whether the window was closed.
-     *
-     * \return Returns true when the window was closed.
-     */
-    bool isDead() const;
-
-private:
-    const ConfigurationLoader * const _Configuration; //< The Configuration
-    sf::RenderWindow* _Window;                        //< Pointer to the SFML Window drawing the stuff.
-    sf::Font _Font;                                   //< The font used for the text.
-    bool _FontExists;                                  //< Indicates whether the font exists.
-    sf::Text* _Text;                                  //< Pointer to the text drawn.
-    sf::RectangleShape* _ButtonRectangle;             //< Pointer a button rectangle drawn on the bottom.
-    Button _Buttons[3];                               //< The buttons.
-    bool _isDead;                                     //< Indicate whether the window was killed.
+protected:
+    const ConfigurationLoader* const _Configuration; //< The global configuration.
 
 };
+
+#endif //_WINDOW_H

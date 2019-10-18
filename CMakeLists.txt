@@ -29,8 +29,9 @@ set(BOT_SRC ${SOURCE_DIR}/Bot/Bot.cpp
             ${SOURCE_DIR}/Bot/PlayerBot.cpp
             ${SOURCE_DIR}/Bot/Utilities.cpp)
 # Renderer
-set(RENDERER_SRC ${SOURCE_DIR}/Renderer/Window.cpp
-                 ${SOURCE_DIR}/Renderer/Button.cpp)
+set(RENDERER_SRC ${SOURCE_DIR}/Renderer/SFMLWindow.cpp
+                 ${SOURCE_DIR}/Renderer/Button.cpp
+                 ${SOURCE_DIR}/Renderer/Window.cpp)
 
 # World
 set(WORLD_SRC ${SOURCE_DIR}/World/ConfigurationLoader.cpp
