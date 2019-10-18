@@ -1,5 +1,4 @@
 #include "Field.h"
-#include "Configuration.h"
 #include "Bot/Utilities.h"
 #include "ConfigurationLoader.h"
 

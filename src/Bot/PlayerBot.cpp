@@ -1,5 +1,4 @@
 #include "PlayerBot.h"
-#include "Configuration.h"
 #include "World/FieldList.h"
 
 PlayerBot::PlayerBot()
