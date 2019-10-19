@@ -1,13 +1,13 @@
 #include "World.h"
+#include "Renderer/SFMLWindow.h"
 #include "FieldList.h"
 #include "WorldSnapshot.h"
 #include <SFML/System/Clock.hpp>
 #include <iostream>
 
 World::World()
-    : _Configuration(),
-      _Window(&_Configuration),
-      _Grid(&_Configuration),
+    : _Window(new SFMLWindow),
+      _Grid(),
       _NumberOfBots(0)
 {
     _Clock = new sf::Clock;
@@ -19,6 +19,22 @@ World::World()
     _Bots[2] = nullptr;
     _Bots[3] = nullptr;
 }
+
+World::World(Window* WindowRenderer)
+    : _Window(),
+      _Grid(),
+      _NumberOfBots(0)
+{
+    _Clock = new sf::Clock;
+    // _WorldSnapshot and _Fields will be initialized in the right _Initialize() methods
+    // as there might be more than 2 teams
+    // Set all bots to be nullptr
+    _Bots[0] = nullptr;
+    _Bots[1] = nullptr;
+    _Bots[2] = nullptr;
+    _Bots[3] = nullptr;
+}
+
 
 World::~World()
 {
@@ -46,10 +62,10 @@ void World::Play(Bot** Bots)
 
     WindowEvent Event = WindowEvent::Nothing; // Used to get feedback of the window for interactivity
     bool Kill = false;                        // To indicate whether window should be killed afterwards
-    bool isPaused = _Configuration.GetPauseOnStartup();         // Default value if starting with paused
+    bool isPaused = Configuration::Get().PauseOnStartup();         // Default value if starting with paused
     bool TimePaused = false;                  // To pause the turns for the turn time
     bool OneStepForward = false;              // To check whether to go only one step forward
-    while (_WorldSnapshot->_TurnNumber < _Configuration.GetMaxTurnCount())
+    while (_WorldSnapshot->_TurnNumber < Configuration::Get().MaxTurnCount())
     {
         // If paused don't do anything
         if (!isPaused && !TimePaused)
@@ -82,36 +98,36 @@ void World::Play(Bot** Bots)
                 if (!_WorldSnapshot[_Bots[j]->GetTeamAsUnsignedInt()].GetFields().GetSize())
                 {
                     TeamCount[j] = false;
-                    _Window.SetWinner(TEAM::BLUE);
+                    _Window->SetWinner(TEAM::BLUE);
                     return;
                 }
             }
             // TODO: Make this cleaner
             if (_NumberOfBots == 2 && !TeamCount[1])
             {
-                _Window.SetWinner(TEAM::BLUE);
+                _Window->SetWinner(TEAM::BLUE);
                 return;
             }
             if (_NumberOfBots == 2 && !TeamCount[0])
             {
-                _Window.SetWinner(TEAM::RED);
+                _Window->SetWinner(TEAM::RED);
                 return;
             }
             if (_NumberOfBots == 3)
             {
                 if (!TeamCount[1] && !TeamCount[2])
                 {
-                    _Window.SetWinner(TEAM::BLUE);
+                    _Window->SetWinner(TEAM::BLUE);
                     return;
                 }
                 if (!TeamCount[0] && !TeamCount[2])
                 {
-                    _Window.SetWinner(TEAM::RED);
+                    _Window->SetWinner(TEAM::RED);
                     return;
                 }
                 if (!TeamCount[0] && !TeamCount[1])
                 {
-                    _Window.SetWinner(TEAM::GREEN);
+                    _Window->SetWinner(TEAM::GREEN);
                     return;
                 }
             }
@@ -119,22 +135,22 @@ void World::Play(Bot** Bots)
             {
                 if (!TeamCount[1] && !TeamCount[2] && !TeamCount[3])
                 {
-                    _Window.SetWinner(TEAM::BLUE);
+                    _Window->SetWinner(TEAM::BLUE);
                     return;
                 }
                 if (!TeamCount[0] && !TeamCount[2] && !TeamCount[3])
                 {
-                    _Window.SetWinner(TEAM::RED);
+                    _Window->SetWinner(TEAM::RED);
                     return;
                 }
                 if (!TeamCount[0] && !TeamCount[1] && !TeamCount[3])
                 {
-                    _Window.SetWinner(TEAM::GREEN);
+                    _Window->SetWinner(TEAM::GREEN);
                     return;
                 }
                 if (!TeamCount[0] && !TeamCount[1] && !TeamCount[2])
                 {
-                    _Window.SetWinner(TEAM::YELLOW);
+                    _Window->SetWinner(TEAM::YELLOW);
                     return;
                 }
             }
@@ -142,7 +158,7 @@ void World::Play(Bot** Bots)
 
         // Pause as long as wer are below the turn duration
         TimePaused = static_cast<unsigned int>(_Clock->getElapsedTime().asMilliseconds())
-                     < _Configuration.GetTurnDurationInMs();
+                     < Configuration::Get().TurnDurationInMs();
 
         Event = _RenderWorld(_WorldSnapshot->_TurnNumber);
 
@@ -210,18 +226,17 @@ bool World::_Initialize()
         // Initialize the bots first
         _Bots[i]->_Initialize(
             static_cast<DIRECTION>(i), // Direction goes first LEFt, RIGHT, DOWN, UP
-            static_cast<TEAM>(i),     // Team goes first BLUE, RED, GREEN, YELLOW
-            &_Configuration);
+            static_cast<TEAM>(i));    // Team goes first BLUE, RED, GREEN, YELLOW
 
        
         // After initializing the players initialize the fields for two teams
         // Starting Positions have to be translated 
         // from numbers on the grid to pixels
         Vector TranslatedStartingPosition = _Bots[i]->GetStartingPosition();
-        TranslatedStartingPosition.X *= _Configuration.GetWindowSize() / _Configuration.GetGridSize();
-        TranslatedStartingPosition.Y *= _Configuration.GetWindowSize() / _Configuration.GetGridSize();
+        TranslatedStartingPosition.X *= Configuration::Get().WindowSize() / Configuration::Get().GridSize();
+        TranslatedStartingPosition.Y *= Configuration::Get().WindowSize() / Configuration::Get().GridSize();
         _Fields[_Bots[i]->GetTeamAsUnsignedInt()]._Add(
-                Field(&_Configuration, _Bots[i]->GetTeam(), 100, TranslatedStartingPosition));
+                Field(_Bots[i]->GetTeam(), 100, TranslatedStartingPosition));
     }
 
     // Then the Grid can be initialized with the fields
@@ -266,19 +281,19 @@ void World::_UpdateWorld()
 
             if (CurrentActions.Up > 0)
                 _Grid.SetFieldValuesAt(
-                        CurrentPosition.X, CurrentPosition.Y - _Configuration.GetWindowSize()/_Configuration.GetGridSize(),
+                        CurrentPosition.X, CurrentPosition.Y - Configuration::Get().WindowSize()/Configuration::Get().GridSize(),
                         static_cast<TEAM>(i), CurrentActions.Up);
             if (CurrentActions.Down > 0)
                 _Grid.SetFieldValuesAt(
-                        CurrentPosition.X, CurrentPosition.Y + _Configuration.GetWindowSize()/_Configuration.GetGridSize(),
+                        CurrentPosition.X, CurrentPosition.Y + Configuration::Get().WindowSize()/Configuration::Get().GridSize(),
                         static_cast<TEAM>(i), CurrentActions.Down);
             if (CurrentActions.Left > 0)
                 _Grid.SetFieldValuesAt(
-                        CurrentPosition.X - _Configuration.GetWindowSize()/_Configuration.GetGridSize(), CurrentPosition.Y,
+                        CurrentPosition.X - Configuration::Get().WindowSize()/Configuration::Get().GridSize(), CurrentPosition.Y,
                         static_cast<TEAM>(i), CurrentActions.Left);
             if (CurrentActions.Right > 0)
                 _Grid.SetFieldValuesAt(
-                        CurrentPosition.X + _Configuration.GetWindowSize()/_Configuration.GetGridSize(), CurrentPosition.Y,
+                        CurrentPosition.X + Configuration::Get().WindowSize()/Configuration::Get().GridSize(), CurrentPosition.Y,
                         static_cast<TEAM>(i), CurrentActions.Right);
 
             // After setting all those field values decrease the actual cell count of the current field
@@ -287,7 +302,7 @@ void World::_UpdateWorld()
             // Afterwards reset the actions
             CurrentField->_ResetActions();
             
-            if (!_Configuration.GetIncreasingSplitValues())
+            if (!Configuration::Get().IncreasingSplitValues())
                 // And then increase all by 10%
                 CurrentField->_IncreaseCellCount(0.1);
         }
@@ -295,7 +310,7 @@ void World::_UpdateWorld()
     // After applying everything calculate the grid
     _Grid.ComputeAllFields(_Fields, _NumberOfBots);
 
-    if (_Configuration.GetIncreasingSplitValues())
+    if (Configuration::Get().IncreasingSplitValues())
     {
         for (int i = 0; i < _NumberOfBots; ++i)
         {
@@ -314,6 +329,6 @@ WindowEvent World::_RenderWorld(const unsigned int &TurnNumber)
 {
     // TODO: Do this on another thread
     // After calculating everything draw everything
-    return _Window.Display(_Fields, _NumberOfBots, TurnNumber);
+    return _Window->Display(_Fields, _NumberOfBots, TurnNumber);
 }
 

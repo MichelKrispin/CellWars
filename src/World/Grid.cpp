@@ -1,13 +1,12 @@
 #include "Grid.h"
 #include "FieldListIterator.h"
-#include "ConfigurationLoader.h"
+#include "Configuration.h"
 
-Grid::Grid(ConfigurationLoader* Configuration)
-    : _Configuration(Configuration),
-     _Size(_Configuration->GetGridSize())
+Grid::Grid()
+    : _Size(Configuration::Get().GridSize())
 {
-    _Fields = new Field*[_Configuration->GetGridSize() * _Configuration->GetGridSize()];
-    _SplitValues = new SplitValues[_Configuration->GetGridSize() * _Configuration->GetGridSize()];
+    _Fields = new Field*[Configuration::Get().GridSize() * Configuration::Get().GridSize()];
+    _SplitValues = new SplitValues[Configuration::Get().GridSize() * Configuration::Get().GridSize()];
 }
 
 Grid::~Grid()
@@ -45,14 +44,14 @@ void Grid::SetFieldValuesAt(unsigned int x, unsigned int y, TEAM Team, unsigned 
 {
     // Make negative or too positive values go to the opposite side of the screen
     if (static_cast<int>(x) < 0)
-        x += _Configuration->GetWindowSize();
-    if (x >= _Configuration->GetWindowSize())
-        x -= _Configuration->GetWindowSize();
+        x += Configuration::Get().WindowSize();
+    if (x >= Configuration::Get().WindowSize())
+        x -= Configuration::Get().WindowSize();
 
     if (static_cast<int>(y) < 0)
-        y += _Configuration->GetWindowSize();
-    if (y >= _Configuration->GetWindowSize())
-        y -= _Configuration->GetWindowSize();
+        y += Configuration::Get().WindowSize();
+    if (y >= Configuration::Get().WindowSize())
+        y -= Configuration::Get().WindowSize();
 
     Vector Position = _ConvertPixelsToGridValues({x, y});
     
@@ -165,8 +164,8 @@ void Grid::ComputeAllFields(FieldList* AllFields, unsigned char NumberOfTeams)
 
             // If the difference of both cells is above the max take the max
             // (For whatever reason can this be achieved?)
-            if (CellDifference > _Configuration->GetMaxCountPerField())
-                CellDifference = _Configuration->GetMaxCountPerField();
+            if (CellDifference > Configuration::Get().MaxCountPerField())
+                CellDifference = Configuration::Get().MaxCountPerField();
 
             // If FieldGoesTo is still -1 and there wasn't a field already there is no need to do anything
             if (FieldAlreadyExists == -1 && FieldGoesTo == -1)
@@ -177,8 +176,8 @@ void Grid::ComputeAllFields(FieldList* AllFields, unsigned char NumberOfTeams)
 
             // Save the starting position for the field in pixel values
             Vector StartingPosition(x, y);
-            StartingPosition.X *= _Configuration->GetWindowSize() / _Configuration->GetGridSize();
-            StartingPosition.Y *= _Configuration->GetWindowSize() / _Configuration->GetGridSize();
+            StartingPosition.X *= Configuration::Get().WindowSize() / Configuration::Get().GridSize();
+            StartingPosition.Y *= Configuration::Get().WindowSize() / Configuration::Get().GridSize();
 
             // If the field doesn't go to but exists already it should be deleted
             if (FieldGoesTo == -1)
@@ -194,7 +193,7 @@ void Grid::ComputeAllFields(FieldList* AllFields, unsigned char NumberOfTeams)
                 // Add a new field to the correct array of all fields
                 // which is an array of team count length
                 AllFields[static_cast<unsigned int>(FieldGoesTo)]
-                    ._Add(Field(_Configuration, static_cast<TEAM>(FieldGoesTo), CellDifference, StartingPosition));
+                    ._Add(Field(static_cast<TEAM>(FieldGoesTo), CellDifference, StartingPosition));
                 CurrentSplitValues.Reset(); // Reset split values for this spot afterwards
                 continue;
             }
@@ -214,7 +213,7 @@ void Grid::ComputeAllFields(FieldList* AllFields, unsigned char NumberOfTeams)
                 ._Remove(StartingPosition);
 
             AllFields[static_cast<unsigned int>(FieldGoesTo)]
-                ._Add(Field(_Configuration, static_cast<TEAM>(FieldGoesTo), CellDifference, StartingPosition));
+                ._Add(Field(static_cast<TEAM>(FieldGoesTo), CellDifference, StartingPosition));
 
             CurrentSplitValues.Reset(); // Reset split values for this spot afterwards
         }
@@ -244,14 +243,14 @@ bool Grid::GetAdjacentFieldOf(const TEAM &Team, const Field* Field, const DIRECT
    
     // Same goes after going one step aside but in grid space
     if (static_cast<short>(Position.X) < 0)
-        Position.X += _Configuration->GetGridSize();
-    if (static_cast<short>(Position.X) >= _Configuration->GetGridSize())
-        Position.X -= _Configuration->GetGridSize();
+        Position.X += Configuration::Get().GridSize();
+    if (static_cast<short>(Position.X) >= Configuration::Get().GridSize())
+        Position.X -= Configuration::Get().GridSize();
 
     if (static_cast<short>(Position.Y) < 0)
-        Position.Y += _Configuration->GetGridSize();
-    if (static_cast<short>(Position.Y) >= _Configuration->GetGridSize())
-        Position.Y -= _Configuration->GetGridSize();
+        Position.Y += Configuration::Get().GridSize();
+    if (static_cast<short>(Position.Y) >= Configuration::Get().GridSize())
+        Position.Y -= Configuration::Get().GridSize();
 
     // If a nullptr is at the new position return false
     // Or if their team doesn't equal (short circuiting)
@@ -263,8 +262,8 @@ bool Grid::GetAdjacentFieldOf(const TEAM &Team, const Field* Field, const DIRECT
 Vector Grid::_ConvertPixelsToGridValues(const Vector &InputPosition) const
 {
     return {
-        static_cast<unsigned int>(InputPosition.X * _Configuration->GetGridSize() / _Configuration->GetWindowSize()),
-        static_cast<unsigned int>(InputPosition.Y * _Configuration->GetGridSize() / _Configuration->GetWindowSize())
+        static_cast<unsigned int>(InputPosition.X * Configuration::Get().GridSize() / Configuration::Get().WindowSize()),
+        static_cast<unsigned int>(InputPosition.Y * Configuration::Get().GridSize() / Configuration::Get().WindowSize())
     };
 }
 

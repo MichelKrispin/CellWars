@@ -1,11 +1,11 @@
 #ifndef _WORLD_H
 #define _WORLD_H
 #include "Bot/Bot.h"
-#include "Renderer/SFMLWindow.h"
 #include "Grid.h"
+#include "Renderer/Window.h"
 #include "Renderer/WindowEvent.h"
 #include "Bot/PlayerBot.h"
-#include "ConfigurationLoader.h"
+#include "Configuration.h"
 
 namespace sf { class Clock; }
 class FieldList;
@@ -40,9 +40,20 @@ class World
 public:
     /**
      * \brief Initializes the World with a working window and fields.
-     * Will be called on the first getWorld call.
+     *
+     * Uses the default SFMLWindow which uses SFML to render everything onscreen.
      */
     World();
+
+    /**
+     * \brief Initializes everything correctly and specifies another renderer.
+     *
+     * This class will try to delete the WindowRenderer in its destructor so a call can
+     * be made like World(new MyWindow);
+     *
+     * \param WindowRenderer The new renderer which inherits from the Window class.
+     */
+    explicit World(Window* WindowRenderer);
     virtual ~World();
 
     /**
@@ -109,13 +120,13 @@ private:
     bool _Initialize();
 
     // Variables
-    ConfigurationLoader _Configuration; //< The class which holds all configuration data
-    SFMLWindow _Window;                     //< The window used to render everything on screen.
+    Window* _Window;                    //< The window used to render everything on screen.
     Grid _Grid;                         //< The grid which keeps track of all fields in a more natural way.
     WorldSnapshot* _WorldSnapshot;      //< A snapshot of the world which will be updated after each turn.
     FieldList* _Fields;                 //< Keeping track of all fields for both teams.
     Bot* _Bots[4];                      //< An array of up to four Bot pointer. These are the playing bots.
     unsigned char _NumberOfBots;        //< The number of bots that are currently playing.
+    // TODO: Use std clock and remove SFML dependency
     sf::Clock* _Clock;                  //< Used to measure the time between each turn.
 };
 

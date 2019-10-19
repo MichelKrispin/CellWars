@@ -5,7 +5,7 @@
 #include "FieldList.h"
 
 // Forward declaration
-class ConfigurationLoader;
+class Configuration;
 
 // TODO: Outsource this to its own file
 /**
@@ -66,7 +66,7 @@ public:
      * 
      * \param Configuration The adress of the configuration which is loaded once.
      */
-    Grid(ConfigurationLoader* Configuration);
+    Grid();
     virtual ~Grid();
 
     /**
@@ -130,7 +130,6 @@ private:
     void _UpdateAllReferences(FieldList* FieldsList, const unsigned char &NumberOfTeams);
 
     // Variables
-    const ConfigurationLoader * const _Configuration; //< The Configuration
     Field** _Fields; //< Pointer to all fields. Initialized all with nullptr
     SplitValues* _SplitValues; //< Keeping track of each teams splitted values 
     const unsigned int _Size; //< Saving the size/width of the grid

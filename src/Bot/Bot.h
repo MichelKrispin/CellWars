@@ -6,7 +6,7 @@
 #include "World/Vector.h"
 
 // Forward-declaration
-class ConfigurationLoader;
+class Configuration;
 
 /**
  * \brief The basic bot class.
@@ -69,9 +69,8 @@ private:
      *
      * \param Direction The starting position defined as a direction.
      * \param Team The team this bot belongs to.
-     * \param Configuration The configuration to be used for global variables.
      */
-    void _Initialize(DIRECTION Direction, TEAM Team, ConfigurationLoader* Configuration);
+    void _Initialize(DIRECTION Direction, TEAM Team);
 
     // Variables
     Vector _StartingPosition;  //< The starting position of this bot in grid indices.

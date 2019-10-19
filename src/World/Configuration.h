@@ -10,48 +10,52 @@
  * If it can't find the config.txt file then it uses default configurations.
  * The default values for each value can be found in the comments of the private variables.
  */
-class ConfigurationLoader
+class Configuration
 {
 public:
     /**
-     * \brief Initialize the configuration.
+     * \brief The global configuration accessor.
      *
-     * If the configuration file can't be found then the
-     * default values will be used. A message will be printed
-     * to console if this happens.
+     * While it is possible to save a reference to the Configuration
+     * with Configuration &c = Configuration::Get();
+     * it is normally used directly:
+     * \code {.cpp}
+     * SomeClass.DoSomething(Configuration::Get().MaxCountPerField());
+     * \endcode
+     * \return A global instance to the configuration.
      */
-    ConfigurationLoader();
-    virtual ~ConfigurationLoader();
+    static Configuration &Get();
+    virtual ~Configuration();
 
     /**
      * \brief Get the maximal cell count per field
      * \return The count as an unsigned int.
      */
-    const unsigned int &GetMaxCountPerField() const;
+    const unsigned int &MaxCountPerField() const;
 
     /**
      * \brief Get the window size in pixel.
      * \return The window size as an unsigned int.
      */
-    const unsigned int &GetWindowSize() const;
+    const unsigned int &WindowSize() const;
 
     /**
      * \brief Get the grid size.
      * \return The grid size as an unsigned int.
      */
-    const unsigned int &GetGridSize() const;
+    const unsigned int &GridSize() const;
 
     /**
      * \brief Get the maximal number of rounds.
      * \return The maximal turn count as an unsigned int.
      */
-    const unsigned int &GetMaxTurnCount() const;
+    const unsigned int &MaxTurnCount() const;
 
     /**
      * \brief Get the turn duration in milliseconds.
      * \return The duration as an unsigned int.
      */
-    const unsigned int &GetTurnDurationInMs() const;
+    const unsigned int &TurnDurationInMs() const;
 
     // TODO: Make this independent of SFML -> maybe return as a string
     /**
@@ -62,7 +66,7 @@ public:
      *
      * \return The background color as an SFML color.
      */
-    const sf::Color    &GetBackgroundColor() const;
+    const sf::Color &BackgroundColor() const;
 
     /**
      * \brief Get the font search path.
@@ -70,13 +74,13 @@ public:
      *
      * \return The font search path as a string.
      */
-    const std::string  &GetFontPath() const;
+    const std::string &FontPath() const;
 
     /**
      * \brief Whether to pause on startup.
      * \return True if pausing on turn 0.
      */
-    const bool         &GetPauseOnStartup() const;
+    const bool &PauseOnStartup() const;
 
     /**
      * \brief Whether the splitted values will be increased directly after splitting.
@@ -85,9 +89,21 @@ public:
      *
      * \return True if the splitted values should be splitted.
      */
-    const bool         &GetIncreasingSplitValues() const;
+    const bool &IncreasingSplitValues() const;
 
 private:
+    // Methods
+    /**
+     * \brief Initialize the configuration.
+     *
+     * If the configuration file can't be found then the
+     * default values will be used. A message will be printed
+     * to console if this happens.
+     */
+    Configuration();
+    Configuration(const Configuration&);
+    Configuration &operator = (const Configuration&);
+
     unsigned int _MaxCountPerField;      //< Default: 100
     unsigned int _WindowSize;            //< Default: 800
     unsigned int _GridSize;              //< Default: 50

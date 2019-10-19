@@ -3,39 +3,39 @@
 #include "World/Field.h"
 #include "World/FieldList.h"
 #include "World/FieldListIterator.h"
-#include "World/ConfigurationLoader.h"
+#include "World/Configuration.h"
 #include <iostream>
 #include <sstream>
 
 #define BUTTON_SIZE 50
 
-SFMLWindow::SFMLWindow(const ConfigurationLoader* const Configuration)
-    : Window(Configuration),
+SFMLWindow::SFMLWindow()
+    : Window(),
       _Window(nullptr),
       _FontExists(true),
       _Buttons{
-         {{_Configuration->GetWindowSize() - BUTTON_SIZE*6,
-           _Configuration->GetWindowSize()+20},
+         {{Configuration::Get().WindowSize() - BUTTON_SIZE*6,
+           Configuration::Get().WindowSize()+20},
          BUTTON_SIZE,
          &_ButtonRectangle,
          sf::Color::Red},
 
-         {{_Configuration->GetWindowSize() - BUTTON_SIZE*4,
-           _Configuration->GetWindowSize()+20},
+         {{Configuration::Get().WindowSize() - BUTTON_SIZE*4,
+           Configuration::Get().WindowSize()+20},
          BUTTON_SIZE,
          &_ButtonRectangle,
          sf::Color::Green},
 
-         {{_Configuration->GetWindowSize() - BUTTON_SIZE*2,
-           _Configuration->GetWindowSize()+20},
+         {{Configuration::Get().WindowSize() - BUTTON_SIZE*2,
+           Configuration::Get().WindowSize()+20},
          BUTTON_SIZE,
          &_ButtonRectangle,
          sf::Color::Blue}
          }
 {
-    if (!_Font.loadFromFile(_Configuration->GetFontPath()))
+    if (!_Font.loadFromFile(Configuration::Get().FontPath()))
     {
-        std::cout << "ERROR :: LOADING FONT :: WINDOW :: at "  << _Configuration->GetFontPath() << "\n";
+        std::cout << "ERROR :: LOADING FONT :: WINDOW :: at "  << Configuration::Get().FontPath() << "\n";
         _FontExists = false;
     }
 
@@ -43,9 +43,9 @@ SFMLWindow::SFMLWindow(const ConfigurationLoader* const Configuration)
     {
         _Text = new sf::Text;
         _Text->setFont(_Font);
-        _Text->setCharacterSize(_Configuration->GetWindowSize()/10);
+        _Text->setCharacterSize(Configuration::Get().WindowSize()/10);
         _Text->setFillColor(sf::Color::White);
-        _Text->setPosition(10, static_cast<float>(_Configuration->GetWindowSize()-10)); // 10px padding on left side
+        _Text->setPosition(10, static_cast<float>(Configuration::Get().WindowSize()-10)); // 10px padding on left side
     }
     
     _ButtonRectangle = new sf::RectangleShape;
@@ -61,8 +61,8 @@ WindowEvent SFMLWindow::Display(const FieldList *Fields, const unsigned char &Nu
 {
     if (_Window == nullptr)
         _Window = new sf::RenderWindow(
-                sf::VideoMode(_Configuration->GetWindowSize(),
-                              _Configuration->GetWindowSize() + _Configuration->GetWindowSize()/10), // Add a fifth to the height
+                sf::VideoMode(Configuration::Get().WindowSize(),
+                              Configuration::Get().WindowSize() + Configuration::Get().WindowSize()/10), // Add a fifth to the height
                 "Cell Wars");
 
     // First check whether the window is dead
@@ -117,13 +117,13 @@ WindowEvent SFMLWindow::Display(const FieldList *Fields, const unsigned char &Nu
     // Create one rectangle and draw it multiple times
     sf::RectangleShape Rectangle;
     // Minus two for the outline
-    Rectangle.setSize(sf::Vector2f(_Configuration->GetWindowSize() / _Configuration->GetGridSize() - 2.0f,
-                                        _Configuration->GetWindowSize() / _Configuration->GetGridSize() - 2.0f));
+    Rectangle.setSize(sf::Vector2f(Configuration::Get().WindowSize() / Configuration::Get().GridSize() - 2.0f,
+                                        Configuration::Get().WindowSize() / Configuration::Get().GridSize() - 2.0f));
     Rectangle.setOutlineColor(sf::Color::Black);
     Rectangle.setOutlineThickness(1.0f);
 
     // Reset the window
-    _Window->clear(_Configuration->GetBackgroundColor());
+    _Window->clear(Configuration::Get().BackgroundColor());
 
     // Looping trough all of the Fields
     for (int i = 0; i < NumberOfTeams; ++i) // 2 for team size
@@ -141,20 +141,20 @@ WindowEvent SFMLWindow::Display(const FieldList *Fields, const unsigned char &Nu
                 case TEAM::BLUE:
                     // Casting from double to unsigned char as color channel only goes to 255 -> unsigned 8 bit integer value
                     Rectangle.setFillColor(sf::Color(
-                        0, 0, static_cast<unsigned char>(Current->GetCellCount() * 255.0 / _Configuration->GetMaxCountPerField())));
+                        0, 0, static_cast<unsigned char>(Current->GetCellCount() * 255.0 / Configuration::Get().MaxCountPerField())));
                     break;
                 case TEAM::RED:
                     Rectangle.setFillColor(sf::Color(
-                        static_cast<unsigned char>(Current->GetCellCount() * 255.0 / _Configuration->GetMaxCountPerField()), 0, 0));
+                        static_cast<unsigned char>(Current->GetCellCount() * 255.0 / Configuration::Get().MaxCountPerField()), 0, 0));
                     break;
                 case TEAM::GREEN:
                     Rectangle.setFillColor(sf::Color(
-                        0, static_cast<unsigned char>(Current->GetCellCount() * 255.0 / _Configuration->GetMaxCountPerField()), 0));
+                        0, static_cast<unsigned char>(Current->GetCellCount() * 255.0 / Configuration::Get().MaxCountPerField()), 0));
                     break;
                 case TEAM::YELLOW:
                     Rectangle.setFillColor(sf::Color(
-                        static_cast<unsigned char>(Current->GetCellCount() * 255.0 / _Configuration->GetMaxCountPerField()),
-                        static_cast<unsigned char>(Current->GetCellCount() * 255.0 / _Configuration->GetMaxCountPerField()), 0));
+                        static_cast<unsigned char>(Current->GetCellCount() * 255.0 / Configuration::Get().MaxCountPerField()),
+                        static_cast<unsigned char>(Current->GetCellCount() * 255.0 / Configuration::Get().MaxCountPerField()), 0));
                     break;
             }
             // Where it should be rendered
@@ -190,12 +190,12 @@ void SFMLWindow::SetWinner(TEAM Team)
     // and then display it once
     sf::RectangleShape Rectangle;
     // Minus two for the outline
-    Rectangle.setSize(sf::Vector2f(_Configuration->GetWindowSize() * 0.5f,
-                                   _Configuration->GetWindowSize() * 0.5f));
+    Rectangle.setSize(sf::Vector2f(Configuration::Get().WindowSize() * 0.5f,
+                                   Configuration::Get().WindowSize() * 0.5f));
     Rectangle.setOutlineColor(sf::Color::Black);
     Rectangle.setOutlineThickness(1.0f);
-    Rectangle.setPosition(_Configuration->GetWindowSize() * 0.25f,
-                          _Configuration->GetWindowSize() * 0.25f);
+    Rectangle.setPosition(Configuration::Get().WindowSize() * 0.25f,
+                          Configuration::Get().WindowSize() * 0.25f);
 
     std::string WinnerText;
     // Set the color of the rectangle to be that of the winner team
@@ -224,12 +224,12 @@ void SFMLWindow::SetWinner(TEAM Team)
     if (_FontExists)
     {
         _Text->setString(WinnerText);
-        _Text->setPosition(_Configuration->GetWindowSize() * 0.28f,
-                           _Configuration->GetWindowSize() * 0.45f);
+        _Text->setPosition(Configuration::Get().WindowSize() * 0.28f,
+                           Configuration::Get().WindowSize() * 0.45f);
     }
     
     // Reset the window
-    _Window->clear(_Configuration->GetBackgroundColor());
+    _Window->clear(Configuration::Get().BackgroundColor());
     _Window->draw(Rectangle);
     if (_FontExists)
         _Window->draw(*_Text);

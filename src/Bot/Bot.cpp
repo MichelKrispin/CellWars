@@ -1,5 +1,5 @@
 #include "Bot.h"
-#include "World/ConfigurationLoader.h"
+#include "World/Configuration.h"
 
 Bot::Bot()
     : _Team(static_cast<TEAM>(-1))
@@ -26,26 +26,26 @@ unsigned int Bot::GetTeamAsUnsignedInt() const
     return static_cast<unsigned int>(_Team);
 }
 
-void Bot::_Initialize(DIRECTION Direction, TEAM Team, ConfigurationLoader* Configuration)
+void Bot::_Initialize(DIRECTION Direction, TEAM Team)
 {
     _Team = Team;
     switch(Direction)
     {
         case DIRECTION::UP:
-            _StartingPosition = {Configuration->GetGridSize()/2,
-                                 Configuration->GetGridSize()/4};
+            _StartingPosition = {Configuration::Get().GridSize()/2,
+                                 Configuration::Get().GridSize()/4};
             break;
         case DIRECTION::LEFT:
-            _StartingPosition = {Configuration->GetGridSize()/4,
-                                 Configuration->GetGridSize()/2};
+            _StartingPosition = {Configuration::Get().GridSize()/4,
+                                 Configuration::Get().GridSize()/2};
             break;
         case DIRECTION::RIGHT:
-            _StartingPosition = {Configuration->GetGridSize()/4+Configuration->GetGridSize()/2,
-                                 Configuration->GetGridSize()/2};
+            _StartingPosition = {Configuration::Get().GridSize()/4+Configuration::Get().GridSize()/2,
+                                 Configuration::Get().GridSize()/2};
             break;
         case DIRECTION::DOWN:
-            _StartingPosition = {Configuration->GetGridSize()/2,
-                                 Configuration->GetGridSize()/4+Configuration->GetGridSize()/2};
+            _StartingPosition = {Configuration::Get().GridSize()/2,
+                                 Configuration::Get().GridSize()/4+Configuration::Get().GridSize()/2};
             break;
     }
 }

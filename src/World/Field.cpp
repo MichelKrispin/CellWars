@@ -1,10 +1,9 @@
 #include "Field.h"
 #include "Bot/Utilities.h"
-#include "ConfigurationLoader.h"
+#include "Configuration.h"
 
-Field::Field(const ConfigurationLoader* const Configuration, TEAM Team, unsigned short CellCount, Vector Position)
-    : _Configuration(Configuration),
-      _Team(Team),
+Field::Field(TEAM Team, unsigned short CellCount, Vector Position)
+    : _Team(Team),
       _CellCount(CellCount),
       _Position(Position)
 {
@@ -27,8 +26,8 @@ const Vector& Field::GetPosition() const
 Vector Field::GetPositionAsGrid() const
 {
     return {
-        static_cast<unsigned int>(_Position.X * _Configuration->GetGridSize() / _Configuration->GetWindowSize()),
-        static_cast<unsigned int>(_Position.Y * _Configuration->GetGridSize() / _Configuration->GetWindowSize())
+        static_cast<unsigned int>(_Position.X * Configuration::Get().GridSize() / Configuration::Get().WindowSize()),
+        static_cast<unsigned int>(_Position.Y * Configuration::Get().GridSize() / Configuration::Get().WindowSize())
     };
 }
 
@@ -67,8 +66,8 @@ void Field::SplitCellsAllDirections(unsigned short CellCount)
 void Field::_IncreaseCellCount(const double &Percentage)
 {
     _CellCount += RoundUp(_CellCount, Percentage);
-    if (_CellCount > _Configuration->GetMaxCountPerField())
-        _CellCount = _Configuration->GetMaxCountPerField();
+    if (_CellCount > Configuration::Get().MaxCountPerField())
+        _CellCount = Configuration::Get().MaxCountPerField();
 }
 
 

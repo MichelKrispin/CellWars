@@ -1,9 +1,14 @@
-#include "ConfigurationLoader.h"
+#include "Configuration.h"
 #include <fstream>
 #include <iostream>
 
+Configuration &Configuration::Get() {
+    static Configuration Instance;
+    return Instance;
+}
+
 // Default values
-ConfigurationLoader::ConfigurationLoader()
+Configuration::Configuration()
     : _MaxCountPerField(100),
       _WindowSize(800),
       _GridSize(50),
@@ -76,49 +81,49 @@ ConfigurationLoader::ConfigurationLoader()
     }
 }
 
-ConfigurationLoader::~ConfigurationLoader() = default;
+Configuration::~Configuration() = default;
 
-const unsigned int& ConfigurationLoader::GetMaxCountPerField() const
+const unsigned int& Configuration::MaxCountPerField() const
 {
     return _MaxCountPerField;
 }
 
-const unsigned int& ConfigurationLoader::GetWindowSize() const
+const unsigned int& Configuration::WindowSize() const
 {
     return _WindowSize;
 }
 
-const unsigned int& ConfigurationLoader::GetGridSize() const
+const unsigned int& Configuration::GridSize() const
 {
     return _GridSize;
 }
 
-const unsigned int& ConfigurationLoader::GetMaxTurnCount() const
+const unsigned int& Configuration::MaxTurnCount() const
 {
     return _MaxTurnCount;
 }
 
-const unsigned int& ConfigurationLoader::GetTurnDurationInMs() const
+const unsigned int& Configuration::TurnDurationInMs() const
 {
     return _TurnDurationInMs;
 }
 
-const sf::Color& ConfigurationLoader::GetBackgroundColor() const
+const sf::Color& Configuration::BackgroundColor() const
 {
     return _BackgroundColor;
 }
 
-const std::string& ConfigurationLoader::GetFontPath() const
+const std::string& Configuration::FontPath() const
 {
     return _FontPath;
 }
 
-const bool& ConfigurationLoader::GetPauseOnStartup() const
+const bool& Configuration::PauseOnStartup() const
 {
     return _PauseOnStartup;
 }
 
-const bool& ConfigurationLoader::GetIncreasingSplitValues() const
+const bool& Configuration::IncreasingSplitValues() const
 {
     return _IncreasingSplitValues;
 }

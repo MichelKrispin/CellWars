@@ -9,7 +9,7 @@
 namespace sf {
     class RenderWindow; class Font; class Text; class RectangleShape;
 }
-class ConfigurationLoader;
+class Configuration;
 
 /**
  * \brief Window class to render out everything.
@@ -23,9 +23,9 @@ public:
     /**
      * \brief Initializes the window with default values.
      * Height and width will be WINDOW_SIZE (800 by default).
-     * Can be changed in the Configuration.h
+     * Can be changed in the config.txt
      */
-    explicit SFMLWindow(const ConfigurationLoader* const Configuration);
+    SFMLWindow();
     ~SFMLWindow() override;
 
     /**

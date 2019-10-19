@@ -4,7 +4,7 @@
 #include "WindowEvent.h"
 #include "Bot/Team.h"
 
-class ConfigurationLoader;
+class Configuration;
 class FieldList;
 
 class Window {
@@ -13,10 +13,8 @@ public:
      * \brief Initialize the window with a global configuration.
      *
      * This function doesn't need to be overridden.
-     *
-     * \param Configuration The global configuration.
      */
-    Window(const ConfigurationLoader* const Configuration);
+    Window();
     virtual ~Window();
 
     /**
@@ -47,10 +45,6 @@ public:
      * \param Team The winning team.
      */
      virtual void SetWinner(TEAM Team) = 0;
-
-protected:
-    const ConfigurationLoader* const _Configuration; //< The global configuration.
-
 };
 
 #endif //_WINDOW_H

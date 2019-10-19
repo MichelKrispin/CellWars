@@ -34,7 +34,7 @@ set(RENDERER_SRC ${SOURCE_DIR}/Renderer/SFMLWindow.cpp
                  ${SOURCE_DIR}/Renderer/Window.cpp)
 
 # World
-set(WORLD_SRC ${SOURCE_DIR}/World/ConfigurationLoader.cpp
+set(WORLD_SRC ${SOURCE_DIR}/World/Configuration.cpp
               ${SOURCE_DIR}/World/Field.cpp
               ${SOURCE_DIR}/World/FieldList.cpp
               ${SOURCE_DIR}/World/FieldListIterator.cpp
