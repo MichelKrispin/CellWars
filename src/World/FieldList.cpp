@@ -38,7 +38,7 @@ Field* FieldList::operator[](unsigned int Index) const
 }
 
 #ifdef BUILD_PYTHON
-std::vector<Field*> FieldList::GetPythonList() const
+const std::vector<Field*> &FieldList::GetPythonList() const
 {
     return _Fields;
 }

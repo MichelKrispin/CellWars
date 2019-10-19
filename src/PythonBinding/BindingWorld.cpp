@@ -1,6 +1,7 @@
 #include "World/World.h"
 #include "World/WorldSnapshot.h"
 #include "World/FieldList.h"
+#include "World/FieldListIterator.h"
 #include "World/Field.h"
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
@@ -25,12 +26,12 @@ void InitializeWorld(py::module &m)
     .def_property_readonly("size", &FieldList::GetSize)
     .def_property_readonly("as_list", &FieldList::GetPythonList);
 
-
     py::class_<Field>(m, "Field")
     .def_property_readonly("cell_count", &Field::GetCellCount)
     .def_property_readonly("position", &Field::GetPosition)
     .def_property_readonly("position_as_grid", &Field::GetPositionAsGrid)
-    .def("split_cells", &Field::SplitCells);
+    .def("split", &Field::SplitCells)
+    .def("split_all_directions", &Field::SplitCellsAllDirections);
 
 
     py::enum_<DIRECTION>(m, "Direction")
