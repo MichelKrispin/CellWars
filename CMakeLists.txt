@@ -46,11 +46,18 @@ set(WORLD_SRC ${SOURCE_DIR}/World/Configuration.cpp
 
 # If build python library option is activated build a library
 if (BUILD_PYTHON_LIBRARY)
+        # Binding files
+        set(BINDING_SRC ${SOURCE_DIR}/PythonBinding/BindingBot.cpp
+                        ${SOURCE_DIR}/PythonBinding/BindingRenderer.cpp
+                        ${SOURCE_DIR}/PythonBinding/BindingUtilities.cpp
+                        ${SOURCE_DIR}/PythonBinding/BindingWorld.cpp
+                        ${SOURCE_DIR}/PythonBinding/Binding.cpp)
+
         # First set the library source
         set(LIBRARY_SRC ${RENDERER_SRC}
                         ${WORLD_SRC}
                         ${BOT_SRC}
-                        src/PythonBinding/Binding.cpp)
+                        ${BINDING_SRC})
         
         # Add define BUILD_PYTHON to add individual files
         add_compile_definitions(BUILD_PYTHON)
