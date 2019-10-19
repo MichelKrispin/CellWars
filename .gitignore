@@ -19,6 +19,8 @@ bin/*
 docs/*
 docs/
 .vscode/*
+venv/
+venv/*
 
 # Prerequisites
 *.d
