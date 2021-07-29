@@ -51,7 +51,7 @@ public:
      *  can be converted to a native python list
      * 
      */
-    const std::vector<Field*> &FieldList::GetPythonList() const;
+    const std::vector<Field*> &GetPythonList() const;
     #endif
 
     /**
