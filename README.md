@@ -1,7 +1,7 @@
 # Cell Wars
 
-A student side project. (Rather old)
-Some feeatures I was looking for:
+A student side project.
+Some features I was looking for:
 - Useful inheritance architecture
 - Usable GUI ([SFML](https://github.com/SFML/SFML))
 - Python binding of existent C++ code ([Pybind11](https://github.com/pybind/pybind11))
